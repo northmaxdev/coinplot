@@ -6,17 +6,19 @@ import io.github.northmaxdev.coinplot.common.DTOMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @Component
-public final class CurrencyDTOMapper implements DTOMapper<Map<String, String>, List<Currency>> {
+public final class CurrencyDTOMapper implements DTOMapper<Map<String, String>, Set<Currency>> {
 
     @Override
-    public @Nonnull List<Currency> map(@Nonnull Map<String, String> dto) {
+    public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) {
         return dto.entrySet()
                 .stream()
                 .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-                .toList();
+                .collect(toSet());
     }
 }

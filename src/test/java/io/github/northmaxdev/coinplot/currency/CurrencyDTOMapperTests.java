@@ -4,8 +4,8 @@ package io.github.northmaxdev.coinplot.currency;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,13 +19,11 @@ class CurrencyDTOMapperTests {
         );
         CurrencyDTOMapper mapper = new CurrencyDTOMapper();
 
-        // Note: may need to add an assumption for Currency::equals
-
-        List<Currency> expected = List.of(
+        Set<Currency> expected = Set.of(
                 new Currency("EUR", "Euro"),
                 new Currency("CHF", "Swiss Franc")
         );
-        List<Currency> actual = mapper.map(dto);
+        Set<Currency> actual = mapper.map(dto);
 
         assertThat(actual).isEqualTo(expected);
     }
