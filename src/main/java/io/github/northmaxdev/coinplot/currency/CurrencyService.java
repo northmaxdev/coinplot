@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,7 +28,7 @@ public final class CurrencyService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CurrencyService.class);
 
-    private final APIConfig apiConfig;
+    private final URI requestURI;
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
     private final CurrencyDTOMapper dtoMapper;
@@ -39,7 +40,9 @@ public final class CurrencyService {
             HttpClient httpClient,
             ObjectMapper jsonParser,
             CurrencyDTOMapper dtoMapper) {
-        this.apiConfig = apiConfig;
+        // No need for a CurrencyService instance to keep hold of an APIConfig
+        // reference if (in this case) pre-constructing the URI is enough.
+        this.requestURI = URI.create(apiConfig.getCurrenciesURI());
         this.httpClient = httpClient;
         this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
@@ -53,7 +56,6 @@ public final class CurrencyService {
 
     public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) {
         fetchIfCacheIsEmpty();
-
         // TODO:
         //  This will most likely be called relatively often, which means performance of this is impactful.
         //  Consider implementing cache as a Map for constant-time access.
@@ -65,7 +67,7 @@ public final class CurrencyService {
     private void fetchIfCacheIsEmpty() {
         if (cache.isEmpty()) {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(apiConfig.createCurrenciesEndpointURI())
+                    .uri(requestURI)
                     .GET()
                     .build();
 
