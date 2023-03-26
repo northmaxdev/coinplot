@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.stream.Collectors.toSet;
-
 @Service
 public final class CurrencyService {
 
@@ -32,13 +30,19 @@ public final class CurrencyService {
     private final APIConfig apiConfig;
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
+    private final CurrencyDTOMapper dtoMapper;
     private @Nonnull Set<Currency> cache;
 
     @Autowired
-    public CurrencyService(APIConfig apiConfig, HttpClient httpClient, ObjectMapper jsonParser) {
+    public CurrencyService(
+            APIConfig apiConfig,
+            HttpClient httpClient,
+            ObjectMapper jsonParser,
+            CurrencyDTOMapper dtoMapper) {
         this.apiConfig = apiConfig;
         this.httpClient = httpClient;
         this.jsonParser = jsonParser;
+        this.dtoMapper = dtoMapper;
         this.cache = Set.of();
     }
 
@@ -69,11 +73,8 @@ public final class CurrencyService {
                 // TODO: Profile other response content types, maybe byte[] is faster?
                 HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
                 Map<String, String> dto = jsonParser.readValue(response.body(), new TypeReference<>(){});
-                cache = dto.entrySet()
-                        .stream()
-                        .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-                        .collect(toSet());
 
+                cache = dtoMapper.map(dto);
                 LOG.info("Fetched and cached " + cache.size() + " currencies");
             } catch (IOException | InterruptedException e) {
                 LOG.warn("Failed to initialize currency data: " + e);
