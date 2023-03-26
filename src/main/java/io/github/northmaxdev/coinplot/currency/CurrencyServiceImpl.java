@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.currency;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.northmaxdev.coinplot.common.DTOMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -31,7 +32,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
     private final URI requestURI;
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
-    private final CurrencyDTOMapper dtoMapper;
+    private final DTOMapper<Map<String, String>, Set<Currency>> dtoMapper;
     private @Nonnull Set<Currency> cache;
 
     @Autowired
@@ -39,7 +40,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
             APIConfig apiConfig,
             HttpClient httpClient,
             ObjectMapper jsonParser,
-            CurrencyDTOMapper dtoMapper) {
+            DTOMapper<Map<String, String>, Set<Currency>> dtoMapper) {
         // No need for a CurrencyService instance to keep hold of an APIConfig
         // reference if (in this case) pre-constructing the URI is enough.
         this.requestURI = URI.create(apiConfig.getCurrenciesURI());
