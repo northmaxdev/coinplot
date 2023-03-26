@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -42,6 +45,17 @@ public final class CurrencyService {
     public Set<Currency> getAvailableCurrencies() {
         fetchIfCacheIsEmpty();
         return cache;
+    }
+
+    public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) {
+        fetchIfCacheIsEmpty();
+
+        // TODO:
+        //  This will most likely be called relatively often, which means performance of this is impactful.
+        //  Consider implementing cache as a Map for constant-time access.
+        return cache.stream()
+                .filter(currency -> Objects.equals(threeLetterISOCode, currency.threeLetterISOCode()))
+                .findFirst();
     }
 
     private void fetchIfCacheIsEmpty() {
