@@ -1,9 +1,13 @@
-node_modules
+# Misc.
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# Vaadin
+node_modules
+frontend/generated/
 
 ### STS ###
 .apt_generated
