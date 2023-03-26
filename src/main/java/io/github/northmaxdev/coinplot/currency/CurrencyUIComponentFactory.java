@@ -21,24 +21,26 @@ public final class CurrencyUIComponentFactory {
     }
 
     public ComboBox<Currency> createComboBox(@Nullable String label) {
-        var box = new ComboBox<Currency>(label);
-        return configureComboBox(box, "Select a currency");
+        return configureComboBox(new ComboBox<>(), label, "Select a currency");
     }
 
     public MultiSelectComboBox<Currency> createMultiSelectComboBox(@Nullable String label) {
-        var box = new MultiSelectComboBox<Currency>(label);
-        return configureComboBox(box, "Select currencies");
+        return configureComboBox(new MultiSelectComboBox<>(), label, "Select currencies");
     }
 
-    // Common configuration for all types of currency combo boxes
     private <B extends ComboBoxBase<B, Currency, ?>> B configureComboBox(
             @Nonnull B box,
+            @Nullable String label,
             @Nullable String placeholder) {
+        box.setLabel(label); // TODO: i18n
         // FIXME: The combo boxes do not extend horizontally automatically if the placeholder text is too long
-        box.setItems(service.getAvailableCurrencies());
-        box.setItemLabelGenerator(Currency::getName);
-        box.setAutoOpen(true);
         box.setPlaceholder(placeholder); // TODO: i18n
+
+        box.setItems(service.getAvailableCurrencies());
+        box.setItemLabelGenerator(Currency::name);
+
+        box.setAutoOpen(true);
+
         return box;
     }
 }
