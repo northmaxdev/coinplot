@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Collection;
 
 @Component
-public final class ExchangeRatesDTOMapper implements DTOMapper<ExchangeRatesDTO, List<ExchangeRate>> {
+public final class ExchangeRatesDTOMapper implements DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> {
 
     private final CurrencyService currencyService;
 
@@ -24,7 +24,7 @@ public final class ExchangeRatesDTOMapper implements DTOMapper<ExchangeRatesDTO,
     }
 
     @Override
-    public @Nonnull List<ExchangeRate> map(@Nonnull ExchangeRatesDTO dto) {
+    public @Nonnull Collection<ExchangeRate> map(@Nonnull ExchangeRatesDTO dto) {
         // TODO:
         //  Consider reimplementing this in a more procedural way. Reasons:
         //  1. This is pretty much unreadable

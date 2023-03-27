@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,13 +46,13 @@ class ExchangeRatesDTOMapperTests {
         Currency eur = new Currency("EUR", "");
         Currency chf = new Currency("CHF", "");
         Currency gbp = new Currency("GBP", "");
-        List<ExchangeRate> expected = List.of(
+        Collection<ExchangeRate> expected = List.of(
                 new ExchangeRate(eur, chf, LocalDate.of(2005, 3, 1), 1.5357),
                 new ExchangeRate(eur, gbp, LocalDate.of(2005, 3, 1), 0.6879),
                 new ExchangeRate(eur, chf, LocalDate.of(2005, 3, 3), 1.5461),
                 new ExchangeRate(eur, gbp, LocalDate.of(2005, 3, 3), 0.6878)
         );
-        List<ExchangeRate> actual = mapper.map(dto);
+        Collection<ExchangeRate> actual = mapper.map(dto);
 
         assertThat(actual).isEqualTo(expected);
     }
