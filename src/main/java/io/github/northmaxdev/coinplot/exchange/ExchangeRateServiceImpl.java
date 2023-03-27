@@ -33,14 +33,14 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     private final APIConfig apiConfig;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final DTOMapper<ExchangeRatesDTO, List<ExchangeRate>> dtoMapper;
+    private final DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> dtoMapper;
 
     @Autowired
     public ExchangeRateServiceImpl(
             APIConfig apiConfig,
             HttpClient httpClient,
             ObjectMapper objectMapper,
-            DTOMapper<ExchangeRatesDTO, List<ExchangeRate>> dtoMapper) {
+            DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> dtoMapper) {
         this.apiConfig = apiConfig;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
@@ -48,7 +48,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public List<ExchangeRate> getExchangeRatesBetweenDates(
+    public Collection<ExchangeRate> getExchangeRatesBetweenDates(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
             @Nonnull LocalDate start,
