@@ -8,7 +8,7 @@ import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
 
 public record ExchangeRate(
-        @Nonnull Currency baseCurrency,
-        @Nonnull Currency targetCurrency,
+        @Nonnull Currency base,
+        @Nonnull Currency target,
         @Nonnull LocalDate date,
         double value) {}
