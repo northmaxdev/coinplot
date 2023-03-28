@@ -10,6 +10,8 @@ import jakarta.annotation.Nullable;
 
 public final class CurrencyUIComponents {
 
+    private CurrencyUIComponents() {}
+
     public static ComboBox<Currency> comboBox(
             @Nullable String label,
             @Nonnull CurrencyService service) {
