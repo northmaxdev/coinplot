@@ -29,9 +29,6 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         void consume(@Nonnull Currency base, @Nonnull Collection<Currency> targets, @Nonnull LocalDateRange dateRange);
     }
 
-    // This should be equal to the amount of buttons at the bottom of the form for a uniform layout
-    private static final int INPUT_FIELD_COLSPAN = 2;
-
     private final ComboBox<Currency> baseSelector;
     private final MultiSelectComboBox<Currency> targetSelector;
     private final DatePicker startPicker;
@@ -48,19 +45,15 @@ public final class ExchangeRatesRequestForm extends FormLayout {
 
         this.baseSelector = CurrencyUIComponents.comboBox("Base currency", currencyService);
         baseSelector.setRequired(true);
-        setColspan(baseSelector, INPUT_FIELD_COLSPAN);
 
         this.targetSelector = CurrencyUIComponents.multiSelectComboBox("Target currencies", currencyService);
         targetSelector.setRequired(true);
-        setColspan(targetSelector, INPUT_FIELD_COLSPAN);
 
         this.startPicker = new DatePicker("Start date");
         startPicker.setRequired(true);
-        setColspan(startPicker, INPUT_FIELD_COLSPAN);
 
         this.endPicker = new DatePicker("End date");
         endPicker.setRequired(true);
-        setColspan(endPicker, INPUT_FIELD_COLSPAN);
 
         this.okButton = new Button("OK");
         okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
