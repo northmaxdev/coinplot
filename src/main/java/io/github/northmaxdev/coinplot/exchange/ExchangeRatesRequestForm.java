@@ -79,6 +79,11 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         startPicker.addValueChangeListener(this::toggleOKButtonToInput);
         endPicker.addValueChangeListener(this::toggleOKButtonToInput);
 
+        // FIXME: It is possible to circumvent this date min/max validation measure by entering an invalid date via
+        //  textual input. This is solvable by: (a) disabling textual input or (b) making the OK button toggle listener
+        //  check not only whether the form is filled, but also whether its values are sane (actually, both options are
+        //  not mutually exclusive)
+
         // After selecting a start date, set the earliest possible end date to be start date plus 1 day.
         // (when the start date selection is cleared, reset this end date picker restriction as well)
         startPicker.addValueChangeListener(event -> {
@@ -96,8 +101,8 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         okButton.addClickListener(event -> {
             // Note: all these getters technically return nullable values, but we *assume* they're all non-null and sane
             // by the time we get to this block of code as we rely on our surface-level filters of invalid input, such
-            // as keeping the OK button disabled while the form is not fully filled. If the user somehow circumvents
-            // these validation measures, nulls might get through, and it ain't going to be fun.
+            // as keeping the OK button disabled while the form is not fully filled and/or invalid. If the user somehow
+            // circumvents these validation measures, bad input might get through, and it ain't going to be fun.
             Currency base = baseSelector.getValue();
             Collection<Currency> targets = targetSelector.getSelectedItems();
             LocalDateRange dateRange = new LocalDateRange(startPicker.getValue(), endPicker.getValue());
