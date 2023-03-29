@@ -12,29 +12,20 @@ public final class CurrencyUIComponents {
 
     private CurrencyUIComponents() {}
 
-    public static ComboBox<Currency> comboBox(
-            @Nullable String label,
-            @Nonnull CurrencyService service) {
-        return configureComboBox(new ComboBox<>(), service, label, "Select a currency");
+    public static ComboBox<Currency> comboBox(@Nonnull CurrencyService service) {
+        return configureComboBox(new ComboBox<>(), service, "Select a currency");
     }
 
-    public static MultiSelectComboBox<Currency> multiSelectComboBox(
-            @Nullable String label,
-            @Nonnull CurrencyService service) {
-        return configureComboBox(new MultiSelectComboBox<>(), service, label, "Select currencies");
+    public static MultiSelectComboBox<Currency> multiSelectComboBox(@Nonnull CurrencyService service) {
+        return configureComboBox(new MultiSelectComboBox<>(), service, "Select currencies");
     }
 
     private static <B extends ComboBoxBase<B, Currency, ?>> B configureComboBox(
             @Nonnull B box,
             @Nonnull CurrencyService service,
-            @Nullable String label,
             @Nullable String placeholder) {
         box.setItems(service.getAvailableCurrencies());
         box.setItemLabelGenerator(Currency::name);
-        box.setAutoOpen(true);
-
-        // FIXME: The combo boxes do not extend horizontally automatically if the placeholder text is too long
-        box.setLabel(label); // TODO: i18n
         box.setPlaceholder(placeholder); // TODO: i18n
 
         return box;
