@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.currency;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.common.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

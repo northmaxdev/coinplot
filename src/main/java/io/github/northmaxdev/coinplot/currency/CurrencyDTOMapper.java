@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.currency;
 
-import io.github.northmaxdev.coinplot.common.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 

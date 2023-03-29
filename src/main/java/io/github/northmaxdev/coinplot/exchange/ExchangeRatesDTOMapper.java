@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.exchange;
 
-import io.github.northmaxdev.coinplot.common.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import io.github.northmaxdev.coinplot.currency.CurrencyService;
 import jakarta.annotation.Nonnull;
