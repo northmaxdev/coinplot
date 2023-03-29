@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.exchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import io.github.northmaxdev.coinplot.currency.Currency;
@@ -18,7 +19,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,9 +51,8 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     public Collection<ExchangeRate> getExchangeRatesBetweenDates(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
-            @Nonnull LocalDate start,
-            @Nonnull LocalDate end) {
-        URI requestURI = createRequestURI(base, targets, start, end);
+            @Nonnull LocalDateRange dateRange) {
+        URI requestURI = createRequestURI(base, targets, dateRange);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(requestURI)
                 .GET()
@@ -74,8 +73,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     private @Nonnull URI createRequestURI(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
-            @Nonnull LocalDate start,
-            @Nonnull LocalDate end) {
+            @Nonnull LocalDateRange dateRange) {
         // TODO:
         //  Profile this section and if it proves to be a performance bottleneck, consider spreading serialization of
         //  targets, start and end between 3 threads (though it'll probably be negligible compared to other parts of
@@ -86,8 +84,8 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
                 .collect(joining(","));
 
         String s = fmt.formatted(
-                start.format(ISO_LOCAL_DATE),
-                end.format(ISO_LOCAL_DATE),
+                ISO_LOCAL_DATE.format(dateRange.start()),
+                ISO_LOCAL_DATE.format(dateRange.end()),
                 base.threeLetterISOCode(),
                 joinedTargets);
 
