@@ -21,7 +21,7 @@ public final class MainView extends HorizontalLayout {
         var chart = new ExchangeRatesLineChart();
         var form = new ExchangeRatesRequestForm(currencyService, (base, targets, dateRange) -> {
             Collection<ExchangeRate> data = exchangeRateService.getExchangeRatesBetweenDates(base, targets, dateRange);
-            chart.reloadData(data, true);
+            chart.reloadData(data);
         });
 
         add(chart, form);

@@ -67,4 +67,8 @@ public final class ExchangeRatesLineChart extends Chart {
             drawChart();
         }
     }
+
+    public void reloadData(@Nonnull Collection<ExchangeRate> data) {
+        reloadData(data, true);
+    }
 }
