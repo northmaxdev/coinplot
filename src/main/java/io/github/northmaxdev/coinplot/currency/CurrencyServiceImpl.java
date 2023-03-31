@@ -20,10 +20,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -34,16 +33,16 @@ public final class CurrencyServiceImpl implements CurrencyService {
     private final URI requestURI;
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
-    private final DTOMapper<Map<String, String>, Set<Currency>> dtoMapper;
+    private final DTOMapper<Map<String, String>, Map<String, Currency>> dtoMapper;
     private final StopWatch stopWatch;
-    private @Nonnull Set<Currency> cache;
+    private @Nonnull Map<String, Currency> cache;
 
     @Autowired
     public CurrencyServiceImpl(
             APIConfig apiConfig,
             HttpClient httpClient,
             ObjectMapper jsonParser,
-            DTOMapper<Map<String, String>, Set<Currency>> dtoMapper) {
+            DTOMapper<Map<String, String>, Map<String, Currency>> dtoMapper) {
         // No need for a CurrencyService instance to keep hold of an APIConfig
         // reference if (in this case) pre-constructing the URI is enough.
         this.requestURI = URI.create(apiConfig.getCurrenciesURI());
@@ -51,24 +50,20 @@ public final class CurrencyServiceImpl implements CurrencyService {
         this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
         this.stopWatch = new StopWatch();
-        this.cache = Set.of();
+        this.cache = Map.of();
     }
 
     @Override
-    public Set<Currency> getAvailableCurrencies() {
+    public Collection<Currency> getAvailableCurrencies() {
         fetchIfCacheIsEmpty();
-        return cache;
+        return cache.values();
     }
 
     @Override
     public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) {
         fetchIfCacheIsEmpty();
-        // TODO:
-        //  This will most likely be called relatively often, which means performance of this is impactful.
-        //  Consider implementing cache as a Map for constant-time access.
-        return cache.stream()
-                .filter(currency -> Objects.equals(threeLetterISOCode, currency.threeLetterISOCode()))
-                .findFirst();
+        return Optional.ofNullable(threeLetterISOCode)
+                .map(cache::get);
     }
 
     private void fetchIfCacheIsEmpty() {
