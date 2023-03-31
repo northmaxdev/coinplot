@@ -8,6 +8,7 @@ import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import jakarta.annotation.Nonnull;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.util.stream.Collectors.joining;
@@ -34,6 +36,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> dtoMapper;
+    private final StopWatch stopWatch;
 
     @Autowired
     public ExchangeRateServiceImpl(
@@ -45,6 +48,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.dtoMapper = dtoMapper;
+        this.stopWatch = new StopWatch();
     }
 
     @Override
@@ -59,13 +63,23 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
                 .build();
 
         try {
+            stopWatch.reset();
+            stopWatch.start();
+
             // TODO: Profile other response content types, maybe byte[] is faster?
-            // TODO: Implement (and log) execution time measurements through a stopwatch
             HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
             ExchangeRatesDTO dto = objectMapper.readValue(response.body(), ExchangeRatesDTO.class);
-            return dtoMapper.map(dto);
+            Collection<ExchangeRate> exchangeRates = dtoMapper.map(dto);
+
+            stopWatch.stop();
+            String infoMessage = "Fetched %d exchange rates in %dms"
+                    .formatted(exchangeRates.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+            LOG.info(infoMessage);
+
+            return exchangeRates;
         } catch (IOException | InterruptedException e) {
-            LOG.warn("Failed to acquire exchange rates: " + e);
+            LOG.error("Failed to fetch and/or deserialize exchange rates: " + e);
+            // FIXME: Returning an empty list is a bad idea in terms of API design, maybe simply rethrow exceptions?
             return List.of();
         }
     }
