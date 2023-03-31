@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.joining;
 @Service
 public final class ExchangeRateServiceImpl implements ExchangeRateService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExchangeRateService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExchangeRateServiceImpl.class);
 
     private final APIConfig apiConfig;
     private final HttpClient httpClient;
