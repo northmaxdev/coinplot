@@ -8,6 +8,7 @@ import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public final class CurrencyServiceImpl implements CurrencyService {
@@ -33,6 +35,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
     private final DTOMapper<Map<String, String>, Set<Currency>> dtoMapper;
+    private final StopWatch stopWatch;
     private @Nonnull Set<Currency> cache;
 
     @Autowired
@@ -47,6 +50,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
         this.httpClient = httpClient;
         this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
+        this.stopWatch = new StopWatch();
         this.cache = Set.of();
     }
 
@@ -75,13 +79,18 @@ public final class CurrencyServiceImpl implements CurrencyService {
                     .build();
 
             try {
+                stopWatch.reset();
+                stopWatch.start();
+
                 // TODO: Profile other response content types, maybe byte[] is faster?
-                // TODO: Implement (and log) execution time measurements through a stopwatch
                 HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
                 Map<String, String> dto = jsonParser.readValue(response.body(), new TypeReference<>(){});
-
                 cache = dtoMapper.map(dto);
-                LOG.info("Fetched and cached " + cache.size() + " currencies");
+
+                stopWatch.stop();
+                String infoMessage = "Fetched and cached %d currencies in %dms"
+                        .formatted(cache.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+                LOG.info(infoMessage);
             } catch (IOException | InterruptedException e) {
                 LOG.warn("Failed to initialize currency data: " + e);
             }
