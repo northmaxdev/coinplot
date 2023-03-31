@@ -34,7 +34,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
 
     private final APIConfig apiConfig;
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper jsonParser;
     private final DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> dtoMapper;
     private final StopWatch stopWatch;
 
@@ -42,11 +42,11 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     public ExchangeRateServiceImpl(
             APIConfig apiConfig,
             HttpClient httpClient,
-            ObjectMapper objectMapper,
+            ObjectMapper jsonParser,
             DTOMapper<ExchangeRatesDTO, Collection<ExchangeRate>> dtoMapper) {
         this.apiConfig = apiConfig;
         this.httpClient = httpClient;
-        this.objectMapper = objectMapper;
+        this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
         this.stopWatch = new StopWatch();
     }
@@ -68,7 +68,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
 
             // TODO: Profile other response content types, maybe byte[] is faster?
             HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
-            ExchangeRatesDTO dto = objectMapper.readValue(response.body(), ExchangeRatesDTO.class);
+            ExchangeRatesDTO dto = jsonParser.readValue(response.body(), ExchangeRatesDTO.class);
             Collection<ExchangeRate> exchangeRates = dtoMapper.map(dto);
 
             stopWatch.stop();
