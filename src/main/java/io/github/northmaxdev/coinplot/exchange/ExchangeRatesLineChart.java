@@ -35,9 +35,11 @@ public final class ExchangeRatesLineChart extends Chart {
 
         XAxis xAxis = new XAxis();
         xAxis.setType(AxisType.DATETIME);
+        xAxis.setTitle("Timeline"); // TODO: i18n
         config.addxAxis(xAxis);
 
         YAxis yAxis = new YAxis();
+        yAxis.setTitle("Exchange Rate Values"); // TODO: i18n
         config.addyAxis(yAxis);
     }
 
