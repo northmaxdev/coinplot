@@ -53,6 +53,7 @@ public final class ExchangeRatesLineChart extends Chart implements LocaleChangeO
     public void localeChange(LocaleChangeEvent event) {
         xAxis.setTitle(getXAxisTitleTranslation());
         yAxis.setTitle(getYAxisTitleTranslation());
+        drawChart();
     }
 
     public void reloadData(@Nonnull Collection<ExchangeRate> data, boolean redrawImmediately) {
