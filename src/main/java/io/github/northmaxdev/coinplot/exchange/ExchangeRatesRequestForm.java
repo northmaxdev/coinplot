@@ -9,6 +9,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import io.github.northmaxdev.coinplot.currency.CurrencyService;
@@ -20,8 +22,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 
-// TODO: i18n of all UI strings
-public final class ExchangeRatesRequestForm extends FormLayout {
+public final class ExchangeRatesRequestForm extends FormLayout implements LocaleChangeObserver {
 
     @FunctionalInterface
     public interface FormInputConsumer {
@@ -34,6 +35,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
     private final DatePicker startPicker;
     private final DatePicker endPicker;
     private final Button okButton;
+    private final Button clearButton;
 
     public ExchangeRatesRequestForm(
             @Nonnull CurrencyService currencyService,
@@ -43,24 +45,28 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         // Component Initialization //
         //////////////////////////////
 
-        this.baseSelector = CurrencyUIComponents.comboBox("Base currency", currencyService);
+        this.baseSelector = CurrencyUIComponents.comboBox(
+                getBaseFieldLabelTranslation(),
+                currencyService);
         baseSelector.setRequired(true);
 
-        this.targetSelector = CurrencyUIComponents.multiSelectComboBox("Target currencies", currencyService);
+        this.targetSelector = CurrencyUIComponents.multiSelectComboBox(
+                getTargetFieldLabelTranslation(),
+                currencyService);
         targetSelector.setRequired(true);
 
-        this.startPicker = new DatePicker("Start date");
+        this.startPicker = new DatePicker(getStartDateFieldLabelTranslation());
         startPicker.setRequired(true);
 
-        this.endPicker = new DatePicker("End date");
+        this.endPicker = new DatePicker(getEndDateFieldLabelTranslation());
         endPicker.setRequired(true);
 
-        this.okButton = new Button("OK");
+        this.okButton = new Button(getOKButtonTextTranslation());
         okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         // WORKAROUND: Disable the button manually until an input field triggers the toggle listener registered below
         okButton.setEnabled(false);
 
-        Button clearButton = new Button("Clear");
+        this.clearButton = new Button(getClearButtonTextTranslation());
         clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         ///////////////
@@ -108,6 +114,16 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         add(baseSelector, targetSelector, startPicker, endPicker, okButton, clearButton);
     }
 
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        baseSelector.setLabel(getBaseFieldLabelTranslation());
+        targetSelector.setLabel(getTargetFieldLabelTranslation());
+        startPicker.setLabel(getStartDateFieldLabelTranslation());
+        endPicker.setLabel(getEndDateFieldLabelTranslation());
+        okButton.setText(getOKButtonTextTranslation());
+        clearButton.setText(getClearButtonTextTranslation());
+    }
+
     public boolean isFilled() {
         Optional<Currency> selectedBase = baseSelector.getOptionalValue();
         Collection<Currency> selectedTargets = targetSelector.getSelectedItems();
@@ -130,5 +146,33 @@ public final class ExchangeRatesRequestForm extends FormLayout {
     // The parameter is there so this method can be referenced as a ValueChangeEvent listener
     private void toggleOKButtonToInput(HasValue.ValueChangeEvent<?> ignored) {
         okButton.setEnabled(isFilled());
+    }
+
+    //////////
+    // i18n //
+    //////////
+
+    private String getBaseFieldLabelTranslation() {
+        return getTranslation("form.input.base-selection.label");
+    }
+
+    private String getTargetFieldLabelTranslation() {
+        return getTranslation("form.input.target-selection.label");
+    }
+
+    private String getStartDateFieldLabelTranslation() {
+        return getTranslation("form.input.start-date-selection.label");
+    }
+
+    private String getEndDateFieldLabelTranslation() {
+        return getTranslation("form.input.end-date-selection.label");
+    }
+
+    private String getOKButtonTextTranslation() {
+        return getTranslation("form.button.ok");
+    }
+
+    private String getClearButtonTextTranslation() {
+        return getTranslation("form.button.clear");
     }
 }
