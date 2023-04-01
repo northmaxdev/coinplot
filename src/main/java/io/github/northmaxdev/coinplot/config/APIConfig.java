@@ -18,7 +18,7 @@ public class APIConfig {
         return currenciesURI;
     }
 
-    public String getExchangeRatesURIFormat() {
-        return exchangeRatesURIFormat;
+    public String getExchangeRatesURI(Object... params) {
+        return exchangeRatesURIFormat.formatted(params);
     }
 }

@@ -87,16 +87,11 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
             @Nonnull LocalDateRange dateRange) {
-        // TODO:
-        //  Profile this section and if it proves to be a performance bottleneck, consider spreading serialization of
-        //  targets, start and end between 3 threads (though it'll probably be negligible compared to other parts of
-        //  the codebase).
-        String fmt = apiConfig.getExchangeRatesURIFormat();
         String joinedTargets = targets.stream()
                 .map(Currency::threeLetterISOCode)
                 .collect(joining(","));
 
-        String s = fmt.formatted(
+        String s = apiConfig.getExchangeRatesURI(
                 ISO_LOCAL_DATE.format(dateRange.start()),
                 ISO_LOCAL_DATE.format(dateRange.end()),
                 base.threeLetterISOCode(),
