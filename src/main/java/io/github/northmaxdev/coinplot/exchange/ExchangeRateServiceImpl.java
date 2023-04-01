@@ -66,8 +66,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             stopWatch.reset();
             stopWatch.start();
 
-            // TODO: Profile other response content types, maybe byte[] is faster?
-            HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+            HttpResponse<byte[]> response = httpClient.send(request, BodyHandlers.ofByteArray());
             ExchangeRatesDTO dto = jsonParser.readValue(response.body(), ExchangeRatesDTO.class);
             Collection<ExchangeRate> exchangeRates = dtoMapper.map(dto);
 

@@ -77,8 +77,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
                 stopWatch.reset();
                 stopWatch.start();
 
-                // TODO: Profile other response content types, maybe byte[] is faster?
-                HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+                HttpResponse<byte[]> response = httpClient.send(request, BodyHandlers.ofByteArray());
                 Map<String, String> dto = jsonParser.readValue(response.body(), new TypeReference<>(){});
                 cache = dtoMapper.map(dto);
 
