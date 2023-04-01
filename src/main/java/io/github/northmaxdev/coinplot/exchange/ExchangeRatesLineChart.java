@@ -90,7 +90,7 @@ public final class ExchangeRatesLineChart extends Chart {
     private static DataSeriesItem convertRateToSeriesItem(@Nonnull ExchangeRate rate) {
         Instant exchangeDateAsInstant = rate.date()
                 .atStartOfDay()
-                .toInstant(ZoneOffset.UTC); // FIXME: Temporary dummy value
+                .toInstant(ZoneOffset.UTC); // UTC is selected for this matter completely arbitrarily
 
         return new DataSeriesItem(exchangeDateAsInstant, rate.value());
     }
