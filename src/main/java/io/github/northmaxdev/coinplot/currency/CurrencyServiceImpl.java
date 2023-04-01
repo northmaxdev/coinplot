@@ -87,7 +87,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
                         .formatted(cache.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
                 LOG.info(infoMessage);
             } catch (IOException | InterruptedException e) {
-                LOG.warn("Failed to initialize currency data: " + e);
+                LOG.error("Failed to initialize currency data: " + e);
             }
         }
     }
