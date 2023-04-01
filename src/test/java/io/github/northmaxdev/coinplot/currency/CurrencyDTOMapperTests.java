@@ -24,6 +24,6 @@ class CurrencyDTOMapperTests {
         );
         Map<String, Currency> actual = mapper.map(dto);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).containsExactlyInAnyOrderEntriesOf(expected);
     }
 }
