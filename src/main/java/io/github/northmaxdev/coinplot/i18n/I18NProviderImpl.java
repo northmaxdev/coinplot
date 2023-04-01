@@ -16,10 +16,11 @@ public final class I18NProviderImpl implements I18NProvider {
     private static final String RESOURCE_BUNDLE_BASE_NAME = "i18n/i18n";
 
     private static final Locale ENGLISH = new Locale("en");
+    private static final Locale RUSSIAN = new Locale("ru");
 
     @Override
     public List<Locale> getProvidedLocales() {
-        return List.of(ENGLISH);
+        return List.of(ENGLISH, RUSSIAN);
     }
 
     @Override
