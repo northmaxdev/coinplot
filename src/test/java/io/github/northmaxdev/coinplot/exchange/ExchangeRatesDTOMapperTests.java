@@ -54,6 +54,6 @@ class ExchangeRatesDTOMapperTests {
         );
         Collection<ExchangeRate> actual = mapper.map(dto);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 }

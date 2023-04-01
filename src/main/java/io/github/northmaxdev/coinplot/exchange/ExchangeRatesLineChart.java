@@ -3,8 +3,10 @@
 package io.github.northmaxdev.coinplot.exchange;
 
 import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.charts.model.AxisType;
 import com.vaadin.flow.component.charts.model.ChartType;
-import com.vaadin.flow.component.charts.model.ListSeries;
+import com.vaadin.flow.component.charts.model.DataSeries;
+import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.charts.model.Series;
 import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
@@ -13,36 +15,36 @@ import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
 
 public final class ExchangeRatesLineChart extends Chart {
 
     public ExchangeRatesLineChart() {
         super(ChartType.LINE);
+        var config = getConfiguration();
 
         XAxis xAxis = new XAxis();
-        YAxis yAxis = new YAxis();
-
-        var config = getConfiguration();
+        xAxis.setType(AxisType.DATETIME);
+        xAxis.setTitle("Timeline"); // TODO: i18n
         config.addxAxis(xAxis);
+
+        YAxis yAxis = new YAxis();
+        yAxis.setTitle("Exchange Rate Values"); // TODO: i18n
         config.addyAxis(yAxis);
     }
 
     public void reloadData(@Nonnull Collection<ExchangeRate> data, boolean redrawImmediately) {
-        List<Series> newSeries = data.stream()
-                // Group the exchange rates by the unique combination of their base and target currencies (similar to
-                // composite keys in SQL), while the grouped exchange rates themselves are stored sorted by date
-                .collect(groupingBy(rate -> new ImmutablePair<>(rate.base(), rate.target()), toCollection(() -> {
-                    Comparator<ExchangeRate> comparator = Comparator.comparing(ExchangeRate::date);
-                    return new TreeSet<>(comparator);
-                })))
+        List<Series> newSeries = organizeData(data)
                 .entrySet()
                 .stream()
                 .map(entry -> {
@@ -51,14 +53,16 @@ public final class ExchangeRatesLineChart extends Chart {
                     Currency target = exchange.getRight();
 
                     String seriesName = base.name() + " to " + target.name(); // TODO: i18n
-                    List<Number> seriesValues = entry.getValue()
+                    List<DataSeriesItem> seriesItems = entry.getValue()
                             .stream()
-                            .map(ExchangeRate::value)
-                            .collect(toList());
+                            .map(ExchangeRatesLineChart::convertRateToSeriesItem)
+                            .toList();
 
-                    return new ListSeries(seriesName, seriesValues);
+                    Series series = new DataSeries(seriesItems);
+                    series.setName(seriesName);
+                    return series;
                 })
-                .collect(toList());
+                .toList();
 
         var config = getConfiguration();
         config.setSeries(newSeries);
@@ -66,5 +70,28 @@ public final class ExchangeRatesLineChart extends Chart {
         if (redrawImmediately) {
             drawChart();
         }
+    }
+
+    public void reloadData(@Nonnull Collection<ExchangeRate> data) {
+        reloadData(data, true);
+    }
+
+    private static Map<Pair<Currency, Currency>, Set<ExchangeRate>> organizeData(
+            @Nonnull Collection<ExchangeRate> data) {
+        // Group the exchange rates by the unique combination of their base and target currencies (similar to
+        // composite keys in SQL), while the grouped exchange rates themselves are sorted by date
+        return data.stream()
+                .collect(groupingBy(rate -> new ImmutablePair<>(rate.base(), rate.target()), toCollection(() -> {
+                    Comparator<ExchangeRate> comparator = Comparator.comparing(ExchangeRate::date);
+                    return new TreeSet<>(comparator);
+                })));
+    }
+
+    private static DataSeriesItem convertRateToSeriesItem(@Nonnull ExchangeRate rate) {
+        Instant exchangeDateAsInstant = rate.date()
+                .atStartOfDay()
+                .toInstant(ZoneOffset.UTC); // UTC is selected for this matter completely arbitrarily
+
+        return new DataSeriesItem(exchangeDateAsInstant, rate.value());
     }
 }

@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class LocalDateRangeTests {
 
     @Test
     void throwsIAEIfEndBeforeStart() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThatIllegalArgumentException().isThrownBy(() -> {
             var start = LocalDate.of(2000, 1, 3);
             var end = LocalDate.of(2000, 1, 2);
             new LocalDateRange(start, end);
@@ -22,7 +22,7 @@ class LocalDateRangeTests {
 
     @Test
     void throwsIAEIfEndEqualsStart() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThatIllegalArgumentException().isThrownBy(() -> {
             var start = LocalDate.of(2000, 1, 1);
             var end = LocalDate.of(2000, 1, 1);
             new LocalDateRange(start, end);
@@ -31,7 +31,7 @@ class LocalDateRangeTests {
 
     @Test
     void doesNotThrowIfEndAfterStart() {
-        assertDoesNotThrow(() -> {
+        assertThatNoException().isThrownBy(() -> {
             var start = LocalDate.of(2000, 1, 2);
             var end = LocalDate.of(2000, 1, 3);
             new LocalDateRange(start, end);

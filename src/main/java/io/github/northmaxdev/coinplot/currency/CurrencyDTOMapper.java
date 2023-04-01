@@ -7,18 +7,18 @@ import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toMap;
 
 @Component
-public final class CurrencyDTOMapper implements DTOMapper<Map<String, String>, Set<Currency>> {
+public final class CurrencyDTOMapper implements DTOMapper<Map<String, String>, Map<String, Currency>> {
 
     @Override
-    public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) {
+    public @Nonnull Map<String, Currency> map(@Nonnull Map<String, String> dto) {
         return dto.entrySet()
                 .stream()
                 .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-                .collect(toSet());
+                .collect(toMap(Currency::threeLetterISOCode, Function.identity()));
     }
 }

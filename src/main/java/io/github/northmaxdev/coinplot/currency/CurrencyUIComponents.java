@@ -8,6 +8,10 @@ import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Collection;
+
+import static java.util.Comparator.comparing;
+
 public final class CurrencyUIComponents {
 
     private CurrencyUIComponents() {}
@@ -27,7 +31,13 @@ public final class CurrencyUIComponents {
     private static <B extends ComboBoxBase<B, Currency, ?>> B configureComboBox(
             @Nonnull B box,
             @Nonnull CurrencyService service) {
-        box.setItems(service.getAvailableCurrencies());
+        Collection<Currency> sortedItems = service.getAvailableCurrencies()
+                .stream()
+                // Note: CASE_INSENSITIVE_ORDER does not take locale into account as per its own documentation
+                .sorted(comparing(Currency::name, String.CASE_INSENSITIVE_ORDER))
+                .toList();
+
+        box.setItems(sortedItems);
         box.setItemLabelGenerator(Currency::name);
 
         return box;
