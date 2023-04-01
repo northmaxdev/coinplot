@@ -25,11 +25,11 @@ public final class I18NProviderImpl implements I18NProvider {
 
     @Override
     public String getTranslation(String key, Locale locale, Object... params) {
-        ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, locale);
         try {
+            ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_BASE_NAME, locale);
             return bundle.getString(key);
         } catch (MissingResourceException e) {
-            return "!{%s}".formatted(key);
+            return "!{key: %s, locale: %s}".formatted(key, locale);
         }
     }
 }
