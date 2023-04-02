@@ -82,11 +82,11 @@ public final class CurrencyServiceImpl implements CurrencyService {
                 cache = dtoMapper.map(dto);
 
                 stopWatch.stop();
-                String infoMessage = "Fetched and cached %d currencies in %dms"
+                String infoMessage = "Fetched and deserialized %d currencies in %dms"
                         .formatted(cache.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
                 LOG.info(infoMessage);
             } catch (IOException | InterruptedException e) {
-                LOG.error("Failed to initialize currency data: " + e);
+                LOG.error("Failed to fetch and/or deserialize currency data: " + e);
                 throw e;
             }
         }
