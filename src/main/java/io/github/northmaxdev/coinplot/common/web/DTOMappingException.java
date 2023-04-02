@@ -9,4 +9,8 @@ public final class DTOMappingException extends IOException {
     public DTOMappingException(String message) {
         super(message);
     }
+
+    public DTOMappingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
