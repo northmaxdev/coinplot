@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CurrencyService {
 
-    Collection<Currency> getAvailableCurrencies();
+    Collection<Currency> getAvailableCurrencies() throws Exception;
 
-    Optional<Currency> getCurrency(@Nullable String threeLetterISOCode);
+    Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) throws Exception;
 }
