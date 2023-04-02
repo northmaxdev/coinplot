@@ -54,19 +54,19 @@ public final class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public Collection<Currency> getAvailableCurrencies() {
+    public Collection<Currency> getAvailableCurrencies() throws Exception {
         fetchIfCacheIsEmpty();
         return cache.values();
     }
 
     @Override
-    public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) {
+    public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) throws Exception {
         fetchIfCacheIsEmpty();
         return Optional.ofNullable(threeLetterISOCode)
                 .map(cache::get);
     }
 
-    private void fetchIfCacheIsEmpty() {
+    private void fetchIfCacheIsEmpty() throws IOException, InterruptedException {
         if (cache.isEmpty()) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(requestURI)
@@ -87,6 +87,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
                 LOG.info(infoMessage);
             } catch (IOException | InterruptedException e) {
                 LOG.error("Failed to initialize currency data: " + e);
+                throw e;
             }
         }
     }
