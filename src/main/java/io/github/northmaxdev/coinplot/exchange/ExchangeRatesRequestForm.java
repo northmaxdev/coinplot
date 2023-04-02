@@ -13,8 +13,8 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
 import io.github.northmaxdev.coinplot.currency.Currency;
+import io.github.northmaxdev.coinplot.currency.CurrencyComboBoxes;
 import io.github.northmaxdev.coinplot.currency.CurrencyService;
-import io.github.northmaxdev.coinplot.currency.CurrencyUIComponents;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -37,81 +37,98 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
     private final Button okButton;
     private final Button clearButton;
 
-    public ExchangeRatesRequestForm(
+    public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
             @Nonnull CurrencyService currencyService,
+            @Nonnull FormInputConsumer onOKButtonClick) throws Exception {
+        ComboBox<Currency> baseSelector = CurrencyComboBoxes.singleWithData(currencyService);
+        MultiSelectComboBox<Currency> targetSelector = CurrencyComboBoxes.multiWithData(currencyService);
+        return new ExchangeRatesRequestForm(baseSelector, targetSelector, onOKButtonClick);
+    }
+
+    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData(@Nonnull FormInputConsumer onOKButtonClick) {
+        return new ExchangeRatesRequestForm(
+                CurrencyComboBoxes.singleWithoutData(),
+                CurrencyComboBoxes.multiWithoutData(),
+                onOKButtonClick
+        );
+    }
+
+    private ExchangeRatesRequestForm(
+            @Nonnull ComboBox<Currency> baseSelector,
+            @Nonnull MultiSelectComboBox<Currency> targetSelector,
             @Nonnull FormInputConsumer onOKButtonClick) {
 
         //////////////////////////////
         // Component Initialization //
         //////////////////////////////
 
-        this.baseSelector = CurrencyUIComponents.comboBox(
-                getBaseFieldLabelTranslation(),
-                currencyService);
-        baseSelector.setRequired(true);
+        this.baseSelector = baseSelector;
+        this.baseSelector.setLabel(getBaseFieldLabelTranslation());
+        this.baseSelector.setRequired(true);
 
-        this.targetSelector = CurrencyUIComponents.multiSelectComboBox(
-                getTargetFieldLabelTranslation(),
-                currencyService);
-        targetSelector.setRequired(true);
+        this.targetSelector = targetSelector;
+        this.targetSelector.setLabel(getTargetFieldLabelTranslation());
+        this.targetSelector.setRequired(true);
 
         this.startPicker = new DatePicker(getStartDateFieldLabelTranslation());
-        startPicker.setRequired(true);
+        this.startPicker.setRequired(true);
 
         this.endPicker = new DatePicker(getEndDateFieldLabelTranslation());
-        endPicker.setRequired(true);
+        this.endPicker.setRequired(true);
 
         this.okButton = new Button(getOKButtonTextTranslation());
-        okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        this.okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         // WORKAROUND: Disable the button manually until an input field triggers the toggle listener registered below
-        okButton.setEnabled(false);
+        this.okButton.setEnabled(false);
 
         this.clearButton = new Button(getClearButtonTextTranslation());
-        clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        this.clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         ///////////////
         // Listeners //
         ///////////////
 
-        baseSelector.addValueChangeListener(this::toggleOKButtonToInput);
-        targetSelector.addValueChangeListener(this::toggleOKButtonToInput);
-        startPicker.addValueChangeListener(this::toggleOKButtonToInput);
-        endPicker.addValueChangeListener(this::toggleOKButtonToInput);
+        this.baseSelector.addValueChangeListener(this::toggleOKButtonToInput);
+        this.targetSelector.addValueChangeListener(this::toggleOKButtonToInput);
+        this.startPicker.addValueChangeListener(this::toggleOKButtonToInput);
+        this.endPicker.addValueChangeListener(this::toggleOKButtonToInput);
 
         // FIXME: It is possible to circumvent this date min/max validation measure by entering an invalid date via
         //  textual input. This is solvable by: (a) disabling textual input or (b) making the OK button toggle listener
         //  check not only whether the form is filled, but also whether its values are sane (actually, both options are
         //  not mutually exclusive)
 
+        // TODO: Disable values later than today
+
         // After selecting a start date, set the earliest possible end date to be start date plus 1 day.
-        // (when the start date selection is cleared, reset this end date picker restriction as well)
-        startPicker.addValueChangeListener(event -> {
+        // (when the start date selection is cleared, reset this restriction)
+        this.startPicker.addValueChangeListener(event -> {
             @Nullable LocalDate newSelection = event.getValue();
-            endPicker.setMin(newSelection == null ? null : newSelection.plusDays(1));
+            this.endPicker.setMin(newSelection == null ? null : newSelection.plusDays(1));
         });
 
         // After selecting an end date, set the latest possible start date to be end date minus 1 day.
-        // (when the end date selection is cleared, reset this start date picker restriction as well)
-        endPicker.addValueChangeListener(event -> {
+        // (when the end date selection is cleared, reset this restriction)
+        this.endPicker.addValueChangeListener(event -> {
             @Nullable LocalDate newSelection = event.getValue();
-            startPicker.setMax(newSelection == null ? null : newSelection.minusDays(1));
+            this.startPicker.setMax(newSelection == null ? null : newSelection.minusDays(1));
         });
 
-        okButton.addClickListener(event -> {
+        this.okButton.addClickListener(event -> {
             // Note: all these getters technically return nullable values, but we *assume* they're all non-null and sane
             // by the time we get to this block of code as we rely on our surface-level filters of invalid input, such
             // as keeping the OK button disabled while the form is not fully filled and/or invalid. If the user somehow
             // circumvents these validation measures, bad input might get through, and it ain't going to be fun.
-            Currency base = baseSelector.getValue();
-            Collection<Currency> targets = targetSelector.getSelectedItems();
-            LocalDateRange dateRange = new LocalDateRange(startPicker.getValue(), endPicker.getValue());
+            Currency base = this.baseSelector.getValue();
+            Collection<Currency> targets = this.targetSelector.getSelectedItems();
+            LocalDateRange dateRange = new LocalDateRange(this.startPicker.getValue(), this.endPicker.getValue());
 
             onOKButtonClick.consume(base, targets, dateRange);
         });
 
-        clearButton.addClickListener(event -> clear());
+        this.clearButton.addClickListener(event -> clear());
 
-        add(baseSelector, targetSelector, startPicker, endPicker, okButton, clearButton);
+        add(this.baseSelector, this.targetSelector, this.startPicker, this.endPicker, this.okButton, this.clearButton);
     }
 
     @Override
