@@ -70,13 +70,13 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             Collection<ExchangeRate> exchangeRates = dtoMapper.map(dto);
 
             stopWatch.stop();
-            String infoMessage = "Fetched %d exchange rates in %dms"
+            String infoMessage = "Fetched and deserialized %d exchange rates in %dms"
                     .formatted(exchangeRates.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
             LOG.info(infoMessage);
 
             return exchangeRates;
         } catch (IOException | InterruptedException e) {
-            LOG.error("Failed to fetch and/or deserialize exchange rates: " + e);
+            LOG.error("Failed to fetch and/or deserialize exchange rate data: " + e);
             throw e;
         }
     }
