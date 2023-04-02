@@ -15,23 +15,23 @@ public final class CurrencyComboBoxes {
 
     private CurrencyComboBoxes() {}
 
-    public static ComboBox<Currency> singleWithData(@Nonnull CurrencyService service) throws Exception {
-        return configureWithData(new ComboBox<>(), service);
+    public static ComboBox<Currency> singleAvailable(@Nonnull CurrencyService service) throws Exception {
+        return configureAvailable(new ComboBox<>(), service);
     }
 
-    public static ComboBox<Currency> singleWithoutData() {
-        return configureWithoutData(new ComboBox<>());
+    public static ComboBox<Currency> singleUnavailable() {
+        return configureUnavailable(new ComboBox<>());
     }
 
-    public static MultiSelectComboBox<Currency> multiWithData(@Nonnull CurrencyService service) throws Exception {
-        return configureWithData(new MultiSelectComboBox<>(), service);
+    public static MultiSelectComboBox<Currency> multiAvailable(@Nonnull CurrencyService service) throws Exception {
+        return configureAvailable(new MultiSelectComboBox<>(), service);
     }
 
-    public static MultiSelectComboBox<Currency> multiWithoutData() {
-        return configureWithoutData(new MultiSelectComboBox<>());
+    public static MultiSelectComboBox<Currency> multiUnavailable() {
+        return configureUnavailable(new MultiSelectComboBox<>());
     }
 
-    private static <B extends ComboBoxBase<B, Currency, ?>> B configureWithData(
+    private static <B extends ComboBoxBase<B, Currency, ?>> B configureAvailable(
             @Nonnull B box,
             @Nonnull CurrencyService service) throws Exception {
         Collection<Currency> sortedItems = service.getAvailableCurrencies()
@@ -45,10 +45,8 @@ public final class CurrencyComboBoxes {
         return box;
     }
 
-    private static <B extends ComboBoxBase<B, Currency, ?>> B configureWithoutData(@Nonnull B box) {
+    private static <B extends ComboBoxBase<B, Currency, ?>> B configureUnavailable(@Nonnull B box) {
         box.setEnabled(false);
-        String placeholder = box.getTranslation("currency-combobox.placeholder-on-unavailable");
-        box.setPlaceholder(placeholder);
         return box;
     }
 }
