@@ -13,5 +13,5 @@ public interface ExchangeRateService {
     Collection<ExchangeRate> getExchangeRatesBetweenDates(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
-            @Nonnull LocalDateRange dateRange);
+            @Nonnull LocalDateRange dateRange) throws Exception;
 }
