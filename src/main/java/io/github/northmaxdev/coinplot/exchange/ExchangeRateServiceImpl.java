@@ -21,7 +21,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
@@ -55,7 +54,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     public Collection<ExchangeRate> getExchangeRatesBetweenDates(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
-            @Nonnull LocalDateRange dateRange) {
+            @Nonnull LocalDateRange dateRange) throws Exception {
         URI requestURI = createRequestURI(base, targets, dateRange);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(requestURI)
@@ -78,8 +77,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             return exchangeRates;
         } catch (IOException | InterruptedException e) {
             LOG.error("Failed to fetch and/or deserialize exchange rates: " + e);
-            // FIXME: Returning an empty list is a bad idea in terms of API design, maybe simply rethrow exceptions?
-            return List.of();
+            throw e;
         }
     }
 
