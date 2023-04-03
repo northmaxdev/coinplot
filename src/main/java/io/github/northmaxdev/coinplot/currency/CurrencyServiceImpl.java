@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.currency;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMappingException;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -85,7 +86,7 @@ public final class CurrencyServiceImpl implements CurrencyService {
                 String infoMessage = "Fetched and deserialized %d currencies in %dms"
                         .formatted(cache.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
                 LOG.info(infoMessage);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException | InterruptedException | DTOMappingException e) {
                 LOG.error("Failed to fetch and/or deserialize currency data: " + e);
                 throw e;
             }
