@@ -40,15 +40,15 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
     public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
             @Nonnull CurrencyService currencyService,
             @Nonnull FormInputConsumer onOKButtonClick) throws Exception {
-        ComboBox<Currency> baseSelector = CurrencyComboBoxes.singleWithData(currencyService);
-        MultiSelectComboBox<Currency> targetSelector = CurrencyComboBoxes.multiWithData(currencyService);
+        ComboBox<Currency> baseSelector = CurrencyComboBoxes.singleAvailable(currencyService);
+        MultiSelectComboBox<Currency> targetSelector = CurrencyComboBoxes.multiAvailable(currencyService);
         return new ExchangeRatesRequestForm(baseSelector, targetSelector, onOKButtonClick);
     }
 
     public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData(@Nonnull FormInputConsumer onOKButtonClick) {
         return new ExchangeRatesRequestForm(
-                CurrencyComboBoxes.singleWithoutData(),
-                CurrencyComboBoxes.multiWithoutData(),
+                CurrencyComboBoxes.singleUnavailable(),
+                CurrencyComboBoxes.multiUnavailable(),
                 onOKButtonClick
         );
     }
