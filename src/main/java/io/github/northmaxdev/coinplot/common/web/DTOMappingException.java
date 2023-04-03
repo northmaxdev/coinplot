@@ -2,9 +2,7 @@
 
 package io.github.northmaxdev.coinplot.common.web;
 
-import java.io.IOException;
-
-public final class DTOMappingException extends IOException {
+public final class DTOMappingException extends RuntimeException {
 
     public DTOMappingException(String message) {
         super(message);
