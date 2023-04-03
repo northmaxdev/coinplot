@@ -7,7 +7,11 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 
+import java.time.Duration;
+
 public final class ResourceFetchFailureNotification extends Notification implements LocaleChangeObserver {
+
+    private static final Duration DEFAULT_DURATION = Duration.ofSeconds(5);
 
     private final String i18nPropertyKey;
 
@@ -24,7 +28,7 @@ public final class ResourceFetchFailureNotification extends Notification impleme
 
         addThemeVariants(NotificationVariant.LUMO_ERROR);
         setTranslatedText();
-        setDuration(0);
+        setDuration((int) DEFAULT_DURATION.toMillis()); // This is safe
         setPosition(Position.BOTTOM_CENTER);
     }
 
