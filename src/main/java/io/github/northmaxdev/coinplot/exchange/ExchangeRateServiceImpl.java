@@ -3,8 +3,9 @@
 package io.github.northmaxdev.coinplot.exchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
+import io.github.northmaxdev.coinplot.common.chrono.LocalDateRange;
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMappingException;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import jakarta.annotation.Nonnull;
@@ -21,7 +22,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
@@ -55,7 +55,7 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
     public Collection<ExchangeRate> getExchangeRatesBetweenDates(
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
-            @Nonnull LocalDateRange dateRange) {
+            @Nonnull LocalDateRange dateRange) throws Exception {
         URI requestURI = createRequestURI(base, targets, dateRange);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(requestURI)
@@ -71,15 +71,14 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             Collection<ExchangeRate> exchangeRates = dtoMapper.map(dto);
 
             stopWatch.stop();
-            String infoMessage = "Fetched %d exchange rates in %dms"
+            String infoMessage = "Fetched and deserialized %d exchange rates in %dms"
                     .formatted(exchangeRates.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
             LOG.info(infoMessage);
 
             return exchangeRates;
-        } catch (IOException | InterruptedException e) {
-            LOG.error("Failed to fetch and/or deserialize exchange rates: " + e);
-            // FIXME: Returning an empty list is a bad idea in terms of API design, maybe simply rethrow exceptions?
-            return List.of();
+        } catch (IOException | InterruptedException | DTOMappingException e) {
+            LOG.error("Failed to fetch and/or deserialize exchange rate data: " + e);
+            throw e;
         }
     }
 
@@ -87,16 +86,11 @@ public final class ExchangeRateServiceImpl implements ExchangeRateService {
             @Nonnull Currency base,
             @Nonnull Collection<Currency> targets,
             @Nonnull LocalDateRange dateRange) {
-        // TODO:
-        //  Profile this section and if it proves to be a performance bottleneck, consider spreading serialization of
-        //  targets, start and end between 3 threads (though it'll probably be negligible compared to other parts of
-        //  the codebase).
-        String fmt = apiConfig.getExchangeRatesURIFormat();
         String joinedTargets = targets.stream()
                 .map(Currency::threeLetterISOCode)
                 .collect(joining(","));
 
-        String s = fmt.formatted(
+        String s = apiConfig.getExchangeRatesURI(
                 ISO_LOCAL_DATE.format(dateRange.start()),
                 ISO_LOCAL_DATE.format(dateRange.end()),
                 base.threeLetterISOCode(),

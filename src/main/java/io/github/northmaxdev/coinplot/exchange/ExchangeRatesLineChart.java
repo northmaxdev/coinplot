@@ -10,6 +10,8 @@ import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.charts.model.Series;
 import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -27,20 +29,31 @@ import java.util.TreeSet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
 
-public final class ExchangeRatesLineChart extends Chart {
+public final class ExchangeRatesLineChart extends Chart implements LocaleChangeObserver {
+
+    private final XAxis xAxis;
+    private final YAxis yAxis;
 
     public ExchangeRatesLineChart() {
         super(ChartType.LINE);
+
+        this.xAxis = new XAxis();
+        this.xAxis.setType(AxisType.DATETIME);
+        setXAxisTitleTranslation();
+
+        this.yAxis = new YAxis();
+        setYAxisTitleTranslation();
+
         var config = getConfiguration();
-
-        XAxis xAxis = new XAxis();
-        xAxis.setType(AxisType.DATETIME);
-        xAxis.setTitle("Timeline"); // TODO: i18n
         config.addxAxis(xAxis);
-
-        YAxis yAxis = new YAxis();
-        yAxis.setTitle("Exchange Rate Values"); // TODO: i18n
         config.addyAxis(yAxis);
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        setXAxisTitleTranslation();
+        setYAxisTitleTranslation();
+        drawChart();
     }
 
     public void reloadData(@Nonnull Collection<ExchangeRate> data, boolean redrawImmediately) {
@@ -52,7 +65,7 @@ public final class ExchangeRatesLineChart extends Chart {
                     Currency base = exchange.getLeft();
                     Currency target = exchange.getRight();
 
-                    String seriesName = base.name() + " to " + target.name(); // TODO: i18n
+                    String seriesName = base.name() + " | " + target.name();
                     List<DataSeriesItem> seriesItems = entry.getValue()
                             .stream()
                             .map(ExchangeRatesLineChart::convertRateToSeriesItem)
@@ -93,5 +106,17 @@ public final class ExchangeRatesLineChart extends Chart {
                 .toInstant(ZoneOffset.UTC); // UTC is selected for this matter completely arbitrarily
 
         return new DataSeriesItem(exchangeDateAsInstant, rate.value());
+    }
+
+    //////////
+    // i18n //
+    //////////
+
+    private void setXAxisTitleTranslation() {
+        xAxis.setTitle(getTranslation("chart.x.title"));
+    }
+
+    private void setYAxisTitleTranslation() {
+        yAxis.setTitle(getTranslation("chart.y.title"));
     }
 }

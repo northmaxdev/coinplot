@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.exchange;
 
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMappingException;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import io.github.northmaxdev.coinplot.currency.CurrencyService;
 import jakarta.annotation.Nonnull;
@@ -24,33 +25,35 @@ public final class ExchangeRatesDTOMapper implements DTOMapper<ExchangeRatesDTO,
     }
 
     @Override
-    public @Nonnull Collection<ExchangeRate> map(@Nonnull ExchangeRatesDTO dto) {
-        // TODO:
-        //  Consider reimplementing this in a more procedural way. Reasons:
-        //  1. This is pretty much unreadable
-        //  2. Might throw ISE mid-stream when doing look-up for target currencies, which is not great
-        //  When implementing using a classic for-loop, we can run a separate thread for each date and
-        //  push everything to a thread-safe list impl (is throwing ISE from a different thread OK though?)
-        Currency base = getCurrencyOrThrowISE(dto.base());
+    public @Nonnull Collection<ExchangeRate> map(@Nonnull ExchangeRatesDTO dto) throws DTOMappingException {
+        Currency base = getCurrencyOrThrow(dto.base());
 
         return dto.rates()
                 .entrySet()
                 .stream()
-                .flatMap(dateToDatasetEntry -> {
-                    LocalDate date = dateToDatasetEntry.getKey();
-                    return dateToDatasetEntry.getValue()
+                .flatMap(dateToMapEntry -> {
+                    LocalDate date = dateToMapEntry.getKey();
+                    return dateToMapEntry.getValue()
                             .entrySet()
                             .stream()
-                            .map(isoCodeToValueEntry -> {
-                                Currency target = getCurrencyOrThrowISE(isoCodeToValueEntry.getKey());
-                                return new ExchangeRate(base, target, date, isoCodeToValueEntry.getValue());
+                            .map(strToDoubleEntry -> {
+                                // Fail-fast: fetch currency first, then construct. Throwing exceptions mid-stream is
+                                // not optimal, but this is a truly exceptional case, so if it happens, it'll probably
+                                // matter more than all the stack unwinding.
+                                Currency target = getCurrencyOrThrow(strToDoubleEntry.getKey());
+                                double rateValue = strToDoubleEntry.getValue();
+                                return new ExchangeRate(base, target, date, rateValue);
                             });
                 })
                 .toList();
     }
 
-    private @Nonnull Currency getCurrencyOrThrowISE(@Nullable String code) {
-        return currencyService.getCurrency(code)
-                .orElseThrow(() -> new IllegalStateException("Failed to identify currency by code \"" + code + '\"'));
+    private @Nonnull Currency getCurrencyOrThrow(@Nullable String code) throws DTOMappingException {
+        try {
+            return currencyService.getCurrency(code)
+                    .orElseThrow(() -> new DTOMappingException("Failed to identify currency by code \"" + code + '\"'));
+        } catch (Exception e) {
+            throw new DTOMappingException("Failed to retrieve currency by code \"" + code + '\"', e);
+        }
     }
 }

@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.currency;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
+import io.github.northmaxdev.coinplot.common.web.DTOMappingException;
 import io.github.northmaxdev.coinplot.config.APIConfig;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -54,19 +55,19 @@ public final class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public Collection<Currency> getAvailableCurrencies() {
+    public Collection<Currency> getAvailableCurrencies() throws Exception {
         fetchIfCacheIsEmpty();
         return cache.values();
     }
 
     @Override
-    public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) {
+    public Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) throws Exception {
         fetchIfCacheIsEmpty();
         return Optional.ofNullable(threeLetterISOCode)
                 .map(cache::get);
     }
 
-    private void fetchIfCacheIsEmpty() {
+    private void fetchIfCacheIsEmpty() throws IOException, InterruptedException {
         if (cache.isEmpty()) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(requestURI)
@@ -82,11 +83,12 @@ public final class CurrencyServiceImpl implements CurrencyService {
                 cache = dtoMapper.map(dto);
 
                 stopWatch.stop();
-                String infoMessage = "Fetched and cached %d currencies in %dms"
+                String infoMessage = "Fetched and deserialized %d currencies in %dms"
                         .formatted(cache.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
                 LOG.info(infoMessage);
-            } catch (IOException | InterruptedException e) {
-                LOG.error("Failed to initialize currency data: " + e);
+            } catch (IOException | InterruptedException | DTOMappingException e) {
+                LOG.error("Failed to fetch and/or deserialize currency data: " + e);
+                throw e;
             }
         }
     }
