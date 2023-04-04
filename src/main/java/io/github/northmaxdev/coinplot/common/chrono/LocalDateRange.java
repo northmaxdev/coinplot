@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-package io.github.northmaxdev.coinplot.common.core;
+package io.github.northmaxdev.coinplot.common.chrono;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

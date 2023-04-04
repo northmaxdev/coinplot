@@ -9,7 +9,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
+import io.github.northmaxdev.coinplot.common.chrono.LocalDateRange;
 import io.github.northmaxdev.coinplot.common.fn.ExceptionHandler;
 import io.github.northmaxdev.coinplot.common.fn.TriConsumer;
 import io.github.northmaxdev.coinplot.currency.Currency;

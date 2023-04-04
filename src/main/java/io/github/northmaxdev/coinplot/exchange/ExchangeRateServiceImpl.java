@@ -3,7 +3,7 @@
 package io.github.northmaxdev.coinplot.exchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
+import io.github.northmaxdev.coinplot.common.chrono.LocalDateRange;
 import io.github.northmaxdev.coinplot.common.web.DTOMapper;
 import io.github.northmaxdev.coinplot.common.web.DTOMappingException;
 import io.github.northmaxdev.coinplot.config.APIConfig;

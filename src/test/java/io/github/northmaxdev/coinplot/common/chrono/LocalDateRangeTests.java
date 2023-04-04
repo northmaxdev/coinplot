@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-package io.github.northmaxdev.coinplot.common.core;
+package io.github.northmaxdev.coinplot.common.chrono;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
