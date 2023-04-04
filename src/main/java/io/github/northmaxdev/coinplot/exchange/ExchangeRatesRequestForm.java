@@ -119,19 +119,6 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         clearButton.setText(getClearButtonTextTranslation());
     }
 
-    public boolean isFilled() {
-        // FIXME
-        Optional<Currency> selectedBase = baseSelector.getOptionalValue();
-        Collection<Currency> selectedTargets = targetSelector.getValue();
-        Optional<LocalDate> selectedStart = startPicker.getOptionalValue();
-        Optional<LocalDate> selectedEnd = endPicker.getOptionalValue();
-
-        return selectedBase.isPresent()
-                && !selectedTargets.isEmpty()
-                && selectedStart.isPresent()
-                && selectedEnd.isPresent();
-    }
-
     public void clear() {
         baseSelector.clear();
         targetSelector.clear();
@@ -141,7 +128,16 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
     // The parameter is there so this method can be referenced as a ValueChangeEvent listener
     private void toggleOKButtonToInput(HasValue.ValueChangeEvent<?> ignored) {
-        okButton.setEnabled(isFilled());
+        Optional<Currency> selectedBase = this.baseSelector.getOptionalValue();
+        Collection<Currency> selectedTargets = this.targetSelector.getValue();
+        @Nullable LocalDate selectedStartDate = this.startPicker.getValue();
+        @Nullable LocalDate selectedEndDate = this.endPicker.getValue();
+
+        boolean inputIsValid = selectedBase.isPresent()
+                && !selectedTargets.isEmpty()
+                && LocalDateRange.isValid(selectedStartDate, selectedEndDate);
+
+        this.okButton.setEnabled(inputIsValid);
     }
 
     //////////
