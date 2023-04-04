@@ -111,19 +111,19 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        baseSelector.setLabel(getBaseFieldLabelTranslation());
-        targetSelector.setLabel(getTargetFieldLabelTranslation());
-        startPicker.setLabel(getStartDateFieldLabelTranslation());
-        endPicker.setLabel(getEndDateFieldLabelTranslation());
-        okButton.setText(getOKButtonTextTranslation());
-        clearButton.setText(getClearButtonTextTranslation());
+        this.baseSelector.setLabel(getBaseFieldLabelTranslation());
+        this.targetSelector.setLabel(getTargetFieldLabelTranslation());
+        this.startPicker.setLabel(getStartDateFieldLabelTranslation());
+        this.endPicker.setLabel(getEndDateFieldLabelTranslation());
+        this.okButton.setText(getOKButtonTextTranslation());
+        this.clearButton.setText(getClearButtonTextTranslation());
     }
 
     public void clear() {
-        baseSelector.clear();
-        targetSelector.clear();
-        startPicker.clear();
-        endPicker.clear();
+        this.baseSelector.clear();
+        this.targetSelector.clear();
+        this.startPicker.clear();
+        this.endPicker.clear();
     }
 
     // The parameter is there so this method can be referenced as a ValueChangeEvent listener
