@@ -49,6 +49,7 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
         this.endPicker = new DatePicker(getEndDateFieldLabelTranslation());
         this.endPicker.setRequired(true);
+        this.endPicker.setMax(LocalDate.now());
 
         this.okButton = new Button(getOKButtonTextTranslation());
         this.okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
