@@ -71,27 +71,6 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         this.startPicker.addValueChangeListener(this::toggleOKButtonToInput);
         this.endPicker.addValueChangeListener(this::toggleOKButtonToInput);
 
-        // FIXME: It is possible to circumvent this date min/max validation measure by entering an invalid date via
-        //  textual input. This is solvable by: (a) disabling textual input or (b) making the OK button toggle listener
-        //  check not only whether the form is filled, but also whether its values are sane (actually, both options are
-        //  not mutually exclusive)
-
-        // TODO: Disable values later than today
-
-        // After selecting a start date, set the earliest possible end date to be start date plus 1 day.
-        // (when the start date selection is cleared, reset this restriction)
-        this.startPicker.addValueChangeListener(event -> {
-            @Nullable LocalDate newSelection = event.getValue();
-            this.endPicker.setMin(newSelection == null ? null : newSelection.plusDays(1));
-        });
-
-        // After selecting an end date, set the latest possible start date to be end date minus 1 day.
-        // (when the end date selection is cleared, reset this restriction)
-        this.endPicker.addValueChangeListener(event -> {
-            @Nullable LocalDate newSelection = event.getValue();
-            this.startPicker.setMax(newSelection == null ? null : newSelection.minusDays(1));
-        });
-
         this.okButton.addClickListener(event -> {
             // Note: all these getters technically return nullable values, but we *assume* they're all non-null and sane
             // by the time we get to this block of code as we rely on our surface-level filters of invalid input, such
