@@ -38,11 +38,11 @@ public final class ExchangeRatesLineChart extends Chart implements LocaleChangeO
         super(ChartType.LINE);
 
         this.xAxis = new XAxis();
-        xAxis.setType(AxisType.DATETIME);
-        xAxis.setTitle(getXAxisTitleTranslation());
+        this.xAxis.setType(AxisType.DATETIME);
+        setXAxisTitleTranslation();
 
         this.yAxis = new YAxis();
-        yAxis.setTitle(getYAxisTitleTranslation());
+        setYAxisTitleTranslation();
 
         var config = getConfiguration();
         config.addxAxis(xAxis);
@@ -51,8 +51,8 @@ public final class ExchangeRatesLineChart extends Chart implements LocaleChangeO
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
-        xAxis.setTitle(getXAxisTitleTranslation());
-        yAxis.setTitle(getYAxisTitleTranslation());
+        setXAxisTitleTranslation();
+        setYAxisTitleTranslation();
         drawChart();
     }
 
@@ -112,11 +112,11 @@ public final class ExchangeRatesLineChart extends Chart implements LocaleChangeO
     // i18n //
     //////////
 
-    private String getXAxisTitleTranslation() {
-        return getTranslation("chart.x.title");
+    private void setXAxisTitleTranslation() {
+        xAxis.setTitle(getTranslation("chart.x.title"));
     }
 
-    private String getYAxisTitleTranslation() {
-        return getTranslation("chart.y.title");
+    private void setYAxisTitleTranslation() {
+        yAxis.setTitle(getTranslation("chart.y.title"));
     }
 }
