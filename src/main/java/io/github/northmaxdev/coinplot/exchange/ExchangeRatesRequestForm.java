@@ -39,13 +39,19 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
     public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
             @Nonnull CurrencyService currencyService,
-            @Nonnull FormInputConsumer onOKButtonClick) throws Exception {
-        ComboBox<Currency> baseSelector = CurrencyComboBoxes.singleAvailable(currencyService);
-        MultiSelectComboBox<Currency> targetSelector = CurrencyComboBoxes.multiAvailable(currencyService);
+            @Nullable FormInputConsumer onOKButtonClick) throws Exception {
+        var baseSelector = CurrencyComboBoxes.singleAvailable(currencyService);
+        var targetSelector = CurrencyComboBoxes.multiAvailable(currencyService);
         return new ExchangeRatesRequestForm(baseSelector, targetSelector, onOKButtonClick);
     }
 
-    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData(@Nonnull FormInputConsumer onOKButtonClick) {
+    public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
+            @Nonnull CurrencyService currencyService) throws Exception {
+        return withCurrencyData(currencyService, null);
+    }
+
+    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData(
+            @Nullable FormInputConsumer onOKButtonClick) {
         return new ExchangeRatesRequestForm(
                 CurrencyComboBoxes.singleUnavailable(),
                 CurrencyComboBoxes.multiUnavailable(),
@@ -53,10 +59,14 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         );
     }
 
+    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData() {
+        return withoutCurrencyData(null);
+    }
+
     private ExchangeRatesRequestForm(
             @Nonnull ComboBox<Currency> baseSelector,
             @Nonnull MultiSelectComboBox<Currency> targetSelector,
-            @Nonnull FormInputConsumer onOKButtonClick) {
+            @Nullable FormInputConsumer onOKButtonClick) {
 
         //////////////////////////////
         // Component Initialization //
@@ -123,7 +133,9 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
             Collection<Currency> targets = this.targetSelector.getSelectedItems();
             LocalDateRange dateRange = new LocalDateRange(this.startPicker.getValue(), this.endPicker.getValue());
 
-            onOKButtonClick.consume(base, targets, dateRange);
+            if (onOKButtonClick != null) {
+                onOKButtonClick.consume(base, targets, dateRange);
+            }
         });
 
         this.clearButton.addClickListener(event -> clear());
