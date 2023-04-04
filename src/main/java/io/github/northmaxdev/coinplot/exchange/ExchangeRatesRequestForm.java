@@ -5,17 +5,15 @@ package io.github.northmaxdev.coinplot.exchange;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
+import io.github.northmaxdev.coinplot.common.fn.TriConsumer;
 import io.github.northmaxdev.coinplot.currency.Currency;
-import io.github.northmaxdev.coinplot.currency.CurrencyComboBoxes;
-import io.github.northmaxdev.coinplot.currency.CurrencyService;
-import jakarta.annotation.Nonnull;
+import io.github.northmaxdev.coinplot.currency.CurrencyComboBox;
+import io.github.northmaxdev.coinplot.currency.MultiCurrencyComboBox;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
@@ -24,59 +22,25 @@ import java.util.Optional;
 
 public final class ExchangeRatesRequestForm extends FormLayout implements LocaleChangeObserver {
 
-    @FunctionalInterface
-    public interface FormInputConsumer {
-
-        void consume(@Nonnull Currency base, @Nonnull Collection<Currency> targets, @Nonnull LocalDateRange dateRange);
-    }
-
-    private final ComboBox<Currency> baseSelector;
-    private final MultiSelectComboBox<Currency> targetSelector;
+    private final CurrencyComboBox baseSelector;
+    private final MultiCurrencyComboBox targetSelector;
     private final DatePicker startPicker;
     private final DatePicker endPicker;
     private final Button okButton;
     private final Button clearButton;
 
-    public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
-            @Nonnull CurrencyService currencyService,
-            @Nullable FormInputConsumer onOKButtonClick) throws Exception {
-        var baseSelector = CurrencyComboBoxes.singleAvailable(currencyService);
-        var targetSelector = CurrencyComboBoxes.multiAvailable(currencyService);
-        return new ExchangeRatesRequestForm(baseSelector, targetSelector, onOKButtonClick);
-    }
-
-    public static @Nonnull ExchangeRatesRequestForm withCurrencyData(
-            @Nonnull CurrencyService currencyService) throws Exception {
-        return withCurrencyData(currencyService, null);
-    }
-
-    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData(
-            @Nullable FormInputConsumer onOKButtonClick) {
-        return new ExchangeRatesRequestForm(
-                CurrencyComboBoxes.singleUnavailable(),
-                CurrencyComboBoxes.multiUnavailable(),
-                onOKButtonClick
-        );
-    }
-
-    public static @Nonnull ExchangeRatesRequestForm withoutCurrencyData() {
-        return withoutCurrencyData(null);
-    }
-
-    private ExchangeRatesRequestForm(
-            @Nonnull ComboBox<Currency> baseSelector,
-            @Nonnull MultiSelectComboBox<Currency> targetSelector,
-            @Nullable FormInputConsumer onOKButtonClick) {
+    public ExchangeRatesRequestForm(
+            @Nullable TriConsumer<Currency, Collection<Currency>, LocalDateRange> onOKButtonClick) {
 
         //////////////////////////////
         // Component Initialization //
         //////////////////////////////
 
-        this.baseSelector = baseSelector;
+        this.baseSelector = new CurrencyComboBox();
         this.baseSelector.setLabel(getBaseFieldLabelTranslation());
         this.baseSelector.setRequired(true);
 
-        this.targetSelector = targetSelector;
+        this.targetSelector = new MultiCurrencyComboBox();
         this.targetSelector.setLabel(getTargetFieldLabelTranslation());
         this.targetSelector.setRequired(true);
 
@@ -93,6 +57,9 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
         this.clearButton = new Button(getClearButtonTextTranslation());
         this.clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+        add(this.baseSelector.getComponent(), this.targetSelector.getComponent());
+        add(this.startPicker, this.endPicker, this.okButton, this.clearButton);
 
         ///////////////
         // Listeners //
@@ -130,17 +97,15 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
             // as keeping the OK button disabled while the form is not fully filled and/or invalid. If the user somehow
             // circumvents these validation measures, bad input might get through, and it ain't going to be fun.
             Currency base = this.baseSelector.getValue();
-            Collection<Currency> targets = this.targetSelector.getSelectedItems();
+            Collection<Currency> targets = this.targetSelector.getValue();
             LocalDateRange dateRange = new LocalDateRange(this.startPicker.getValue(), this.endPicker.getValue());
 
             if (onOKButtonClick != null) {
-                onOKButtonClick.consume(base, targets, dateRange);
+                onOKButtonClick.accept(base, targets, dateRange);
             }
         });
 
         this.clearButton.addClickListener(event -> clear());
-
-        add(this.baseSelector, this.targetSelector, this.startPicker, this.endPicker, this.okButton, this.clearButton);
     }
 
     @Override
@@ -154,8 +119,9 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
     }
 
     public boolean isFilled() {
+        // FIXME
         Optional<Currency> selectedBase = baseSelector.getOptionalValue();
-        Collection<Currency> selectedTargets = targetSelector.getSelectedItems();
+        Collection<Currency> selectedTargets = targetSelector.getValue();
         Optional<LocalDate> selectedStart = startPicker.getOptionalValue();
         Optional<LocalDate> selectedEnd = endPicker.getOptionalValue();
 
