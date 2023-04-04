@@ -10,10 +10,13 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.common.core.LocalDateRange;
+import io.github.northmaxdev.coinplot.common.fn.ExceptionHandler;
 import io.github.northmaxdev.coinplot.common.fn.TriConsumer;
 import io.github.northmaxdev.coinplot.currency.Currency;
 import io.github.northmaxdev.coinplot.currency.CurrencyComboBox;
+import io.github.northmaxdev.coinplot.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.currency.MultiCurrencyComboBox;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
@@ -86,6 +89,16 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         this.clearButton.addClickListener(event -> clear());
 
         toggleOKButtonToInput(null);
+    }
+
+    public void fetchCurrencies(@Nonnull CurrencyService service) throws Exception {
+        this.baseSelector.fetchItems(service);
+        this.targetSelector.fetchItems(service);
+    }
+
+    public void fetchCurrencies(@Nonnull CurrencyService service, @Nonnull ExceptionHandler exceptionHandler) {
+        this.baseSelector.fetchItems(service, exceptionHandler);
+        this.targetSelector.fetchItems(service, exceptionHandler);
     }
 
     @Override
