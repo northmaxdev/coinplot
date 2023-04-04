@@ -56,8 +56,6 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
         this.okButton = new Button(getOKButtonTextTranslation());
         this.okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        // WORKAROUND: Disable the button manually until an input field triggers the toggle listener registered below
-        this.okButton.setEnabled(false);
 
         this.clearButton = new Button(getClearButtonTextTranslation());
         this.clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -75,10 +73,7 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         this.endPicker.addValueChangeListener(this::toggleOKButtonToInput);
 
         this.okButton.addClickListener(event -> {
-            // Note: all these getters technically return nullable values, but we *assume* they're all non-null and sane
-            // by the time we get to this block of code as we rely on our surface-level filters of invalid input, such
-            // as keeping the OK button disabled while the form is not fully filled and/or invalid. If the user somehow
-            // circumvents these validation measures, bad input might get through, and it ain't going to be fun.
+            // This should be safe as long as the button is only clicked through the UI (i.e. no programmatic access)
             Currency base = this.baseSelector.getValue();
             Collection<Currency> targets = this.targetSelector.getValue();
             LocalDateRange dateRange = new LocalDateRange(this.startPicker.getValue(), this.endPicker.getValue());
@@ -89,6 +84,8 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
         });
 
         this.clearButton.addClickListener(event -> clear());
+
+        toggleOKButtonToInput(null);
     }
 
     @Override
