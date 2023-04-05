@@ -21,6 +21,7 @@ import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 public final class ExchangeRatesRequestForm extends FormLayout implements LocaleChangeObserver {
@@ -103,10 +104,16 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Locale
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
+        Locale newLocale = event.getLocale();
+
         this.baseSelector.setLabel(getBaseFieldLabelTranslation());
         this.targetSelector.setLabel(getTargetFieldLabelTranslation());
+
         this.startPicker.setLabel(getStartDateFieldLabelTranslation());
+        this.startPicker.setLocale(newLocale);
         this.endPicker.setLabel(getEndDateFieldLabelTranslation());
+        this.endPicker.setLocale(newLocale);
+
         this.okButton.setText(getOKButtonTextTranslation());
         this.clearButton.setText(getClearButtonTextTranslation());
     }
