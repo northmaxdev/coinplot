@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.common.ui;
 
-import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -10,13 +10,12 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Locale;
 
-public final class LocaleSelect extends Select<Locale> implements LocaleChangeObserver {
+public final class LocaleRadioButtonGroup extends RadioButtonGroup<Locale> implements LocaleChangeObserver {
 
-    public LocaleSelect(@Nonnull I18NProvider i18nProvider) {
+    public LocaleRadioButtonGroup(@Nonnull I18NProvider i18nProvider) {
         setFieldLabelTranslation();
-        setItems(i18nProvider.getProvidedLocales());
         setItemLabelGenerator(locale -> i18nProvider.getTranslation("locale-input.item-label", locale));
-        setEmptySelectionAllowed(false);
+        setItems(i18nProvider.getProvidedLocales());
     }
 
     @Override

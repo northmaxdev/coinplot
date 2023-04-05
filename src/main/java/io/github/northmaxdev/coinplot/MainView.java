@@ -4,12 +4,10 @@ package io.github.northmaxdev.coinplot;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.I18NProvider;
 import com.vaadin.flow.router.Route;
-import io.github.northmaxdev.coinplot.common.ui.LocaleSelect;
+import io.github.northmaxdev.coinplot.common.ui.LocaleRadioButtonGroup;
 import io.github.northmaxdev.coinplot.currency.CurrencyFetchFailureNotification;
 import io.github.northmaxdev.coinplot.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.exchange.ExchangeRateFetchFailureNotification;
@@ -58,15 +56,14 @@ public final class MainView extends AppLayout {
         });
         form.fetchCurrencies(currencyService, noCurrenciesNotification);
 
-        var localeSelector = new LocaleSelect(i18nProvider);
+        var localeSelector = new LocaleRadioButtonGroup(i18nProvider);
         localeSelector.addValueChangeListener(event -> {
             UI ui = UI.getCurrent();
             Locale newSelection = event.getValue();
             ui.setLocale(newSelection);
         });
 
-        var drawerContent = new VerticalLayout(form, new FormLayout(localeSelector));
-        drawerContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN); // FIXME: This doesn't work
+        var drawerContent = new VerticalLayout(form, localeSelector);
         addToDrawer(drawerContent);
         setPrimarySection(Section.DRAWER);
     }
