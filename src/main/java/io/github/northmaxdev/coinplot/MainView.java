@@ -56,8 +56,7 @@ public final class MainView extends AppLayout {
         });
         form.fetchCurrencies(currencyService, noCurrenciesNotification);
 
-        var localeSelector = new LocaleRadioButtonGroup(i18nProvider);
-        localeSelector.addValueChangeListener(event -> {
+        var localeSelector = new LocaleRadioButtonGroup(i18nProvider, event -> {
             UI ui = UI.getCurrent();
             Locale newSelection = event.getValue();
             ui.setLocale(newSelection);
