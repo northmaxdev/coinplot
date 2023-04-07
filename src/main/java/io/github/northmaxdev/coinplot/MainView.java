@@ -6,6 +6,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.I18NProvider;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import io.github.northmaxdev.coinplot.common.ui.LocaleRadioButtonGroup;
 import io.github.northmaxdev.coinplot.currency.CurrencyFetchFailureNotification;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Locale;
 
 @Route
+@PageTitle("CoinPlot")
 public final class MainView extends AppLayout {
 
     @Autowired
