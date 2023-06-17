@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: MIT
 
 package io.github.northmaxdev.coinplot.exchange;
 
