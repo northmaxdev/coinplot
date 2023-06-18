@@ -15,7 +15,7 @@ public interface CurrencyService {
     default Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) throws Exception {
         var availableCurrencies = getAvailableCurrencies();
         return availableCurrencies.stream()
-                .filter(currency -> Objects.equals(currency.threeLetterISOCode(), threeLetterISOCode))
+                .filter(currency -> Objects.equals(currency.getThreeLetterISOCode(), threeLetterISOCode))
                 .findFirst();
     }
 }

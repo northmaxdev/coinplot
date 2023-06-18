@@ -19,6 +19,6 @@ public final class CurrencyDTOMapper implements DTOMapper<Map<String, String>, M
         return dto.entrySet()
                 .stream()
                 .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-                .collect(toMap(Currency::threeLetterISOCode, Function.identity()));
+                .collect(toMap(Currency::getThreeLetterISOCode, Function.identity()));
     }
 }
