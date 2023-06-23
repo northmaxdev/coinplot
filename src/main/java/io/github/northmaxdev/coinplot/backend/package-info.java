@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * This package contains all things backend. It is NOT dependent on the frontend package.
+ * Package for everything that is related to the backend side. It is <b>not</b> dependent on the frontend package.
  */
 package io.github.northmaxdev.coinplot.backend;
