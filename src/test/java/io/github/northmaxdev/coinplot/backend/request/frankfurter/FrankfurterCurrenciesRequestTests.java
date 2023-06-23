@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.request.frankfurter;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -18,5 +19,11 @@ class FrankfurterCurrenciesRequestTests {
         URI expected = URI.create("https://api.frankfurter.app/currencies");
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void equalsAndHashCode() {
+        EqualsVerifier.forClass(FrankfurterCurrenciesRequest.class)
+                .verify();
     }
 }
