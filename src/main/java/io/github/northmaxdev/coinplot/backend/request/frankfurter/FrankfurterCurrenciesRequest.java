@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterRequest {
 
+    private static final List<String> PATH_SEGMENTS = List.of("currencies");
+
     public FrankfurterCurrenciesRequest(@Nonnull HttpHost customHost) {
         super(customHost);
     }
@@ -20,7 +22,7 @@ public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterReque
 
     @Override
     protected @Nonnull List<String> getPathSegments() {
-        return List.of("currencies");
+        return PATH_SEGMENTS;
     }
 
     @Override
