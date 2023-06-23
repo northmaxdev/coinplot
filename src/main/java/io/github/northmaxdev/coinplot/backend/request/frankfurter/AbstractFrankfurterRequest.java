@@ -30,4 +30,10 @@ public abstract class AbstractFrankfurterRequest extends AbstractAPIRequest {
     // Due to complexities with equals/hashCode contract implementations and unit testing within big inheritance
     // hierarchies, only the final subclasses actually implement those methods. AbstractFrankfurterRequest explicitly
     // marks these methods as abstract to force their implementation by the final subclasses.
+
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
 }
