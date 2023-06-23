@@ -7,7 +7,7 @@ target/
 
 # Vaadin
 node_modules
-frontend/
+/frontend/
 
 ### STS ###
 .apt_generated
