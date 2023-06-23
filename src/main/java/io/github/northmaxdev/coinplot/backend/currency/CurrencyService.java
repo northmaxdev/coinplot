@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.currency;
+package io.github.northmaxdev.coinplot.backend.currency;
 
 import jakarta.annotation.Nullable;
 
