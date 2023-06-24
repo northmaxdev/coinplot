@@ -44,7 +44,7 @@ public class Currency {
 
     @Override
     public int hashCode() {
-        return Objects.hash(threeLetterISOCode, name);
+        return Objects.hashCode(threeLetterISOCode);
     }
 
     @Override
