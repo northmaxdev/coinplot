@@ -21,7 +21,7 @@ class AbstractAPIRequestTests {
 
     @ParameterizedTest
     @MethodSource("provideRequestAndURIPairs")
-    void requestConvertsToExpectedURI(AbstractAPIRequest request, URI expected) {
+    void actualURIEqualsExpected(AbstractAPIRequest request, URI expected) {
         URI actual = request.toURI();
 
         assertThat(actual).isEqualTo(expected);
