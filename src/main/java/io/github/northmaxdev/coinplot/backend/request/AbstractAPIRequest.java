@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.request;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
@@ -12,6 +13,13 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public abstract class AbstractAPIRequest implements APIRequest {
+
+    // IMPORTANT: Caching the URI implies that all outgoing subclasses MUST be immutable.
+    private @Nullable URI cachedURI;
+
+    public AbstractAPIRequest() {
+        this.cachedURI = null;
+    }
 
     protected abstract @Nonnull HttpHost getHost();
 
@@ -27,14 +35,17 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     @Override
     public final @Nonnull URI toURI() {
-        try {
-            return new URIBuilder()
-                    .setHttpHost(getHost())
-                    .setPathSegments(getPathSegments())
-                    .setParameters(getParameters())
-                    .build();
-        } catch (URISyntaxException e) {
-            throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
+        if (cachedURI == null) {
+            try {
+                cachedURI = new URIBuilder()
+                        .setHttpHost(getHost())
+                        .setPathSegments(getPathSegments())
+                        .setParameters(getParameters())
+                        .build();
+            } catch (URISyntaxException e) {
+                throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
+            }
         }
+        return cachedURI;
     }
 }
