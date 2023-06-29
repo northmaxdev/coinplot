@@ -8,7 +8,11 @@ import java.util.List;
 
 public final class CurrencyAPICurrenciesRequest extends AbstractCurrencyAPIRequest {
 
-    private static final List<String> PATH_SEGMENTS = List.of("v3", "currencies");
+    private static final List<String> PATH_SEGMENTS = createPathSegments("currencies");
+
+    public CurrencyAPICurrenciesRequest() {
+        super();
+    }
 
     @Override
     protected @Nonnull List<String> getPathSegments() {
