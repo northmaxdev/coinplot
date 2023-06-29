@@ -15,6 +15,10 @@ public sealed abstract class AbstractCurrencyAPIRequest extends AbstractAPIReque
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "api.currencyapi.com");
 
+    protected AbstractCurrencyAPIRequest() {
+        super();
+    }
+
     @Override
     protected final @Nonnull HttpHost getHost() {
         return HOST;
