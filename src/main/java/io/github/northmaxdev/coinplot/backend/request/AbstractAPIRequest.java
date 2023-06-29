@@ -17,7 +17,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // IMPORTANT: Caching the URI implies that all outgoing subclasses MUST be immutable.
     private @Nullable URI cachedURI;
 
-    public AbstractAPIRequest() {
+    protected AbstractAPIRequest() {
         this.cachedURI = null;
     }
 
