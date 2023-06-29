@@ -48,4 +48,14 @@ public abstract class AbstractAPIRequest implements APIRequest {
         }
         return cachedURI;
     }
+
+    @Override
+    public final String toString() {
+        // NOTE: When using Temurin JDK v17.0.7+7, which is the primary JDK for this project, the implementation of
+        // URI::toString caches the string form and avoids excess computations. If this behavior is NOT explicitly
+        // specified by the java.net.URI spec (and thus the aforementioned is a JDK-specific implementation detail),
+        // then we'll have to cache the string form ourselves to ensure portability of optimizations.
+        URI u = toURI();
+        return u.toString();
+    }
 }
