@@ -2,15 +2,21 @@
 
 package io.github.northmaxdev.coinplot.backend.request;
 
+import io.github.northmaxdev.coinplot.backend.currency.Currency;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.joining;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
@@ -31,6 +37,23 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Method getParameters is purposely not final: this is a default impl that you override if you need to
     protected @Nonnull List<NameValuePair> getParameters() {
         return List.of();
+    }
+
+    // A convenient utility method for an operation that is frequently used by certain subclasses.
+    // The collection must not contain nulls.
+    protected static Optional<NameValuePair> joinCurrenciesToParameter(
+            @Nonnull String parameterName,
+            @Nonnull Collection<Currency> currencies) {
+        if (currencies.isEmpty()) {
+            return Optional.empty();
+        }
+
+        String joinedCodes = currencies.stream()
+                .map(Currency::getThreeLetterISOCode)
+                .collect(joining(","));
+
+        NameValuePair parameter = new BasicNameValuePair(parameterName, joinedCodes);
+        return Optional.of(parameter);
     }
 
     @Override
