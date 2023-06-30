@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.request.frankfurter;
 
+import com.google.common.collect.ImmutableList;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.apache.hc.core5.http.HttpHost;
@@ -24,7 +25,7 @@ class FrankfurterExchangeRatesRequestTests {
     void actualURIEqualsExpected() {
         LocalDate start = LocalDate.of(2000, Month.JANUARY, 1);
         LocalDate end = LocalDate.of(2000, Month.FEBRUARY, 1);
-        var request = new FrankfurterExchangeRatesRequest(DUMMY_HOST, FOO, List.of(BAR), start, end);
+        var request = new FrankfurterExchangeRatesRequest(DUMMY_HOST, start, end, FOO, ImmutableList.of(BAR));
 
         URI actual = request.toURI();
         Iterable<URI> expectedURIs = List.of(

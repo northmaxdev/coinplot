@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.request.frankfurter;
 
+import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
@@ -9,88 +10,90 @@ import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-import static java.util.stream.Collectors.joining;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class FrankfurterExchangeRatesRequest extends AbstractFrankfurterRequest {
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-
-    private final @Nonnull Currency base;
-    private final @Nonnull Collection<Currency> targets;
     private final @Nonnull LocalDate start;
     private final @Nonnull LocalDate end;
+    private final @Nonnull Currency base;
+    private final @Nonnull ImmutableCollection<Currency> targets;
 
     public FrankfurterExchangeRatesRequest(
             @Nonnull HttpHost customHost,
-            @Nonnull Currency base,
-            @Nonnull Collection<Currency> targets,
             @Nonnull LocalDate start,
-            @Nonnull LocalDate end) {
+            @Nonnull LocalDate end,
+            @Nonnull Currency base,
+            @Nonnull ImmutableCollection<Currency> targets) {
         super(customHost);
-        this.base = base;
-        this.targets = targets;
         this.start = start;
         this.end = end;
+        this.base = base;
+        this.targets = targets;
     }
 
     public FrankfurterExchangeRatesRequest(
-            @Nonnull Currency base,
-            @Nonnull Collection<Currency> targets,
             @Nonnull LocalDate start,
-            @Nonnull LocalDate end) {
+            @Nonnull LocalDate end,
+            @Nonnull Currency base,
+            @Nonnull ImmutableCollection<Currency> targets) {
         super();
-        this.base = base;
-        this.targets = targets;
         this.start = start;
         this.end = end;
+        this.base = base;
+        this.targets = targets;
+    }
+
+    public @Nonnull LocalDate getStart() {
+        return start;
+    }
+
+    public @Nonnull LocalDate getEnd() {
+        return end;
+    }
+
+    public @Nonnull Currency getBase() {
+        return base;
+    }
+
+    public @Nonnull ImmutableCollection<Currency> getTargets() {
+        return targets;
     }
 
     @Override
     protected @Nonnull List<String> getPathSegments() {
-        // TODO: All this can be computed once and cached
-        String endpoint = start.format(DATE_FORMAT) + ".." + end.format(DATE_FORMAT);
+        // TODO: Cache this
+        String endpoint = start.format(ISO_LOCAL_DATE) + ".." + end.format(ISO_LOCAL_DATE);
         return List.of(endpoint);
     }
 
     @Override
     protected @Nonnull List<NameValuePair> getParameters() {
-        // TODO: All this can be computed once and cached
-
-        List<NameValuePair> parameters = new ArrayList<>(2);
-
+        // TODO Cache this
         NameValuePair baseParameter = new BasicNameValuePair("from", base.getThreeLetterISOCode());
-        parameters.add(baseParameter);
+        Optional<NameValuePair> targetsParameter = joinCurrenciesToParameter("to", targets);
 
-        if (!targets.isEmpty()) {
-            String joinedTargets = targets.stream()
-                    .filter(Objects::nonNull)
-                    .map(Currency::getThreeLetterISOCode)
-                    .collect(joining(","));
-            NameValuePair targetsParameter = new BasicNameValuePair("to", joinedTargets);
-            parameters.add(targetsParameter);
-        }
-
-        return parameters;
+        return targetsParameter.map(tp -> List.of(baseParameter, tp))
+                .orElse(List.of(baseParameter));
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof FrankfurterExchangeRatesRequest that
-               && Objects.equals(this.getHost(), that.getHost())
-               && Objects.equals(this.base, that.base)
-               && Objects.equals(this.targets, that.targets)
-               && Objects.equals(this.start, that.start)
-               && Objects.equals(this.end, that.end);
+                && Objects.equals(this.getHost(), that.getHost())
+                && Objects.equals(this.start, that.start)
+                && Objects.equals(this.end, that.end)
+                && Objects.equals(this.base, that.base)
+                && Objects.equals(this.targets, that.targets);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getHost(), base, targets, start, end);
+        // TODO: Cache this
+        return Objects.hash(getHost(), start, end, base, targets);
     }
 }
