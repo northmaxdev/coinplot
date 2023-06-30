@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.request.AbstractCurrencyAPIRequest;
+import io.github.northmaxdev.coinplot.backend.web.request.AbstractCurrencyAPIRequest;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

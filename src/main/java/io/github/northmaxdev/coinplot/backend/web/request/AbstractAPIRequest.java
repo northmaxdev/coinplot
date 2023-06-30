@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.request;
+package io.github.northmaxdev.coinplot.backend.web.request;
 
 import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
