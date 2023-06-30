@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.config;
+package io.github.northmaxdev.coinplot.backend.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class HTTPClientConfig {
     @Bean
     public HttpClient httpClient() {
         return HttpClient.newBuilder()
-                .version(Version.HTTP_1_1)
+                .version(Version.HTTP_2)
                 .build();
     }
 }
