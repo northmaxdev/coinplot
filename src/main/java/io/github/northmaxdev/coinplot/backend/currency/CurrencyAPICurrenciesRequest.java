@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.request.currencyapi;
+package io.github.northmaxdev.coinplot.backend.currency;
 
+import io.github.northmaxdev.coinplot.backend.request.AbstractCurrencyAPIRequest;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;

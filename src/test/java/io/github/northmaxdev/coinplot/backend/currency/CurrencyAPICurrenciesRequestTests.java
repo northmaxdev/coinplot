@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.request.currencyapi;
+package io.github.northmaxdev.coinplot.backend.currency;
 
 import org.junit.jupiter.api.Test;
 
