@@ -12,10 +12,10 @@ public interface CurrencyService {
 
     Collection<Currency> getAvailableCurrencies() throws Exception;
 
-    default Optional<Currency> getCurrency(@Nullable String threeLetterISOCode) throws Exception {
+    default Optional<Currency> getCurrency(@Nullable String code) throws Exception {
         var availableCurrencies = getAvailableCurrencies();
         return availableCurrencies.stream()
-                .filter(currency -> Objects.equals(currency.getCode(), threeLetterISOCode))
+                .filter(currency -> Objects.equals(currency.getCode(), code))
                 .findFirst();
     }
 }
