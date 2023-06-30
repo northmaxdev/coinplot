@@ -51,7 +51,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
         }
 
         String joinedCodes = currencies.stream()
-                .map(Currency::getThreeLetterISOCode)
+                .map(Currency::getCode)
                 .collect(joining(","));
 
         NameValuePair parameter = new BasicNameValuePair(parameterName, joinedCodes);

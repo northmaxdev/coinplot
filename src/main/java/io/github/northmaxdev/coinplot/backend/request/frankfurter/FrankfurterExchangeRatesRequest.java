@@ -74,7 +74,7 @@ public final class FrankfurterExchangeRatesRequest extends AbstractFrankfurterRe
     @Override
     protected @Nonnull List<NameValuePair> getParameters() {
         // TODO Cache this
-        NameValuePair baseParameter = new BasicNameValuePair("from", base.getThreeLetterISOCode());
+        NameValuePair baseParameter = new BasicNameValuePair("from", base.getCode());
         Optional<NameValuePair> targetsParameter = joinCurrenciesToParameter("to", targets);
 
         return targetsParameter.map(tp -> List.of(baseParameter, tp))

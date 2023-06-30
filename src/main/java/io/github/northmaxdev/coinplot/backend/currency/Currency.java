@@ -14,13 +14,13 @@ public class Currency {
 
     @Id
     @Column(nullable = false)
-    private @Nonnull String threeLetterISOCode;
+    private @Nonnull String code;
 
     @Column(nullable = false)
     private @Nonnull String name;
 
-    public Currency(@Nonnull String threeLetterISOCode, @Nonnull String name) {
-        this.threeLetterISOCode = threeLetterISOCode;
+    public Currency(@Nonnull String code, @Nonnull String name) {
+        this.code = code;
         this.name = name;
     }
 
@@ -28,8 +28,8 @@ public class Currency {
         // JPA spec requires a public or protected no-arg constructor
     }
 
-    public @Nonnull String getThreeLetterISOCode() {
-        return threeLetterISOCode;
+    public @Nonnull String getCode() {
+        return code;
     }
 
     public @Nonnull String getName() {
@@ -39,12 +39,12 @@ public class Currency {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Currency that
-               && Objects.equals(this.threeLetterISOCode, that.threeLetterISOCode);
+               && Objects.equals(this.code, that.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(threeLetterISOCode);
+        return Objects.hashCode(code);
     }
 
     @Override

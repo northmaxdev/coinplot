@@ -69,7 +69,7 @@ public final class CurrencyAPIExchangeRatesRequest extends AbstractCurrencyAPIRe
         NameValuePair endParameter = new BasicNameValuePair("datetime_end", ISO_INSTANT.format(end));
         parameters.add(endParameter);
 
-        NameValuePair baseParameter = new BasicNameValuePair("base_currency", base.getThreeLetterISOCode());
+        NameValuePair baseParameter = new BasicNameValuePair("base_currency", base.getCode());
         parameters.add(baseParameter);
 
         Optional<NameValuePair> targetsParameter = joinCurrenciesToParameter("currencies", targets);
