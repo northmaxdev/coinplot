@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.response;
+package io.github.northmaxdev.coinplot.backend.web.response;
 
 import jakarta.annotation.Nonnull;
 

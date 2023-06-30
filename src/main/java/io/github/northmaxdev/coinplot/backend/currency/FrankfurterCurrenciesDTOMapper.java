@@ -2,8 +2,8 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.response.DTOMapper;
-import io.github.northmaxdev.coinplot.backend.response.DTOMappingException;
+import io.github.northmaxdev.coinplot.backend.web.response.DTOMapper;
+import io.github.northmaxdev.coinplot.backend.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
 
 import java.util.Map;
