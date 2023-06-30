@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.response.frankfurter;
+package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
