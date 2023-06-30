@@ -10,8 +10,7 @@ import java.util.List;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
-public sealed abstract class AbstractCurrencyAPIRequest extends AbstractAPIRequest
-        permits CurrencyAPICurrenciesRequest, CurrencyAPIExchangeRatesRequest {
+public abstract class AbstractCurrencyAPIRequest extends AbstractAPIRequest {
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "api.currencyapi.com");
 
