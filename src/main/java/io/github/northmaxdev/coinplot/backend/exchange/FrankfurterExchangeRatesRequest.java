@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.request.frankfurter;
+package io.github.northmaxdev.coinplot.backend.exchange;
 
 import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
+import io.github.northmaxdev.coinplot.backend.request.AbstractFrankfurterRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
