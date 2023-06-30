@@ -33,6 +33,7 @@ public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterReque
 
     @Override
     public int hashCode() {
+        // TODO: Cache this
         return Objects.hashCode(getHost());
     }
 }
