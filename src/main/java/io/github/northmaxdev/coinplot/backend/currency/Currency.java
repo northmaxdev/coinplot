@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.currency;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,9 +20,17 @@ public class Currency {
     @Column(nullable = false)
     private @Nonnull String name;
 
-    public Currency(@Nonnull String code, @Nonnull String name) {
+    @Column
+    private @Nullable String nativeSymbol;
+
+    public Currency(@Nonnull String code, @Nonnull String name, @Nullable String nativeSymbol) {
         this.code = code;
         this.name = name;
+        this.nativeSymbol = nativeSymbol;
+    }
+
+    public Currency(@Nonnull String code, @Nonnull String name) {
+        this(code, name, null);
     }
 
     protected Currency() {
@@ -36,6 +45,10 @@ public class Currency {
         return name;
     }
 
+    public @Nullable String getNativeSymbol() {
+        return nativeSymbol;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Currency that
@@ -44,6 +57,7 @@ public class Currency {
 
     @Override
     public int hashCode() {
+        // TODO: Cache this
         return Objects.hashCode(code);
     }
 
