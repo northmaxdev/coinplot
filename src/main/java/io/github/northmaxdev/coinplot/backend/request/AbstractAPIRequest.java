@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.request;
 
+import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -12,7 +13,6 @@ import org.apache.hc.core5.net.URIBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +40,12 @@ public abstract class AbstractAPIRequest implements APIRequest {
     }
 
     // A convenient utility method for an operation that is frequently used by certain subclasses.
-    // The collection must not contain nulls.
     protected static Optional<NameValuePair> joinCurrenciesToParameter(
             @Nonnull String parameterName,
-            @Nonnull Collection<Currency> currencies) {
+            // ImmutableCollection is used instead of a regular Collection because:
+            // 1. All fields representing a collection of currencies should be deeply immutable anyway
+            // 2. ImmutableCollection makes strong guarantees about not allowing nulls
+            @Nonnull ImmutableCollection<Currency> currencies) {
         if (currencies.isEmpty()) {
             return Optional.empty();
         }
