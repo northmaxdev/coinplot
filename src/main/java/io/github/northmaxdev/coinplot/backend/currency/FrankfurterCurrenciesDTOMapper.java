@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
 
@@ -11,7 +10,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 
-public final class FrankfurterCurrenciesDTOMapper implements DTOMapper<Map<String, String>, Set<Currency>> {
+public final class FrankfurterCurrenciesDTOMapper implements CurrenciesDTOMapper<Map<String, String>> {
 
     @Override
     public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) throws DTOMappingException {
