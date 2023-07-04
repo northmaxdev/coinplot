@@ -68,6 +68,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
                         .setParameters(getParameters())
                         .build();
             } catch (URISyntaxException e) {
+                // Should never happen unless an implementation accepts unvalidated direct user input
                 throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
             }
         }
