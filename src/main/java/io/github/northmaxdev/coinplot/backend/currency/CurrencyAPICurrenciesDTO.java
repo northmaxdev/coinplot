@@ -12,5 +12,5 @@ public record CurrencyAPICurrenciesDTO(Map<String, CurrencyData> data) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public record CurrencyData(String symbol, String name, String symbolNative) {}
+    public record CurrencyData(String name, String symbolNative) {}
 }
