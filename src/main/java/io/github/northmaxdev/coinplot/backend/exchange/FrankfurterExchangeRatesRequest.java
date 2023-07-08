@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static io.github.northmaxdev.coinplot.backend.exchange.ExchangeRatesRequestUtils.joinTargetsToParameter;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class FrankfurterExchangeRatesRequest extends FrankfurterRequest implements ExchangeRatesRequest {
@@ -76,7 +77,7 @@ public final class FrankfurterExchangeRatesRequest extends FrankfurterRequest im
     protected @Nonnull List<NameValuePair> getParameters() {
         // TODO Cache this
         NameValuePair baseParameter = new BasicNameValuePair("from", base.getCode());
-        Optional<NameValuePair> targetsParameter = joinCurrenciesToParameter("to", targets);
+        Optional<NameValuePair> targetsParameter = joinTargetsToParameter("to", targets);
 
         return targetsParameter.map(tp -> List.of(baseParameter, tp))
                 .orElse(List.of(baseParameter));

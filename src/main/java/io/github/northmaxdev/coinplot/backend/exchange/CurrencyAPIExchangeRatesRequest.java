@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static io.github.northmaxdev.coinplot.backend.exchange.ExchangeRatesRequestUtils.joinTargetsToParameter;
 import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 
 public final class CurrencyAPIExchangeRatesRequest extends CurrencyAPIRequest implements ExchangeRatesRequest {
@@ -73,7 +74,7 @@ public final class CurrencyAPIExchangeRatesRequest extends CurrencyAPIRequest im
         NameValuePair baseParameter = new BasicNameValuePair("base_currency", base.getCode());
         parameters.add(baseParameter);
 
-        Optional<NameValuePair> targetsParameter = joinCurrenciesToParameter("currencies", targets);
+        Optional<NameValuePair> targetsParameter = joinTargetsToParameter("currencies", targets);
         targetsParameter.ifPresent(parameters::add);
 
         return parameters;
