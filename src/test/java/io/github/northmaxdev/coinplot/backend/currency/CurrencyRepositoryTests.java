@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CurrencyRepositoryTests {
 
     static final Currency FOO = new Currency("FOO", "Foo Dollar");
+    static final Currency BAR = new Currency("BAR", "Bar Dollar");
 
     @Autowired
     CurrencyRepository repository;
@@ -44,7 +45,11 @@ class CurrencyRepositoryTests {
     @Test
     void findAllAsSetOnNonEmpty() {
         repository.save(FOO);
+        repository.save(BAR);
 
-        assertThat(repository.findAllAsSet()).isEqualTo(Set.of(FOO));
+        Set<Currency> expected = Set.of(FOO, BAR);
+        Set<Currency> actual = repository.findAllAsSet();
+
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 }
