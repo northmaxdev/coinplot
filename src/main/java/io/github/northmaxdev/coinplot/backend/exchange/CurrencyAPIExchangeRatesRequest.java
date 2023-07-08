@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.exchange;
 
 import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
-import io.github.northmaxdev.coinplot.backend.web.request.AbstractCurrencyAPIRequest;
+import io.github.northmaxdev.coinplot.backend.web.request.CurrencyAPIRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 
-public final class CurrencyAPIExchangeRatesRequest extends AbstractCurrencyAPIRequest implements ExchangeRatesRequest {
+public final class CurrencyAPIExchangeRatesRequest extends CurrencyAPIRequest implements ExchangeRatesRequest {
 
     private static final List<String> PATH_SEGMENTS = createPathSegments("range");
 

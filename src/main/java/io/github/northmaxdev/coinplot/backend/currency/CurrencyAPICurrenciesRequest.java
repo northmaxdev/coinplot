@@ -2,12 +2,12 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.web.request.AbstractCurrencyAPIRequest;
+import io.github.northmaxdev.coinplot.backend.web.request.CurrencyAPIRequest;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public final class CurrencyAPICurrenciesRequest extends AbstractCurrencyAPIRequest implements CurrenciesRequest {
+public final class CurrencyAPICurrenciesRequest extends CurrencyAPIRequest implements CurrenciesRequest {
 
     private static final List<String> PATH_SEGMENTS = createPathSegments("currencies");
 

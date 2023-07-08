@@ -9,11 +9,11 @@ import java.util.List;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
-public abstract class AbstractCurrencyAPIRequest extends AbstractAPIRequest {
+public class CurrencyAPIRequest extends AbstractAPIRequest {
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "api.currencyapi.com");
 
-    protected AbstractCurrencyAPIRequest() {
+    public CurrencyAPIRequest() {
         super();
     }
 
