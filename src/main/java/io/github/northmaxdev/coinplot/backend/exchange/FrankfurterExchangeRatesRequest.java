@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
-public final class FrankfurterExchangeRatesRequest extends AbstractFrankfurterRequest {
+public final class FrankfurterExchangeRatesRequest extends AbstractFrankfurterRequest implements ExchangeRatesRequest {
 
     private final @Nonnull LocalDate start;
     private final @Nonnull LocalDate end;

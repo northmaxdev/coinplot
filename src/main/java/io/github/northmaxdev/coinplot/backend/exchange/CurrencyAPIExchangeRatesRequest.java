@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 
-public final class CurrencyAPIExchangeRatesRequest extends AbstractCurrencyAPIRequest {
+public final class CurrencyAPIExchangeRatesRequest extends AbstractCurrencyAPIRequest implements ExchangeRatesRequest {
 
     private static final List<String> PATH_SEGMENTS = createPathSegments("range");
 
