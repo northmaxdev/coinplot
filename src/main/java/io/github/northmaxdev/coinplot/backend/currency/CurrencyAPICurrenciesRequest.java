@@ -7,7 +7,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
-public final class CurrencyAPICurrenciesRequest extends AbstractCurrencyAPIRequest {
+public final class CurrencyAPICurrenciesRequest extends AbstractCurrencyAPIRequest implements CurrenciesRequest {
 
     private static final List<String> PATH_SEGMENTS = createPathSegments("currencies");
 

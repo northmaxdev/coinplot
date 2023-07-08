@@ -9,7 +9,7 @@ import org.apache.hc.core5.http.HttpHost;
 import java.util.List;
 import java.util.Objects;
 
-public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterRequest {
+public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterRequest implements CurrenciesRequest {
 
     private static final List<String> PATH_SEGMENTS = List.of("currencies");
 
