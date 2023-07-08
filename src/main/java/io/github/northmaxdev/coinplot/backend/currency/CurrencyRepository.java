@@ -2,9 +2,9 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.github.northmaxdev.coinplot.backend.db.ExtendedJPARepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CurrencyRepository extends JpaRepository<Currency, String> {
+public interface CurrencyRepository extends ExtendedJPARepository<Currency, String> {
 }
