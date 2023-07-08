@@ -7,17 +7,17 @@ import org.apache.hc.core5.http.HttpHost;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
-public abstract class AbstractFrankfurterRequest extends AbstractAPIRequest {
+public class FrankfurterRequest extends AbstractAPIRequest {
 
     private static final HttpHost PUBLIC_INSTANCE_HOST = new HttpHost(HTTPS.getId(), "api.frankfurter.app");
 
     private final HttpHost host;
 
-    protected AbstractFrankfurterRequest(@Nonnull HttpHost customHost) {
+    public FrankfurterRequest(@Nonnull HttpHost customHost) {
         this.host = customHost;
     }
 
-    protected AbstractFrankfurterRequest() {
+    public FrankfurterRequest() {
         this(PUBLIC_INSTANCE_HOST);
     }
 

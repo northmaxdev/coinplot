@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.exchange;
 
 import com.google.common.collect.ImmutableCollection;
 import io.github.northmaxdev.coinplot.backend.currency.Currency;
-import io.github.northmaxdev.coinplot.backend.web.request.AbstractFrankfurterRequest;
+import io.github.northmaxdev.coinplot.backend.web.request.FrankfurterRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
-public final class FrankfurterExchangeRatesRequest extends AbstractFrankfurterRequest implements ExchangeRatesRequest {
+public final class FrankfurterExchangeRatesRequest extends FrankfurterRequest implements ExchangeRatesRequest {
 
     private final @Nonnull LocalDate start;
     private final @Nonnull LocalDate end;

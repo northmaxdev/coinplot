@@ -2,14 +2,14 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
-import io.github.northmaxdev.coinplot.backend.web.request.AbstractFrankfurterRequest;
+import io.github.northmaxdev.coinplot.backend.web.request.FrankfurterRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 
 import java.util.List;
 import java.util.Objects;
 
-public final class FrankfurterCurrenciesRequest extends AbstractFrankfurterRequest implements CurrenciesRequest {
+public final class FrankfurterCurrenciesRequest extends FrankfurterRequest implements CurrenciesRequest {
 
     private static final List<String> PATH_SEGMENTS = List.of("currencies");
 
