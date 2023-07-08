@@ -18,7 +18,7 @@ public abstract class AbstractHTTPService {
 
     private final HttpClient httpClient;
 
-    protected AbstractHTTPService(@Nonnull HttpClient httpClient) {
+    protected AbstractHTTPService(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
