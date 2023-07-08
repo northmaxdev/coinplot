@@ -2,18 +2,19 @@
 
 package io.github.northmaxdev.coinplot.backend.currency;
 
+import io.github.northmaxdev.coinplot.backend.ResourceFetchException;
 import jakarta.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CurrencyService {
 
-    Collection<Currency> getAvailableCurrencies() throws Exception;
+    Set<Currency> getAvailableCurrencies() throws ResourceFetchException;
 
-    default Optional<Currency> getCurrency(@Nullable String code) throws Exception {
-        var availableCurrencies = getAvailableCurrencies();
+    default Optional<Currency> getCurrency(@Nullable String code) throws ResourceFetchException {
+        Set<Currency> availableCurrencies = getAvailableCurrencies();
         return availableCurrencies.stream()
                 .filter(currency -> Objects.equals(currency.getCode(), code))
                 .findFirst();
