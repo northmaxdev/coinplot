@@ -12,17 +12,20 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
-public abstract class AbstractHTTPService {
+public abstract class AbstractHTTPService<R extends APIRequest> {
 
     private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
 
     private final HttpClient httpClient;
+    // TODO:
+    //  Add support for "API request history". Basically a mutable List<R> with a final getter that gets updated right
+    //  between constructing an HTTP request and sending it.
 
     protected AbstractHTTPService(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
-    protected final @Nonnull CompletableFuture<HttpResponse<byte[]>> sendRequest(@Nonnull APIRequest apiRequest) {
+    protected final @Nonnull CompletableFuture<HttpResponse<byte[]>> sendRequest(@Nonnull R apiRequest) {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .uri(apiRequest.toURI())
