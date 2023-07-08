@@ -11,12 +11,13 @@ import java.util.Set;
 @NoRepositoryBean
 public interface ExtendedJPARepository<T, I> extends JpaRepository<T, I> {
 
-    // TODO: JPQL
+    // Repository interfaces that extend this one should "override" these inefficient default implementations with more
+    // efficient JPQL queries whenever possible.
+
     default boolean isEmpty() {
         return count() == 0L;
     }
 
-    // TODO: JPQL
     default Set<T> findAllAsSet() {
         return new HashSet<>(findAll());
     }
