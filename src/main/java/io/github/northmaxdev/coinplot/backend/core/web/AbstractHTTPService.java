@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.ResourceFetchException;
-import io.github.northmaxdev.coinplot.backend.web.request.APIRequest;
+import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

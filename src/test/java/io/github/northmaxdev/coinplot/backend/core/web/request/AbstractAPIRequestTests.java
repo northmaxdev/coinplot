@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.web.request;
+package io.github.northmaxdev.coinplot.backend.core.web.request;
 
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
@@ -36,14 +36,17 @@ class AbstractAPIRequestTests {
             protected @Nonnull HttpHost getHost() {
                 return new HttpHost(HTTPS.getId(), "example.com");
             }
+
             @Override
             protected Optional<String> getPathRoot() {
                 return Optional.of("v2");
             }
+
             @Override
             protected @Nonnull String getEndpoint() {
                 return "events";
             }
+
             @Override
             protected List<NameValuePair> getParameters() {
                 return List.of();
@@ -56,14 +59,17 @@ class AbstractAPIRequestTests {
             protected @Nonnull HttpHost getHost() {
                 return new HttpHost(HTTP.getId(), "localhost", 8080);
             }
+
             @Override
             protected Optional<String> getPathRoot() {
                 return Optional.empty();
             }
+
             @Override
             protected @Nonnull String getEndpoint() {
                 return "stuff";
             }
+
             @Override
             protected List<NameValuePair> getParameters() {
                 NameValuePair p = new BasicNameValuePair("foo", "bar");
