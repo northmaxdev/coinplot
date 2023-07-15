@@ -11,6 +11,7 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
@@ -23,23 +24,26 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     protected abstract @Nonnull HttpHost getHost();
 
-    // Method getPathSegments is purposely not final: this is a default impl that you override if you need to
-    protected @Nonnull List<String> getPathSegments() {
-        return List.of();
-    }
+    protected abstract Optional<String> getPathRoot();
 
-    // Method getParameters is purposely not final: this is a default impl that you override if you need to
-    protected @Nonnull List<NameValuePair> getParameters() {
-        return List.of();
-    }
+    protected abstract @Nonnull String getEndpoint();
+
+    protected abstract List<NameValuePair> getParameters();
 
     @Override
     public final @Nonnull URI toURI() {
         if (cachedURI == null) {
             try {
+                // Note: for some implementations, the endpoint is not a static string, but something that actually
+                // requires computation(s), so it's recommended to call this method exactly once.
+                String endpoint = getEndpoint();
+                List<String> pathSegments = getPathRoot()
+                        .map(pathRoot -> List.of(pathRoot, endpoint))
+                        .orElse(List.of(endpoint));
+
                 cachedURI = new URIBuilder()
                         .setHttpHost(getHost())
-                        .setPathSegments(getPathSegments())
+                        .setPathSegments(pathSegments)
                         .setParameters(getParameters())
                         .build();
             } catch (URISyntaxException e) {
