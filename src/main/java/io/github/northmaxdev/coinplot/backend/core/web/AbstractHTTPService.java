@@ -27,10 +27,7 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
     private final DTOMapper<D, M> dtoMapper;
     private final Logger logger;
 
-    protected AbstractHTTPService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            DTOMapper<D, M> dtoMapper) {
+    protected AbstractHTTPService(HttpClient httpClient, ObjectMapper jsonParser, DTOMapper<D, M> dtoMapper) {
         this.httpClient = httpClient;
         this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
@@ -38,22 +35,7 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
     }
 
     protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
-        HttpResponse<byte[]> responsePreStatusCheck = sendAPIRequest(apiRequest);
-        HttpResponse<byte[]> responsePostStatusCheck = checkStatusCode(responsePreStatusCheck);
-        D dto = mapResponseBodyToDTO(responsePostStatusCheck.body(), jsonParser);
-        M resource = mapDTOToModel(dto);
-
-        logger.info("Fetched: " + apiRequest);
-        return resource;
-    }
-
-    protected abstract HttpResponse<byte[]> checkStatusCode(HttpResponse<byte[]> httpResponse)
-            throws ResourceFetchException;
-
-    protected abstract D mapResponseBodyToDTO(byte[] responseBody, ObjectMapper jsonParser)
-            throws ResourceFetchException;
-
-    private HttpResponse<byte[]> sendAPIRequest(R apiRequest) throws ResourceFetchException {
+        // TODO: Headers
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .uri(apiRequest.toURI())
@@ -61,17 +43,25 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
                 .build();
 
         try {
-            return httpClient.send(httpRequest, BodyHandlers.ofByteArray());
-        } catch (IOException | InterruptedException e) {
+            HttpResponse<byte[]> response = httpClient.send(httpRequest, BodyHandlers.ofByteArray());
+
+            int statusCode = response.statusCode();
+            // While this might seem limited at first, every web service that follows industry conventions and norms
+            // returns 200 OK on a successful response, and in any other case we're going to be throwing an RFE anyway
+            // (even in the case of other 2XX codes), so might as well inline this here.
+            if (statusCode != 200) {
+                throw new ResourceFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
+            }
+
+            D dto = parseResponseBody(response.body(), jsonParser);
+            M model = dtoMapper.map(dto);
+
+            logger.info("Completed request: " + apiRequest);
+            return model;
+        } catch (IOException | InterruptedException | DTOMappingException e) {
             throw new ResourceFetchException(e);
         }
     }
 
-    private M mapDTOToModel(D dto) throws ResourceFetchException {
-        try {
-            return dtoMapper.map(dto);
-        } catch (DTOMappingException e) {
-            throw new ResourceFetchException(e);
-        }
-    }
+    protected abstract D parseResponseBody(byte[] responseBody, ObjectMapper jsonParser) throws IOException;
 }
