@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.currency;
+// SPDX-License-Identifier: MIT
 
-import io.github.northmaxdev.coinplot.backend.web.request.FrankfurterRequest;
+package io.github.northmaxdev.coinplot.backend.__old;
+
+import io.github.northmaxdev.coinplot.backend.core.currency.CurrencySetRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 
 import java.util.List;
 import java.util.Objects;
 
-public final class FrankfurterCurrenciesRequest extends FrankfurterRequest implements CurrenciesRequest {
+public final class FrankfurterCurrenciesRequest extends FrankfurterRequest implements CurrencySetRequest {
 
     private static final List<String> PATH_SEGMENTS = List.of("currencies");
 
