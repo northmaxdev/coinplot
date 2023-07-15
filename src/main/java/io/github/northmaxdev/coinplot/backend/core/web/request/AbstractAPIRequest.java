@@ -24,7 +24,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     protected abstract @Nonnull HttpHost getHost();
 
-    protected abstract Optional<String> getPathRoot();
+    protected abstract Optional<String> getRootPathSegment();
 
     protected abstract @Nonnull String getEndpoint();
 
@@ -37,7 +37,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
                 // Note: for some implementations, the endpoint is not a static string, but something that actually
                 // requires computation(s), so it's recommended to call this method exactly once.
                 String endpoint = getEndpoint();
-                List<String> pathSegments = getPathRoot()
+                List<String> pathSegments = getRootPathSegment()
                         .map(pathRoot -> List.of(pathRoot, endpoint))
                         .orElse(List.of(endpoint));
 

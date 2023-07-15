@@ -38,7 +38,7 @@ class AbstractAPIRequestTests {
             }
 
             @Override
-            protected Optional<String> getPathRoot() {
+            protected Optional<String> getRootPathSegment() {
                 return Optional.of("v2");
             }
 
@@ -61,7 +61,7 @@ class AbstractAPIRequestTests {
             }
 
             @Override
-            protected Optional<String> getPathRoot() {
+            protected Optional<String> getRootPathSegment() {
                 return Optional.empty();
             }
 
