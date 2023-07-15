@@ -24,6 +24,7 @@ class FixerCurrencySetRequestTests {
     @Test
     void equalsAndHashCode() {
         EqualsVerifier.forClass(FixerCurrencySetRequest.class)
+                .withNonnullFields("accessKeyParameter")
                 .verify();
     }
 }
