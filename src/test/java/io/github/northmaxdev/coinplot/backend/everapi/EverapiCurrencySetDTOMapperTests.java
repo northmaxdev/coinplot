@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.currency;
+package io.github.northmaxdev.coinplot.backend.everapi;
 
+import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -9,18 +10,18 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CurrencyAPICurrenciesDTOMapperTests {
+class EverapiCurrencySetDTOMapperTests {
 
     @Test
     void maps() {
-        CurrencyAPICurrenciesDTO dto = new CurrencyAPICurrenciesDTO(
+        EverapiCurrencySetDTO dto = new EverapiCurrencySetDTO(
                 Map.of(
-                        "FOO", new CurrencyAPICurrenciesDTO.CurrencyData("Foo Dollar", "*"),
-                        "BAR", new CurrencyAPICurrenciesDTO.CurrencyData("Bar Lira", "@"),
-                        "BAZ", new CurrencyAPICurrenciesDTO.CurrencyData("Baz Pound", "&")
+                        "FOO", new EverapiCurrencySetDTO.CurrencyData("Foo Dollar", "*"),
+                        "BAR", new EverapiCurrencySetDTO.CurrencyData("Bar Lira", "@"),
+                        "BAZ", new EverapiCurrencySetDTO.CurrencyData("Baz Pound", "&")
                 )
         );
-        var mapper = new CurrencyAPICurrenciesDTOMapper();
+        var mapper = new EverapiCurrencySetDTOMapper();
 
         Set<Currency> expected = Set.of(
                 new Currency("FOO", "Foo Dollar", "*"),
