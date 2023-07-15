@@ -28,24 +28,34 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     protected abstract @Nonnull String getEndpoint();
 
+    protected abstract Optional<NameValuePair> getAccessKeyParameter();
+
     protected abstract List<NameValuePair> getAdditionalParameters();
 
     @Override
     public final @Nonnull URI toURI() {
         if (cachedURI == null) {
             try {
-                // Note: for some implementations, the endpoint is not a static string, but something that actually
-                // requires computation(s), so it's recommended to call this method exactly once.
+                // Ideally, each one of those abstract methods above should be called exactly once,
+                // as they may or may not include expensive computations.
+
+                URIBuilder builder = new URIBuilder();
+                HttpHost host = getHost();
+                builder.setHttpHost(host);
+
                 String endpoint = getEndpoint();
                 List<String> pathSegments = getRootPathSegment()
-                        .map(pathRoot -> List.of(pathRoot, endpoint))
+                        .map(root -> List.of(root, endpoint))
                         .orElse(List.of(endpoint));
+                builder.setPathSegments(pathSegments);
 
-                cachedURI = new URIBuilder()
-                        .setHttpHost(getHost())
-                        .setPathSegments(pathSegments)
-                        .setParameters(getAdditionalParameters())
-                        .build();
+                Optional<NameValuePair> accessKey = getAccessKeyParameter();
+                accessKey.ifPresent(builder::addParameter);
+
+                List<NameValuePair> additionalParameters = getAdditionalParameters();
+                builder.addParameters(additionalParameters);
+
+                cachedURI = builder.build();
             } catch (URISyntaxException e) {
                 // Should never happen unless an implementation accepts unvalidated direct user input
                 throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");

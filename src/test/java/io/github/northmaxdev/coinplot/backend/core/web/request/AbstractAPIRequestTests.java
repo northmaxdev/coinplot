@@ -48,6 +48,11 @@ class AbstractAPIRequestTests {
             }
 
             @Override
+            protected Optional<NameValuePair> getAccessKeyParameter() {
+                return Optional.empty();
+            }
+
+            @Override
             protected List<NameValuePair> getAdditionalParameters() {
                 return List.of();
             }
@@ -71,12 +76,18 @@ class AbstractAPIRequestTests {
             }
 
             @Override
+            protected Optional<NameValuePair> getAccessKeyParameter() {
+                NameValuePair p = new BasicNameValuePair("key", "49f68a5c8493ec2c0bf489821c21fc3b");
+                return Optional.of(p);
+            }
+
+            @Override
             protected List<NameValuePair> getAdditionalParameters() {
                 NameValuePair p = new BasicNameValuePair("foo", "bar");
                 return List.of(p);
             }
         };
-        URI u2 = URI.create("http://localhost:8080/stuff?foo=bar");
+        URI u2 = URI.create("http://localhost:8080/stuff?key=49f68a5c8493ec2c0bf489821c21fc3b&foo=bar");
 
         return Stream.of(
                 arguments(r1, u1),
