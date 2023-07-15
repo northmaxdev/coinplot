@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 @SuppressWarnings("NotNullFieldNotInitialized")
@@ -46,14 +47,14 @@ public class Currency {
         return name;
     }
 
-    public @Nullable String getNativeSymbol() {
-        return nativeSymbol;
+    public Optional<String> getNativeSymbol() {
+        return Optional.ofNullable(nativeSymbol);
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Currency that
-               && Objects.equals(this.code, that.code);
+                && Objects.equals(this.code, that.code);
     }
 
     @Override
