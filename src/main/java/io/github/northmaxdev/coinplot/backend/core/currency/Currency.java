@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@SuppressWarnings("NotNullFieldNotInitialized")
 public class Currency {
 
     @Id
@@ -57,7 +58,6 @@ public class Currency {
 
     @Override
     public int hashCode() {
-        // TODO: Cache this
         return Objects.hashCode(code);
     }
 
