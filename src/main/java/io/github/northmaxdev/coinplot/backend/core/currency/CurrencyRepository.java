@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.currency;
+package io.github.northmaxdev.coinplot.backend.core.currency;
 
-import io.github.northmaxdev.coinplot.backend.db.ExtendedJPARepository;
+import io.github.northmaxdev.coinplot.backend.core.db.ExtendedJPARepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
