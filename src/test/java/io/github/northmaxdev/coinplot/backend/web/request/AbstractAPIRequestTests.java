@@ -12,8 +12,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.apache.hc.core5.http.URIScheme.HTTP;
+import static org.apache.hc.core5.http.URIScheme.HTTPS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -31,11 +34,19 @@ class AbstractAPIRequestTests {
         AbstractAPIRequest r1 = new AbstractAPIRequest() {
             @Override
             protected @Nonnull HttpHost getHost() {
-                return new HttpHost("https", "example.com");
+                return new HttpHost(HTTPS.getId(), "example.com");
             }
             @Override
-            protected @Nonnull List<String> getPathSegments() {
-                return List.of("v2", "events");
+            protected Optional<String> getPathRoot() {
+                return Optional.of("v2");
+            }
+            @Override
+            protected @Nonnull String getEndpoint() {
+                return "events";
+            }
+            @Override
+            protected List<NameValuePair> getParameters() {
+                return List.of();
             }
         };
         URI u1 = URI.create("https://example.com/v2/events");
@@ -43,21 +54,23 @@ class AbstractAPIRequestTests {
         AbstractAPIRequest r2 = new AbstractAPIRequest() {
             @Override
             protected @Nonnull HttpHost getHost() {
-                return new HttpHost("localhost", 8080);
+                return new HttpHost(HTTP.getId(), "localhost", 8080);
             }
             @Override
-            protected @Nonnull List<String> getPathSegments() {
-                return List.of("stuff");
+            protected Optional<String> getPathRoot() {
+                return Optional.empty();
             }
             @Override
-            protected @Nonnull List<NameValuePair> getParameters() {
-                return List.of(
-                        new BasicNameValuePair("foo", "bar"),
-                        new BasicNameValuePair("baz", "5")
-                );
+            protected @Nonnull String getEndpoint() {
+                return "stuff";
+            }
+            @Override
+            protected List<NameValuePair> getParameters() {
+                NameValuePair p = new BasicNameValuePair("foo", "bar");
+                return List.of(p);
             }
         };
-        URI u2 = URI.create("http://localhost:8080/stuff?foo=bar&baz=5");
+        URI u2 = URI.create("http://localhost:8080/stuff?foo=bar");
 
         return Stream.of(
                 arguments(r1, u1),
