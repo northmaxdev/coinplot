@@ -28,7 +28,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     protected abstract @Nonnull String getEndpoint();
 
-    protected abstract List<NameValuePair> getParameters();
+    protected abstract List<NameValuePair> getAdditionalParameters();
 
     @Override
     public final @Nonnull URI toURI() {
@@ -44,7 +44,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
                 cachedURI = new URIBuilder()
                         .setHttpHost(getHost())
                         .setPathSegments(pathSegments)
-                        .setParameters(getParameters())
+                        .setParameters(getAdditionalParameters())
                         .build();
             } catch (URISyntaxException e) {
                 // Should never happen unless an implementation accepts unvalidated direct user input

@@ -48,7 +48,7 @@ class AbstractAPIRequestTests {
             }
 
             @Override
-            protected List<NameValuePair> getParameters() {
+            protected List<NameValuePair> getAdditionalParameters() {
                 return List.of();
             }
         };
@@ -71,7 +71,7 @@ class AbstractAPIRequestTests {
             }
 
             @Override
-            protected List<NameValuePair> getParameters() {
+            protected List<NameValuePair> getAdditionalParameters() {
                 NameValuePair p = new BasicNameValuePair("foo", "bar");
                 return List.of(p);
             }
