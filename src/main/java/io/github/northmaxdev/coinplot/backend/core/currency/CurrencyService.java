@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.currency;
+package io.github.northmaxdev.coinplot.backend.core.currency;
 
-import io.github.northmaxdev.coinplot.backend.ResourceFetchException;
+import io.github.northmaxdev.coinplot.backend.core.ResourceFetchException;
 import jakarta.annotation.Nullable;
 
 import java.util.Objects;
