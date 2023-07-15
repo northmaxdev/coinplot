@@ -23,4 +23,14 @@ public final class EverapiCurrencySetRequest extends AbstractEverapiAPIRequest i
     protected List<NameValuePair> getAdditionalParameters() {
         return List.of();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EverapiCurrencySetRequest;
+    }
+
+    @Override
+    public int hashCode() {
+        return EverapiCurrencySetRequest.class.hashCode();
+    }
 }
