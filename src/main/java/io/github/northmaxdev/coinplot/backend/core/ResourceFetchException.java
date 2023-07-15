@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend;
+package io.github.northmaxdev.coinplot.backend.core;
 
 public final class ResourceFetchException extends RuntimeException {
 
