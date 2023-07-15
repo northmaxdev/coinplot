@@ -61,4 +61,8 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
         logger.info("Fetched: " + apiRequest);
         return resource;
     }
+
+    protected final Logger getLogger() {
+        return logger;
+    }
 }
