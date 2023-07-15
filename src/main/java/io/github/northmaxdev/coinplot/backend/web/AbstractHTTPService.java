@@ -2,36 +2,63 @@
 
 package io.github.northmaxdev.coinplot.backend.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.northmaxdev.coinplot.backend.ResourceFetchException;
 import io.github.northmaxdev.coinplot.backend.web.request.APIRequest;
 import jakarta.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.concurrent.CompletableFuture;
 
-public abstract class AbstractHTTPService<R extends APIRequest> {
+public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
 
     private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
 
     private final HttpClient httpClient;
-    // TODO:
-    //  Add support for "API request history". Basically a mutable List<R> with a final getter that gets updated right
-    //  between constructing an HTTP request and sending it.
+    private final ObjectMapper jsonParser;
+    private final Logger logger;
 
-    protected AbstractHTTPService(HttpClient httpClient) {
+    protected AbstractHTTPService(HttpClient httpClient, ObjectMapper jsonParser) {
         this.httpClient = httpClient;
+        this.jsonParser = jsonParser;
+        this.logger = LoggerFactory.getLogger(getClass());
     }
 
-    protected final @Nonnull CompletableFuture<HttpResponse<byte[]>> sendRequest(@Nonnull R apiRequest) {
+    private HttpResponse<byte[]> sendAPIRequest(R apiRequest) throws ResourceFetchException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .GET()
                 .uri(apiRequest.toURI())
                 .timeout(TIMEOUT_DURATION)
                 .build();
 
-        return httpClient.sendAsync(httpRequest, BodyHandlers.ofByteArray());
+        try {
+            return httpClient.send(httpRequest, BodyHandlers.ofByteArray());
+        } catch (IOException | InterruptedException e) {
+            throw new ResourceFetchException(e);
+        }
+    }
+
+    protected abstract HttpResponse<byte[]> checkStatusCode(HttpResponse<byte[]> httpResponse)
+            throws ResourceFetchException;
+
+    protected abstract D mapResponseBodyToDTO(byte[] responseBody, ObjectMapper jsonParser)
+            throws ResourceFetchException;
+
+    protected abstract M mapDTOToModel(D dto) throws ResourceFetchException;
+
+    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
+        HttpResponse<byte[]> responsePreStatusCheck = sendAPIRequest(apiRequest);
+        HttpResponse<byte[]> responsePostStatusCheck = checkStatusCode(responsePreStatusCheck);
+        D dto = mapResponseBodyToDTO(responsePostStatusCheck.body(), jsonParser);
+        M resource = mapDTOToModel(dto);
+
+        logger.info("Fetched: " + apiRequest);
+        return resource;
     }
 }
