@@ -5,6 +5,8 @@ package io.github.northmaxdev.coinplot.backend.core.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.ResourceFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
+import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
+import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +24,34 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
 
     private final HttpClient httpClient;
     private final ObjectMapper jsonParser;
+    private final DTOMapper<D, M> dtoMapper;
     private final Logger logger;
 
-    protected AbstractHTTPService(HttpClient httpClient, ObjectMapper jsonParser) {
+    protected AbstractHTTPService(
+            HttpClient httpClient,
+            ObjectMapper jsonParser,
+            DTOMapper<D, M> dtoMapper) {
         this.httpClient = httpClient;
         this.jsonParser = jsonParser;
+        this.dtoMapper = dtoMapper;
         this.logger = LoggerFactory.getLogger(getClass());
     }
+
+    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
+        HttpResponse<byte[]> responsePreStatusCheck = sendAPIRequest(apiRequest);
+        HttpResponse<byte[]> responsePostStatusCheck = checkStatusCode(responsePreStatusCheck);
+        D dto = mapResponseBodyToDTO(responsePostStatusCheck.body(), jsonParser);
+        M resource = mapDTOToModel(dto);
+
+        logger.info("Fetched: " + apiRequest);
+        return resource;
+    }
+
+    protected abstract HttpResponse<byte[]> checkStatusCode(HttpResponse<byte[]> httpResponse)
+            throws ResourceFetchException;
+
+    protected abstract D mapResponseBodyToDTO(byte[] responseBody, ObjectMapper jsonParser)
+            throws ResourceFetchException;
 
     private HttpResponse<byte[]> sendAPIRequest(R apiRequest) throws ResourceFetchException {
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -44,25 +67,11 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
         }
     }
 
-    protected abstract HttpResponse<byte[]> checkStatusCode(HttpResponse<byte[]> httpResponse)
-            throws ResourceFetchException;
-
-    protected abstract D mapResponseBodyToDTO(byte[] responseBody, ObjectMapper jsonParser)
-            throws ResourceFetchException;
-
-    protected abstract M mapDTOToModel(D dto) throws ResourceFetchException;
-
-    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
-        HttpResponse<byte[]> responsePreStatusCheck = sendAPIRequest(apiRequest);
-        HttpResponse<byte[]> responsePostStatusCheck = checkStatusCode(responsePreStatusCheck);
-        D dto = mapResponseBodyToDTO(responsePostStatusCheck.body(), jsonParser);
-        M resource = mapDTOToModel(dto);
-
-        logger.info("Fetched: " + apiRequest);
-        return resource;
-    }
-
-    protected final Logger getLogger() {
-        return logger;
+    private M mapDTOToModel(D dto) throws ResourceFetchException {
+        try {
+            return dtoMapper.map(dto);
+        } catch (DTOMappingException e) {
+            throw new ResourceFetchException(e);
+        }
     }
 }
