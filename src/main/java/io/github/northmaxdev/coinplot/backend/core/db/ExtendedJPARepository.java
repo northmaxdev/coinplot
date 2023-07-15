@@ -2,10 +2,12 @@
 
 package io.github.northmaxdev.coinplot.backend.core.db;
 
+import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @NoRepositoryBean
@@ -20,5 +22,10 @@ public interface ExtendedJPARepository<T, I> extends JpaRepository<T, I> {
 
     default Set<T> findAllAsSet() {
         return new HashSet<>(findAll());
+    }
+
+    // findById is not null-safe
+    default Optional<T> findByIDNullSafely(@Nullable I id) {
+        return id == null ? Optional.empty() : findById(id);
     }
 }
