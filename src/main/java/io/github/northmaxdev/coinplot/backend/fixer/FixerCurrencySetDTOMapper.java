@@ -18,7 +18,7 @@ public final class FixerCurrencySetDTOMapper implements CurrencySetDTOMapper<Fix
         return dto.symbols()
                 .entrySet()
                 .stream()
-                .map(entry -> new Currency(entry.getKey(), entry.getValue()))
+                .map(Currency::ofMapEntry)
                 .collect(toSet());
     }
 }

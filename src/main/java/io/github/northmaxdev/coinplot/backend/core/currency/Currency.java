@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,6 +34,10 @@ public class Currency {
 
     public Currency(@Nonnull String code, @Nonnull String name) {
         this(code, name, null);
+    }
+
+    public static Currency ofMapEntry(Map.Entry<String, String> mapEntry) {
+        return new Currency(mapEntry.getKey(), mapEntry.getValue());
     }
 
     protected Currency() {

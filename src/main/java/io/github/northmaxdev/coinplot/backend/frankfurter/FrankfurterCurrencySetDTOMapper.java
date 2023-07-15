@@ -18,7 +18,7 @@ public final class FrankfurterCurrencySetDTOMapper implements CurrencySetDTOMapp
     public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) throws DTOMappingException {
         return dto.entrySet()
                 .stream()
-                .map(entry -> new Currency(entry.getKey(), entry.getValue()))
+                .map(Currency::ofMapEntry)
                 .collect(toSet());
     }
 }
