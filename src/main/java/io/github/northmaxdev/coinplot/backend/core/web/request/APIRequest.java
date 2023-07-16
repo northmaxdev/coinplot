@@ -5,10 +5,13 @@ package io.github.northmaxdev.coinplot.backend.core.web.request;
 import jakarta.annotation.Nonnull;
 
 import java.net.URI;
+import java.util.Map;
 
-// Not marked @FunctionalInterface as this is *semantically* not a functional interface.
-// Additional methods may be added in the future.
 public interface APIRequest {
 
     @Nonnull URI toURI();
+
+    default Map<String, String> headers() {
+        return Map.of();
+    }
 }
