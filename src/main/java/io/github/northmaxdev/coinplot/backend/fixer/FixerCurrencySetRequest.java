@@ -28,12 +28,6 @@ public final class FixerCurrencySetRequest extends AbstractFixerAPIRequest imple
     @Override
     public boolean equals(Object obj) {
         return obj instanceof FixerCurrencySetRequest that
-                // Access key is the only state in this class
                 && Objects.equals(this.getAccessKeyParameter(), that.getAccessKeyParameter());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getAccessKeyParameter());
     }
 }

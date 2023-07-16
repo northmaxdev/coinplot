@@ -8,6 +8,7 @@ import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
@@ -35,5 +36,10 @@ public abstract class AbstractFixerAPIRequest extends AbstractAPIRequest {
     @Override
     protected final Optional<NameValuePair> getAccessKeyParameter() {
         return Optional.of(accessKeyParameter);
+    }
+
+    @Override
+    public int hashCode() { // Deliberately non-final
+        return Objects.hashCode(accessKeyParameter);
     }
 }
