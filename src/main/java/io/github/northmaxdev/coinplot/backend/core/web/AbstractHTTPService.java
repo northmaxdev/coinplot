@@ -8,15 +8,18 @@ import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import java.util.Map;
 
 public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
 
@@ -35,10 +38,20 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
     }
 
     protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
-        // TODO: Headers
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .GET()
-                .uri(apiRequest.toURI())
+        return fetch(apiRequest, null);
+    }
+
+    protected final M fetch(@Nonnull R apiRequest, @Nullable Map<String, String> headers)
+            throws ResourceFetchException {
+        URI uri = apiRequest.toURI();
+
+        var builder = HttpRequest.newBuilder();
+        if (headers != null) {
+            headers.forEach(builder::setHeader);
+        }
+
+        HttpRequest httpRequest = builder.GET()
+                .uri(uri)
                 .timeout(TIMEOUT_DURATION)
                 .build();
 
