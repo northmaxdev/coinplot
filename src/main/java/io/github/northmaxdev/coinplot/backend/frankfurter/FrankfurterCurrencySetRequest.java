@@ -33,12 +33,6 @@ public final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIR
     @Override
     public boolean equals(Object obj) {
         return obj instanceof FrankfurterCurrencySetRequest that
-                // Host is the only state in this class
                 && Objects.equals(this.getHost(), that.getHost());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getHost());
     }
 }

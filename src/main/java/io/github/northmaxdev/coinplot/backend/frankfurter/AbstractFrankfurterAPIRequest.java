@@ -7,6 +7,7 @@ import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.NameValuePair;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
@@ -38,5 +39,10 @@ public abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest {
     @Override
     protected final Optional<NameValuePair> getAccessKeyParameter() {
         return Optional.empty();
+    }
+
+    @Override
+    public int hashCode() { // Deliberately non-final
+        return Objects.hashCode(host);
     }
 }
