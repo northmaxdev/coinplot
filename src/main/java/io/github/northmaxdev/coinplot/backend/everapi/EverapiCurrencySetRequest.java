@@ -7,11 +7,12 @@ import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.NameValuePair;
 
 import java.util.List;
+import java.util.Objects;
 
 public final class EverapiCurrencySetRequest extends AbstractEverapiAPIRequest implements CurrencySetRequest {
 
-    public EverapiCurrencySetRequest() {
-        super();
+    public EverapiCurrencySetRequest(@Nonnull String accessKey) {
+        super(accessKey);
     }
 
     @Override
@@ -26,11 +27,7 @@ public final class EverapiCurrencySetRequest extends AbstractEverapiAPIRequest i
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof EverapiCurrencySetRequest;
-    }
-
-    @Override
-    public int hashCode() {
-        return EverapiCurrencySetRequest.class.hashCode();
+        return obj instanceof EverapiCurrencySetRequest that
+                && Objects.equals(this.getAccessKey(), that.getAccessKey());
     }
 }

@@ -13,7 +13,7 @@ class EverapiCurrencySetRequestTests {
 
     @Test
     void actualURIEqualsExpected() {
-        var request = new EverapiCurrencySetRequest();
+        var request = new EverapiCurrencySetRequest("hi");
 
         URI expected = URI.create("https://api.currencyapi.com/v3/currencies");
         URI actual = request.toURI();
