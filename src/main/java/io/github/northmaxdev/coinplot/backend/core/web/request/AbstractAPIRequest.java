@@ -56,7 +56,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     }
 
     @Override
-    public final @Nonnull URI toURI() {
+    public final @Nonnull URI getURI() {
         try {
             // Ideally, each one of those abstract methods above should be called exactly once,
             // as they may or may not include expensive computations.
@@ -94,7 +94,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     }
 
     @Override
-    public final Map<String, String> headers() {
+    public final Map<String, String> getHeaders() {
         Map<String, String> headersWithoutKey = getHeadersExcludingAPIKey();
 
         if (accessKey.isSpecifiedAsHeader()) {
@@ -127,8 +127,8 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     @Override
     public final String toString() {
-        URI uri = toURI();
-        Map<String, String> headers = headers();
+        URI uri = getURI();
+        Map<String, String> headers = getHeaders();
 
         StringBuilder sb = new StringBuilder()
                 .append("[URI: ")

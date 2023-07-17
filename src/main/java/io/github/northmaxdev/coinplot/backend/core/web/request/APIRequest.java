@@ -9,9 +9,9 @@ import java.util.Map;
 
 public interface APIRequest {
 
-    @Nonnull URI toURI();
+    @Nonnull URI getURI();
 
-    default Map<String, String> headers() {
+    default Map<String, String> getHeaders() {
         return Map.of();
     }
 }
