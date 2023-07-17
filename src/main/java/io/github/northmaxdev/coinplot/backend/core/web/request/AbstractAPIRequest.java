@@ -20,7 +20,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     //    Fields    //
     //////////////////
 
-    private final @Nonnull APIKey accessKey;
+    private final APIKey accessKey;
     // TODO:
     //  Lazy-compute and cache both URI and headers.
     //  Let readers know that in that case all subclasses must be deeply immutable to maintain integrity.
@@ -109,6 +109,10 @@ public abstract class AbstractAPIRequest implements APIRequest {
     ///////////////////////////////
     //    Standard Java stuff    //
     ///////////////////////////////
+
+    protected final APIKey getAccessKey() {
+        return accessKey;
+    }
 
     @Override
     public boolean equals(Object obj) { // Non-final
