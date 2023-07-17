@@ -16,7 +16,7 @@ class FrankfurterCurrencySetRequestTests {
         var request = new FrankfurterCurrencySetRequest();
 
         URI expected = URI.create("https://api.frankfurter.app/currencies");
-        URI actual = request.toURI();
+        URI actual = request.getURI();
 
         assertThat(actual).isEqualTo(expected);
     }

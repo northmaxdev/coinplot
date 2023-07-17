@@ -5,9 +5,7 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencySetRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.NameValuePair;
 
-import java.util.List;
 import java.util.Objects;
 
 public final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIRequest implements CurrencySetRequest {
@@ -26,13 +24,9 @@ public final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIR
     }
 
     @Override
-    protected List<NameValuePair> getAdditionalParameters() {
-        return List.of();
-    }
-
-    @Override
     public boolean equals(Object obj) {
         return obj instanceof FrankfurterCurrencySetRequest that
+                && Objects.equals(this.getAccessKey(), that.getAccessKey())
                 && Objects.equals(this.getHost(), that.getHost());
     }
 }

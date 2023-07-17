@@ -5,10 +5,8 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.web.request.AbstractAPIRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.NameValuePair;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
@@ -32,17 +30,14 @@ public abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest {
     }
 
     @Override
-    protected final Optional<String> getRootPathSegment() {
-        return Optional.empty();
+    public boolean equals(Object obj) { // Non-final
+        return obj instanceof AbstractFrankfurterAPIRequest that
+                && Objects.equals(this.getAccessKey(), that.getAccessKey())
+                && Objects.equals(this.host, that.host);
     }
 
     @Override
-    protected final Optional<NameValuePair> getAccessKeyParameter() {
-        return Optional.empty();
-    }
-
-    @Override
-    public int hashCode() { // Deliberately non-final
-        return Objects.hashCode(host);
+    public int hashCode() { // Non-final
+        return Objects.hash(getAccessKey(), host);
     }
 }
