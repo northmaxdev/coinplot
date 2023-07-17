@@ -16,7 +16,7 @@ class FixerCurrencySetRequestTests {
         var request = new FixerCurrencySetRequest("5ac5355b84894ede056ab81b324c4675");
 
         URI expected = URI.create("https://data.fixer.io/api/symbols?access_key=5ac5355b84894ede056ab81b324c4675");
-        URI actual = request.toURI();
+        URI actual = request.getURI();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -24,7 +24,6 @@ class FixerCurrencySetRequestTests {
     @Test
     void equalsAndHashCode() {
         EqualsVerifier.forClass(FixerCurrencySetRequest.class)
-                .withNonnullFields("accessKeyParameter")
                 .verify();
     }
 }

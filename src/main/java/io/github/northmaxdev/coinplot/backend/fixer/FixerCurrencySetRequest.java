@@ -4,9 +4,7 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencySetRequest;
 import jakarta.annotation.Nonnull;
-import org.apache.hc.core5.http.NameValuePair;
 
-import java.util.List;
 import java.util.Objects;
 
 public final class FixerCurrencySetRequest extends AbstractFixerAPIRequest implements CurrencySetRequest {
@@ -21,13 +19,8 @@ public final class FixerCurrencySetRequest extends AbstractFixerAPIRequest imple
     }
 
     @Override
-    protected List<NameValuePair> getAdditionalParameters() {
-        return List.of();
-    }
-
-    @Override
     public boolean equals(Object obj) {
         return obj instanceof FixerCurrencySetRequest that
-                && Objects.equals(this.getAccessKeyParameter(), that.getAccessKeyParameter());
+                && Objects.equals(this.getAccessKey(), that.getAccessKey());
     }
 }
