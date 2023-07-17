@@ -3,74 +3,139 @@
 package io.github.northmaxdev.coinplot.backend.core.web.request;
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.net.URIBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
-    // IMPORTANT: Caching the URI implies that all outgoing subclasses MUST be immutable.
-    private transient @Nullable URI cachedURI;
+    //////////////////
+    //    Fields    //
+    //////////////////
+
+    private final @Nonnull APIKey accessKey;
+    // TODO:
+    //  Lazy-compute and cache both URI and headers.
+    //  Let readers know that in that case all subclasses must be deeply immutable to maintain integrity.
+
+    ////////////////////////
+    //    Constructors    //
+    ////////////////////////
 
     protected AbstractAPIRequest() {
-        this.cachedURI = null;
+        this(APIKey.none());
     }
+
+    protected AbstractAPIRequest(@Nonnull APIKey accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    ////////////////////////////////////
+    //    Class Hierarchy API: URI    //
+    ////////////////////////////////////
 
     protected abstract @Nonnull HttpHost getHost();
 
-    protected abstract Optional<String> getRootPathSegment();
+    // Deliberately non-final, merely a default impl
+    protected Optional<String> getRootPathSegment() {
+        return Optional.empty();
+    }
 
     protected abstract @Nonnull String getEndpoint();
 
-    protected abstract Optional<NameValuePair> getAccessKeyParameter();
-
-    protected abstract List<NameValuePair> getAdditionalParameters();
+    // Deliberately non-final, merely a default impl
+    protected Map<String, String> getParameters() {
+        return Map.of();
+    }
 
     @Override
     public final @Nonnull URI toURI() {
-        if (cachedURI == null) {
-            try {
-                // Ideally, each one of those abstract methods above should be called exactly once,
-                // as they may or may not include expensive computations.
+        try {
+            // Ideally, each one of those abstract methods above should be called exactly once,
+            // as they may or may not include expensive computations.
 
-                URIBuilder builder = new URIBuilder();
-                HttpHost host = getHost();
-                builder.setHttpHost(host);
+            URIBuilder builder = new URIBuilder();
+            HttpHost host = getHost();
+            builder.setHttpHost(host);
 
-                String endpoint = getEndpoint();
-                List<String> pathSegments = getRootPathSegment()
-                        .map(root -> List.of(root, endpoint))
-                        .orElse(List.of(endpoint));
-                builder.setPathSegments(pathSegments);
+            String endpoint = getEndpoint();
+            List<String> pathSegments = getRootPathSegment()
+                    .map(root -> List.of(root, endpoint))
+                    .orElse(List.of(endpoint));
+            builder.setPathSegments(pathSegments);
 
-                Optional<NameValuePair> accessKey = getAccessKeyParameter();
-                accessKey.ifPresent(builder::addParameter);
-
-                List<NameValuePair> additionalParameters = getAdditionalParameters();
-                builder.addParameters(additionalParameters);
-
-                cachedURI = builder.build();
-            } catch (URISyntaxException e) {
-                // Should never happen unless an implementation accepts unvalidated direct user input
-                throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
+            Map<String, String> parameters = getParameters();
+            parameters.forEach(builder::setParameter);
+            if (accessKey.isSpecifiedAsQueryParameter()) {
+                builder.setParameter(accessKey.name(), accessKey.value());
             }
+
+            return builder.build();
+        } catch (URISyntaxException e) {
+            // Should never happen unless an implementation accepts unvalidated direct user input
+            throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
         }
-        return cachedURI;
+    }
+
+    ////////////////////////////////////////
+    //    Class Hierarchy API: Headers    //
+    ////////////////////////////////////////
+
+    // Deliberately non-final, merely a default impl
+    protected Map<String, String> getHeadersExcludingAPIKey() {
+        return Map.of();
+    }
+
+    @Override
+    public final Map<String, String> headers() {
+        Map<String, String> headersWithoutKey = getHeadersExcludingAPIKey();
+
+        if (accessKey.isSpecifiedAsHeader()) {
+            Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
+            headersWithKey.put(accessKey.name(), accessKey.value());
+            return headersWithKey;
+        }
+
+        return headersWithoutKey;
+    }
+
+    ///////////////////////////////
+    //    Standard Java stuff    //
+    ///////////////////////////////
+
+    @Override
+    public boolean equals(Object obj) { // Non-final
+        return obj instanceof AbstractAPIRequest that
+                && Objects.equals(this.accessKey, that.accessKey);
+    }
+
+    @Override
+    public int hashCode() { // Non-final
+        return Objects.hashCode(accessKey);
     }
 
     @Override
     public final String toString() {
-        // NOTE: When using Temurin JDK v17.0.7+7, which is the primary JDK for this project, the implementation of
-        // URI::toString caches the string form and avoids excess computations. If this behavior is NOT explicitly
-        // specified by the java.net.URI spec (and thus the aforementioned is a JDK-specific implementation detail),
-        // then we'll have to cache the string form ourselves to ensure portability of optimizations.
-        URI u = toURI();
-        return u.toString();
+        URI uri = toURI();
+        Map<String, String> headers = headers();
+
+        StringBuilder sb = new StringBuilder()
+                .append("[URI: ")
+                .append(uri);
+
+        if (!headers.isEmpty()) {
+            sb.append(" Headers: ");
+            sb.append(headers);
+        }
+
+        sb.append(']');
+        return sb.toString();
     }
 }
