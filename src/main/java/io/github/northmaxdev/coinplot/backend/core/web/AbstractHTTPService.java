@@ -8,7 +8,6 @@ import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,17 +37,11 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
     }
 
     protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
-        return fetch(apiRequest, null);
-    }
-
-    protected final M fetch(@Nonnull R apiRequest, @Nullable Map<String, String> headers)
-            throws ResourceFetchException {
-        URI uri = apiRequest.toURI();
+        URI uri = apiRequest.getURI();
+        Map<String, String> headers = apiRequest.getHeaders();
 
         var builder = HttpRequest.newBuilder();
-        if (headers != null) {
-            headers.forEach(builder::setHeader);
-        }
+        headers.forEach(builder::setHeader);
 
         HttpRequest httpRequest = builder.GET()
                 .uri(uri)
