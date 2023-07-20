@@ -6,14 +6,13 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled // TODO
 class EverapiExchangeRateSetRequestTests {
 
-    @Disabled // TODO
     @Test
     void reqURI() {
     }
 
-    @Disabled // TODO
     @Test
     void eq() {
         EqualsVerifier.forClass(EverapiExchangeRateSetRequest.class)
