@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 class CurrencyTests {
 
     @Test
-    void equalsAndHashCode() {
+    void eq() {
         EqualsVerifier.forClass(Currency.class)
-                .suppress(Warning.SURROGATE_KEY)
+                .suppress(Warning.SURROGATE_KEY) // To only compare entity IDs for equality
                 .verify();
     }
 }
