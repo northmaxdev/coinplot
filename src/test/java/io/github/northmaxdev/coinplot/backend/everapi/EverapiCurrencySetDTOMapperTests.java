@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EverapiCurrencySetDTOMapperTests {
 
     @Test
-    void maps() {
+    void mapsDTO() {
         EverapiCurrencySetDTO dto = new EverapiCurrencySetDTO(
                 Map.of(
                         "FOO", new EverapiCurrencySetDTO.CurrencyData("Foo Dollar", "*"),
