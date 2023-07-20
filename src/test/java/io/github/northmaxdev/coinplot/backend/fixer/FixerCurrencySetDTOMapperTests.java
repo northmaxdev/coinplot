@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FixerCurrencySetDTOMapperTests {
 
     @Test
-    void maps() {
+    void mapsDTO() {
         FixerCurrencySetDTO dto = new FixerCurrencySetDTO(
                 Map.of(
                         "FOO", "Foo Dollar",
