@@ -32,7 +32,7 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
 
     @Override
     public String generateDisplayNameForNestedClass(Class<?> aClass) {
-        throw new UnsupportedOperationException(); // TODO
+        throw new UnsupportedOperationException();
     }
 
     @Override
