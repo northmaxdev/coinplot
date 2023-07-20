@@ -11,10 +11,10 @@ import static java.util.Map.entry;
 
 public final class HumanReadableDisplayNameGenerator implements DisplayNameGenerator {
 
-    private static final Map<String, String> MAGIC_METHOD_NAMES = Map.ofEntries(
+    private static final Map<String, String> MAGIC_TEST_METHOD_NAMES = Map.ofEntries(
             entry("eq", "equals/hashCode contract"),
             entry("reqURI", "APIRequest actual URI equals to expected"),
-            entry("mapsDTO", "DTO properly maps to a model representation")
+            entry("mapsDTO", "DTO maps to a model representation as expected")
     );
 
     @Override
@@ -37,7 +37,7 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
     @Override
     public String generateDisplayNameForMethod(Class<?> aClass, Method method) {
         String methodName = method.getName();
-        return MAGIC_METHOD_NAMES.getOrDefault(methodName, markedAsIs(methodName));
+        return MAGIC_TEST_METHOD_NAMES.getOrDefault(methodName, markedAsIs(methodName));
     }
 
     private static String markedAsIs(String s) {

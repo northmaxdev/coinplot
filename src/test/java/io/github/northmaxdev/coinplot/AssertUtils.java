@@ -14,9 +14,9 @@ public final class AssertUtils {
 
     private AssertUtils() {}
 
-    ////////////////////////////////////////
-    // General-purpose APIRequest asserts //
-    ////////////////////////////////////////
+    ///////////////////////////////////////////
+    // General-purpose APIRequest assertions //
+    ///////////////////////////////////////////
 
     public static <R extends APIRequest> void assertAPIRequestURIEqualsExpected(
             String expectedURILiteral,
