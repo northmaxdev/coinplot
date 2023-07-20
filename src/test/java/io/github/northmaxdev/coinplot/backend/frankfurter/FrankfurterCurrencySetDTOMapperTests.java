@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FrankfurterCurrencySetDTOMapperTests {
 
     @Test
-    void maps() {
+    void mapsDTO() {
         Map<String, String> dto = Map.of(
                 "EUR", "Euro",
                 "CHF", "Swiss Franc"
