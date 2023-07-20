@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static io.github.northmaxdev.coinplot.AssertUtils.assertAPIRequestHeadersContainOnlyExpected;
-import static io.github.northmaxdev.coinplot.AssertUtils.assertAPIRequestURIEqualsExpected;
+import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestHeadersContainOnlyExpected;
+import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestURIEqualsExpected;
 
 class EverapiCurrencySetRequestTests {
 

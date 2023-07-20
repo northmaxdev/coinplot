@@ -10,9 +10,9 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public final class AssertUtils {
+public final class TestUtils {
 
-    private AssertUtils() {}
+    private TestUtils() {}
 
     ///////////////////////////////////////////
     // General-purpose APIRequest assertions //
