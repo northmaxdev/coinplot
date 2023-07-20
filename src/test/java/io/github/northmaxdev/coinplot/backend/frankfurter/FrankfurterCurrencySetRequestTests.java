@@ -5,24 +5,20 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.github.northmaxdev.coinplot.AssertUtils.assertAPIRequestURIEqualsExpected;
 
 class FrankfurterCurrencySetRequestTests {
 
     @Test
-    void actualURIEqualsExpected() {
-        var request = new FrankfurterCurrencySetRequest();
-
-        URI expected = URI.create("https://api.frankfurter.app/currencies");
-        URI actual = request.getURI();
-
-        assertThat(actual).isEqualTo(expected);
+    void reqURI() {
+        assertAPIRequestURIEqualsExpected(
+                "https://api.frankfurter.app/currencies",
+                FrankfurterCurrencySetRequest::new
+        );
     }
 
     @Test
-    void equalsAndHashCode() {
+    void eq() {
         EqualsVerifier.forClass(FrankfurterCurrencySetRequest.class)
                 .verify();
     }
