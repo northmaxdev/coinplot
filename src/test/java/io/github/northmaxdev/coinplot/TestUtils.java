@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot;
 
+import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 
 import java.net.URI;
@@ -14,9 +15,16 @@ public final class TestUtils {
 
     private TestUtils() {}
 
-    ///////////////////////////////////////////
-    // General-purpose APIRequest assertions //
-    ///////////////////////////////////////////
+    ////////////////////
+    // Currency stuff //
+    ////////////////////
+
+    public static final Currency FOO_DOLLAR = new Currency("FOO", "Foo Dollar");
+    public static final Currency BAR_FRANC = new Currency("BAR", "Bar Franc");
+
+    //////////////////////
+    // APIRequest stuff //
+    //////////////////////
 
     public static <R extends APIRequest> void assertAPIRequestURIEqualsExpected(
             String expectedURILiteral,
