@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -29,22 +30,26 @@ public final class TestUtils {
     // APIRequest stuff //
     //////////////////////
 
-    public static <R extends APIRequest> void assertAPIRequestURIEqualsExpected(
-            String expectedURILiteral,
-            Supplier<R> requestSupplier) {
+    public static <R extends APIRequest> void assertExpectedURIsContainActual(
+            Supplier<R> requestSupplier,
+            String... possibleOutcomes) {
         R request = requestSupplier.get();
 
-        URI expected = URI.create(expectedURILiteral);
+        Iterable<URI> expected = Arrays.stream(possibleOutcomes)
+                .map(URI::create)
+                .toList();
         URI actual = request.getURI();
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isIn(expected);
     }
 
-    public static <R extends APIRequest> void assertAPIRequestHeadersContainOnlyExpected(
-            Map<String, String> expected,
-            Supplier<R> requestSupplier) {
+    @SafeVarargs
+    public static <R extends APIRequest> void assertExpectedHeadersContainActual(
+            Supplier<R> requestSupplier,
+            Map.Entry<String, String>... expectedHeaders) {
         R request = requestSupplier.get();
 
+        Map<String, String> expected = Map.ofEntries(expectedHeaders);
         Map<String, String> actual = request.getHeaders();
 
         assertThat(actual).containsExactlyInAnyOrderEntriesOf(expected);
