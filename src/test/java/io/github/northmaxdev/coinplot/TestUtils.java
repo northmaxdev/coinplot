@@ -15,7 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public final class TestUtils {
 
-    private TestUtils() {}
+    private TestUtils() {
+    }
 
     ////////////////////
     // Currency stuff //
@@ -61,6 +62,16 @@ public final class TestUtils {
                 // subtle bugs later on (hopefully not). In the meantime, the tested equals/hashCode implementations
                 // look completely OK.
                 .suppress(Warning.STRICT_INHERITANCE)
+                .verify();
+    }
+
+    ///////////////////////
+    // Persistence stuff //
+    ///////////////////////
+
+    public static <T> void verifyJPAEntityEquals(Class<T> entityClass) {
+        EqualsVerifier.forClass(entityClass)
+                .suppress(Warning.SURROGATE_KEY) // To only compare entity IDs for equality
                 .verify();
     }
 }
