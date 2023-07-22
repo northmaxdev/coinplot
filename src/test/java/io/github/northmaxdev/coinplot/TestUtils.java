@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public final class TestUtils {
 
-    private TestUtils() {
-    }
+    private TestUtils() {}
 
     ////////////////////
     // Currency stuff //
@@ -24,6 +23,7 @@ public final class TestUtils {
 
     public static final Currency FOO_DOLLAR = new Currency("FOO", "Foo Dollar");
     public static final Currency BAR_FRANC = new Currency("BAR", "Bar Franc");
+    public static final Currency BAZ_POUND = new Currency("BAZ", "Baz Pound");
 
     //////////////////////
     // APIRequest stuff //
