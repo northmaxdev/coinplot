@@ -4,27 +4,27 @@ package io.github.northmaxdev.coinplot.backend.everapi;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
-import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestHeadersContainOnlyExpected;
-import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestURIEqualsExpected;
+import static io.github.northmaxdev.coinplot.TestUtils.assertExpectedHeadersContainActual;
+import static io.github.northmaxdev.coinplot.TestUtils.assertExpectedURIsContainActual;
 import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
+import static java.util.Map.entry;
 
 class EverapiCurrencySetRequestTests {
 
     @Test
     void reqURI() {
-        assertAPIRequestURIEqualsExpected(
-                "https://api.currencyapi.com/v3/currencies",
-                () -> new EverapiCurrencySetRequest("hi")
+        assertExpectedURIsContainActual(
+                () -> new EverapiCurrencySetRequest("hi"),
+                "https://api.currencyapi.com/v3/currencies"
         );
     }
 
     @Test
     void reqHeaders() {
-        Map<String, String> expected = Map.of("apikey", "1234");
-
-        assertAPIRequestHeadersContainOnlyExpected(expected, () -> new EverapiCurrencySetRequest("1234"));
+        assertExpectedHeadersContainActual(
+                () -> new EverapiCurrencySetRequest("5ac5355b84894ede056ab81b324c4675"),
+                entry("apikey", "5ac5355b84894ede056ab81b324c4675")
+        );
     }
 
     @Test
