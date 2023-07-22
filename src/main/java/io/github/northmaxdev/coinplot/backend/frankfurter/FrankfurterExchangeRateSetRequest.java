@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
@@ -11,7 +12,6 @@ import org.apache.hc.core5.http.HttpHost;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -93,7 +93,7 @@ public final class FrankfurterExchangeRateSetRequest
             parameters.put("from", base.getCode());
         }
 
-        getJoinedTargetCodes()
+        ExchangeRateSetRequestSupport.joinTargetCodes(this)
                 .ifPresent(s -> parameters.put("to", s));
 
         return parameters;
@@ -103,14 +103,11 @@ public final class FrankfurterExchangeRateSetRequest
     public boolean equals(Object obj) {
         return obj instanceof FrankfurterExchangeRateSetRequest that
                 && super.equals(obj) // For superclass fields
-                && Objects.equals(this.base, that.base)
-                && Objects.equals(this.targets, that.targets)
-                && Objects.equals(this.start, that.start)
-                && Objects.equals(this.end, that.end);
+                && ExchangeRateSetRequestSupport.areBasicPropertiesEqual(this, that);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ Objects.hash(base, targets, start, end);
+        return super.hashCode() ^ ExchangeRateSetRequestSupport.hashBasicProperties(this);
     }
 }
