@@ -16,20 +16,19 @@ public final class ExchangeRateSetRequestSupport {
 
     private ExchangeRateSetRequestSupport() {}
 
-    public static <T> boolean areBasicPropertiesEqual(
-            @Nonnull ExchangeRateSetRequest<T> a,
-            @Nonnull ExchangeRateSetRequest<T> b) {
+    public static boolean areBasicPropertiesEqual(
+            @Nonnull ExchangeRateSetRequest a,
+            @Nonnull ExchangeRateSetRequest b) {
         return Objects.equals(a.getBase(), b.getBase())
                 && Objects.equals(a.getTargets(), b.getTargets())
-                && Objects.equals(a.getStart(), b.getStart())
-                && Objects.equals(a.getEnd(), b.getEnd());
+                && Objects.equals(a.getDateInterval(), b.getDateInterval());
     }
 
-    public static int hashBasicProperties(@Nonnull ExchangeRateSetRequest<?> request) {
-        return Objects.hash(request.getBase(), request.getTargets(), request.getStart(), request.getEnd());
+    public static int hashBasicProperties(@Nonnull ExchangeRateSetRequest request) {
+        return Objects.hash(request.getBase(), request.getTargets(), request.getDateInterval());
     }
 
-    public static Optional<String> joinTargetCodes(@Nonnull ExchangeRateSetRequest<?> request) {
+    public static Optional<String> joinTargetCodes(@Nonnull ExchangeRateSetRequest request) {
         Set<Currency> targets = request.getTargets();
 
         if (targets.isEmpty()) {
