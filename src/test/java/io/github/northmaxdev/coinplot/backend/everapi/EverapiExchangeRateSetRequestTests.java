@@ -2,9 +2,10 @@
 
 package io.github.northmaxdev.coinplot.backend.everapi;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 @Disabled // TODO
 class EverapiExchangeRateSetRequestTests {
@@ -15,7 +16,6 @@ class EverapiExchangeRateSetRequestTests {
 
     @Test
     void eq() {
-        EqualsVerifier.forClass(EverapiExchangeRateSetRequest.class)
-                .verify();
+        verifyAPIRequestEquals(EverapiExchangeRateSetRequest.class);
     }
 }

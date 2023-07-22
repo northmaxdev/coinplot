@@ -2,9 +2,10 @@
 
 package io.github.northmaxdev.coinplot.backend.fixer;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 @Disabled // TODO
 class FixerExchangeRateSetRequestTests {
@@ -15,7 +16,6 @@ class FixerExchangeRateSetRequestTests {
 
     @Test
     void eq() {
-        EqualsVerifier.forClass(FixerExchangeRateSetRequest.class)
-                .verify();
+        verifyAPIRequestEquals(FixerExchangeRateSetRequest.class);
     }
 }

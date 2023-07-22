@@ -2,10 +2,10 @@
 
 package io.github.northmaxdev.coinplot.backend.frankfurter;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestURIEqualsExpected;
+import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 class FrankfurterCurrencySetRequestTests {
 
@@ -19,7 +19,6 @@ class FrankfurterCurrencySetRequestTests {
 
     @Test
     void eq() {
-        EqualsVerifier.forClass(FrankfurterCurrencySetRequest.class)
-                .verify();
+        verifyAPIRequestEquals(FrankfurterCurrencySetRequest.class);
     }
 }

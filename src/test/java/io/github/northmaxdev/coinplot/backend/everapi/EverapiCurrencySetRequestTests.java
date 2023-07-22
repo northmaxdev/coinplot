@@ -2,13 +2,13 @@
 
 package io.github.northmaxdev.coinplot.backend.everapi;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
 import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestHeadersContainOnlyExpected;
 import static io.github.northmaxdev.coinplot.TestUtils.assertAPIRequestURIEqualsExpected;
+import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 class EverapiCurrencySetRequestTests {
 
@@ -29,7 +29,6 @@ class EverapiCurrencySetRequestTests {
 
     @Test
     void eq() {
-        EqualsVerifier.forClass(EverapiCurrencySetRequest.class)
-                .verify();
+        verifyAPIRequestEquals(EverapiCurrencySetRequest.class);
     }
 }
