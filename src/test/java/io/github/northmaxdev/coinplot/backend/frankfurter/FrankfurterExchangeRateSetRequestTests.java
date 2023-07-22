@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.frankfurter;
 
+import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,8 @@ class FrankfurterExchangeRateSetRequestTests {
         assertExpectedURIsContainActual(() -> {
                     LocalDate start = LocalDate.of(2020, Month.JANUARY, 1);
                     LocalDate end = LocalDate.of(2020, Month.JANUARY, 31);
-                    return new FrankfurterExchangeRateSetRequest(FOO_DOLLAR, Set.of(BAR_FRANC, BAZ_POUND), start, end);
+                    LocalDateInterval interval = new LocalDateInterval(start, end);
+                    return new FrankfurterExchangeRateSetRequest(FOO_DOLLAR, Set.of(BAR_FRANC, BAZ_POUND), interval);
                 },
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&to=BAR%2CBAZ&amount=1",
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&amount=1&to=BAR%2CBAZ",

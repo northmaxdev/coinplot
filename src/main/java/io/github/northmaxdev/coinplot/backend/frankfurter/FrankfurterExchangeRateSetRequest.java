@@ -5,11 +5,11 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
+import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,36 +19,30 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class FrankfurterExchangeRateSetRequest
         extends AbstractFrankfurterAPIRequest
-        implements ExchangeRateSetRequest<LocalDate> {
+        implements ExchangeRateSetRequest {
 
     private final @Nullable Currency base;
     private final Set<Currency> targets;
-    private final @Nonnull LocalDate start;
-    private final @Nullable LocalDate end;
+    private final @Nonnull LocalDateInterval dateInterval;
 
     public FrankfurterExchangeRateSetRequest(
             @Nullable Currency base,
             Set<Currency> targets,
-            @Nonnull LocalDate start,
-            @Nullable LocalDate end) {
-        super();
+            @Nonnull LocalDateInterval dateInterval) {
         this.base = base;
         this.targets = targets;
-        this.start = start;
-        this.end = end;
+        this.dateInterval = dateInterval;
     }
 
     public FrankfurterExchangeRateSetRequest(
             @Nonnull HttpHost customHost,
             @Nullable Currency base,
             Set<Currency> targets,
-            @Nonnull LocalDate start,
-            @Nullable LocalDate end) {
+            @Nonnull LocalDateInterval dateInterval) {
         super(customHost);
         this.base = base;
         this.targets = targets;
-        this.start = start;
-        this.end = end;
+        this.dateInterval = dateInterval;
     }
 
     @Override
@@ -62,26 +56,13 @@ public final class FrankfurterExchangeRateSetRequest
     }
 
     @Override
-    public Optional<LocalDate> getStart() {
-        return Optional.of(start);
-    }
-
-    @Override
-    public Optional<LocalDate> getEnd() {
-        return Optional.ofNullable(end);
+    public @Nonnull LocalDateInterval getDateInterval() {
+        return dateInterval;
     }
 
     @Override
     protected @Nonnull String getEndpoint() {
-        StringBuilder sb = new StringBuilder(22) // Maximum possible length of the resulting string
-                .append(start.format(ISO_LOCAL_DATE))
-                .append("..");
-
-        if (end != null) {
-            sb.append(end.format(ISO_LOCAL_DATE));
-        }
-
-        return sb.toString();
+        return ISO_LOCAL_DATE.format(dateInterval.start()) + ".." + ISO_LOCAL_DATE.format(dateInterval.end());
     }
 
     @Override
