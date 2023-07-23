@@ -4,7 +4,6 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
-import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
 import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequests;
 import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
@@ -67,7 +66,7 @@ public final class FrankfurterExchangeRateSetRequest
 
     @Override
     protected Map<String, String> getParameters() {
-        return new ExchangeRateSetRequestParametersBuilder(this)
+        return new ExchangeRateSetRequests.ParametersBuilder(this)
                 .baseName("from")
                 .targetsName("to")
                 .build();

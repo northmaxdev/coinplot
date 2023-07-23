@@ -5,7 +5,6 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequests;
-import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
 import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -56,7 +55,7 @@ public final class FixerExchangeRateSetRequest
 
     @Override
     protected Map<String, String> getParameters() {
-        return new ExchangeRateSetRequestParametersBuilder(this)
+        return new ExchangeRateSetRequests.ParametersBuilder(this)
                 .baseName("base")
                 .targetsName("symbols")
                 .startName("start_date")
