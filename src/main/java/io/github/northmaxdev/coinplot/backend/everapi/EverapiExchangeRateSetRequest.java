@@ -2,18 +2,51 @@
 
 package io.github.northmaxdev.coinplot.backend.everapi;
 
+import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
+import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequests;
+import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
+import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
-import org.apache.hc.core5.http.NameValuePair;
+import jakarta.annotation.Nullable;
 
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-public final class EverapiExchangeRateSetRequest extends AbstractEverapiAPIRequest implements ExchangeRateSetRequest {
+public final class EverapiExchangeRateSetRequest
+        extends AbstractEverapiAPIRequest
+        implements ExchangeRateSetRequest {
 
-    // TODO: Properties
+    private final @Nullable Currency base;
+    private final Set<Currency> targets;
+    private final @Nonnull LocalDateInterval dateInterval;
 
-    public EverapiExchangeRateSetRequest() {
-        super();
+    public EverapiExchangeRateSetRequest(
+            @Nonnull String accessKey,
+            @Nullable Currency base,
+            Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) {
+        super(accessKey);
+        this.base = base;
+        this.targets = targets;
+        this.dateInterval = dateInterval;
+    }
+
+    @Override
+    public Optional<Currency> getBase() {
+        return Optional.ofNullable(base);
+    }
+
+    @Override
+    public Set<Currency> getTargets() {
+        return targets;
+    }
+
+    @Override
+    public @Nonnull LocalDateInterval getDateInterval() {
+        return dateInterval;
     }
 
     @Override
@@ -22,10 +55,26 @@ public final class EverapiExchangeRateSetRequest extends AbstractEverapiAPIReque
     }
 
     @Override
-    protected List<NameValuePair> getAdditionalParameters() {
-        // TODO. See https://currencyapi.com/docs/range#range-historical-exchange-rates
-        throw new UnsupportedOperationException();
+    protected Map<String, String> getParameters() {
+        return new ExchangeRateSetRequestParametersBuilder(this)
+                .baseName("base_currency")
+                .targetsName("currencies")
+                .startName("datetime_start")
+                .endName("datetime_end")
+                // FIXME: Choose the correct formatter (https://currencyapi.com/docs/range)
+                .dateFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
+                .build();
     }
 
-    // TODO: equals/hashCode
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EverapiExchangeRateSetRequest that
+                && super.equals(obj) // For superclass fields
+                && ExchangeRateSetRequests.basicPropertiesAreEqual(this, that);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ ExchangeRateSetRequests.hashBasicProperties(this);
+    }
 }
