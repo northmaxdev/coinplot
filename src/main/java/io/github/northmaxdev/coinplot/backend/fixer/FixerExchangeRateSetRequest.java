@@ -5,16 +5,15 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
+import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
 import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 public final class FixerExchangeRateSetRequest
         extends AbstractFixerAPIRequest
@@ -57,18 +56,13 @@ public final class FixerExchangeRateSetRequest
 
     @Override
     protected Map<String, String> getParameters() {
-        Map<String, String> parameters = new HashMap<>(4);
-        parameters.put("start_date", ISO_LOCAL_DATE.format(dateInterval.start()));
-        parameters.put("end_date", ISO_LOCAL_DATE.format(dateInterval.end()));
-
-        if (base != null) {
-            parameters.put("base", base.getCode());
-        }
-
-        ExchangeRateSetRequestSupport.joinTargetCodes(this)
-                .ifPresent(s -> parameters.put("symbols", s));
-
-        return parameters;
+        return new ExchangeRateSetRequestParametersBuilder(this)
+                .baseName("base")
+                .targetsName("symbols")
+                .startName("start_date")
+                .endName("end_date")
+                .dateFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
+                .build();
     }
 
     @Override
