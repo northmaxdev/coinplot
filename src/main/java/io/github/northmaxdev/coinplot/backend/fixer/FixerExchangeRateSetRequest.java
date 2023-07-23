@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
-import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
+import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequests;
 import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
 import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
@@ -69,11 +69,11 @@ public final class FixerExchangeRateSetRequest
     public boolean equals(Object obj) {
         return obj instanceof FixerExchangeRateSetRequest that
                 && super.equals(obj) // For superclass fields
-                && ExchangeRateSetRequestSupport.areBasicPropertiesEqual(this, that);
+                && ExchangeRateSetRequests.basicPropertiesAreEqual(this, that);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ ExchangeRateSetRequestSupport.hashBasicProperties(this);
+        return super.hashCode() ^ ExchangeRateSetRequests.hashBasicProperties(this);
     }
 }
