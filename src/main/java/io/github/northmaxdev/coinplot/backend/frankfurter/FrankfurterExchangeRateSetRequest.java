@@ -5,12 +5,12 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
+import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequestParametersBuilder;
 import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -67,17 +67,10 @@ public final class FrankfurterExchangeRateSetRequest
 
     @Override
     protected Map<String, String> getParameters() {
-        Map<String, String> parameters = new HashMap<>(3);
-        parameters.put("amount", Integer.toString(1)); // Just to be explicit against the web API
-
-        if (base != null) {
-            parameters.put("from", base.getCode());
-        }
-
-        ExchangeRateSetRequestSupport.joinTargetCodes(this)
-                .ifPresent(s -> parameters.put("to", s));
-
-        return parameters;
+        return new ExchangeRateSetRequestParametersBuilder(this)
+                .baseName("from")
+                .targetsName("to")
+                .build();
     }
 
     @Override
