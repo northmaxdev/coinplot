@@ -2,18 +2,52 @@
 
 package io.github.northmaxdev.coinplot.backend.fixer;
 
+import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequestSupport;
+import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
 import jakarta.annotation.Nonnull;
-import org.apache.hc.core5.http.NameValuePair;
+import jakarta.annotation.Nullable;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-public final class FixerExchangeRateSetRequest extends AbstractFixerAPIRequest implements ExchangeRateSetRequest {
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
-    // TODO: Properties
+public final class FixerExchangeRateSetRequest
+        extends AbstractFixerAPIRequest
+        implements ExchangeRateSetRequest {
 
-    public FixerExchangeRateSetRequest(@Nonnull String accessKey) {
+    private final @Nullable Currency base;
+    private final Set<Currency> targets;
+    private final @Nonnull LocalDateInterval dateInterval;
+
+    public FixerExchangeRateSetRequest(
+            @Nonnull String accessKey,
+            @Nullable Currency base,
+            Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) {
         super(accessKey);
+        this.base = base;
+        this.targets = targets;
+        this.dateInterval = dateInterval;
+    }
+
+    @Override
+    public Optional<Currency> getBase() {
+        return Optional.ofNullable(base);
+    }
+
+    @Override
+    public Set<Currency> getTargets() {
+        return targets;
+    }
+
+    @Override
+    public @Nonnull LocalDateInterval getDateInterval() {
+        return dateInterval;
     }
 
     @Override
@@ -22,10 +56,30 @@ public final class FixerExchangeRateSetRequest extends AbstractFixerAPIRequest i
     }
 
     @Override
-    protected List<NameValuePair> getAdditionalParameters() {
-        // TODO. See https://fixer.io/documentation#timeseries
-        throw new UnsupportedOperationException();
+    protected Map<String, String> getParameters() {
+        Map<String, String> parameters = new HashMap<>(4);
+        parameters.put("start_date", ISO_LOCAL_DATE.format(dateInterval.start()));
+        parameters.put("end_date", ISO_LOCAL_DATE.format(dateInterval.end()));
+
+        if (base != null) {
+            parameters.put("base", base.getCode());
+        }
+
+        ExchangeRateSetRequestSupport.joinTargetCodes(this)
+                .ifPresent(s -> parameters.put("symbols", s));
+
+        return parameters;
     }
 
-    // TODO: equals/hashCode
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FixerExchangeRateSetRequest that
+                && super.equals(obj) // For superclass fields
+                && ExchangeRateSetRequestSupport.areBasicPropertiesEqual(this, that);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ ExchangeRateSetRequestSupport.hashBasicProperties(this);
+    }
 }
