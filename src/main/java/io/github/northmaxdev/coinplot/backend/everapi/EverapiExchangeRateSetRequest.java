@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -17,6 +18,11 @@ import java.util.Set;
 public final class EverapiExchangeRateSetRequest
         extends AbstractEverapiAPIRequest
         implements ExchangeRateSetRequest {
+
+    private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ISO_LOCAL_DATE)
+            .appendLiteral("T00:00:00Z")
+            .toFormatter();
 
     private final @Nullable Currency base;
     private final Set<Currency> targets;
@@ -60,8 +66,7 @@ public final class EverapiExchangeRateSetRequest
                 .targetsName("currencies")
                 .startName("datetime_start")
                 .endName("datetime_end")
-                // FIXME: Choose the correct formatter (https://currencyapi.com/docs/range)
-                .dateFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
+                .dateFormatter(DATE_FORMATTER)
                 .build();
     }
 
