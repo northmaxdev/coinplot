@@ -16,6 +16,8 @@ import java.util.Optional;
 @SuppressWarnings("NotNullFieldNotInitialized")
 public class Currency {
 
+    // TODO: Serializable
+
     @Id
     @Column(nullable = false)
     private @Nonnull String code;
