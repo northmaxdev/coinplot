@@ -17,12 +17,4 @@ public interface ExchangeRateService {
             Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval
     ) throws ResourceFetchException;
-
-    default Set<ExchangeRate> getExchangeRates(@Nonnull ExchangeRateSetRequest request) throws ResourceFetchException {
-        // We honor the convention of only using java.util.Optional as a method's return type,
-        // never as a parameter or a field.
-        @Nullable Currency base = request.getBase()
-                .orElse(null);
-        return getExchangeRates(base, request.getTargets(), request.getDateInterval());
-    }
 }
