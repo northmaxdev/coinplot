@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -17,7 +18,9 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 @Embeddable
 public class Exchange implements Serializable {
 
-    // FIXME: Do we need to implement serialVersionUID? Do types of properties also need to be Serializable?
+    @Serial
+    private static final long serialVersionUID = 4961628072462390664L;
+
     // TODO: Play with FetchType configurations (eager vs lazy)
 
     @ManyToOne(optional = false)
