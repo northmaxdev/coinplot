@@ -8,14 +8,17 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-public class ExchangeRate {
+public class ExchangeRate implements Serializable {
 
-    // FIXME: Serializable?
+    @Serial
+    private static final long serialVersionUID = 7191575760397094585L;
 
     @EmbeddedId
     @Column(nullable = false)
