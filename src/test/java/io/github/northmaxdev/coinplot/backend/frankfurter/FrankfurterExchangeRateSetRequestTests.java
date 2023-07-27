@@ -18,13 +18,7 @@ import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 class FrankfurterExchangeRateSetRequestTests {
 
-    // FIXME:
-    //  Sometimes this test fails with an error message that states the actual URI is not contained in the expected
-    //  values even though you can quite clearly see it is. At other times the test passes flawlessly. The tested
-    //  implementation is quite deterministic (I'm referring to the parameter serialization order), so this is most
-    //  likely an actual bug - either within AssertJ or something related to the Java stream API's under-the-hood
-    //  concurrency. Consider investigating and reporting on this issue.
-    @Disabled
+    @Disabled("https://github.com/assertj/assertj/issues/3127")
     @Test
     void reqURI() {
         assertExpectedURIsContainActual(() -> {

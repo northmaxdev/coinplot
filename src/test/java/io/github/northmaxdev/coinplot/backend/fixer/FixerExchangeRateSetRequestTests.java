@@ -18,7 +18,7 @@ import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
 
 class FixerExchangeRateSetRequestTests {
 
-    @Disabled // FIXME: See related note in FrankfurterExchangeRateSetRequest tests
+    @Disabled("https://github.com/assertj/assertj/issues/3127")
     @Test
     void reqURI() {
         assertExpectedURIsContainActual(() -> {
