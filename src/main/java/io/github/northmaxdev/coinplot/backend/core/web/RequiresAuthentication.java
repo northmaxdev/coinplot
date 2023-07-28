@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.web;
 
+// Semantically not a @FunctionalInterface
 public interface RequiresAuthentication {
 
     boolean canAuthenticate();

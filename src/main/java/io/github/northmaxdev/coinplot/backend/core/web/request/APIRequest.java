@@ -7,6 +7,7 @@ import jakarta.annotation.Nonnull;
 import java.net.URI;
 import java.util.Map;
 
+// Semantically not a @FunctionalInterface
 public interface APIRequest {
 
     @Nonnull URI getURI();
