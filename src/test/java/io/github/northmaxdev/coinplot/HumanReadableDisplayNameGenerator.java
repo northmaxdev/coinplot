@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot;
 
+import io.github.northmaxdev.coinplot.lang.Strings;
 import org.junit.jupiter.api.DisplayNameGenerator;
 
 import java.lang.reflect.Method;
@@ -21,13 +22,9 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
     @Override
     public String generateDisplayNameForClass(Class<?> aClass) {
         String testClassName = aClass.getSimpleName();
-
-        int suffixIndex = testClassName.indexOf("Tests");
-        if (suffixIndex == -1) {
-            return markedAsIs(testClassName);
-        }
-
-        return "Tests for: [" + testClassName.substring(0, suffixIndex) + ']';
+        return Strings.substringBefore(testClassName, "Tests")
+                .map(s -> "Tests for: [" + s + ']')
+                .orElse(markedAsIs(testClassName));
     }
 
     @Override
@@ -37,8 +34,8 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
 
     @Override
     public String generateDisplayNameForMethod(Class<?> aClass, Method method) {
-        String methodName = method.getName();
-        return MAGIC_TEST_METHOD_NAMES.getOrDefault(methodName, markedAsIs(methodName));
+        String testMethodName = method.getName();
+        return MAGIC_TEST_METHOD_NAMES.getOrDefault(testMethodName, markedAsIs(testMethodName));
     }
 
     private static String markedAsIs(String s) {
