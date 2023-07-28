@@ -29,7 +29,9 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
 
     @Override
     public String generateDisplayNameForNestedClass(Class<?> aClass) {
-        throw new UnsupportedOperationException();
+        // The convention in this project is to use nested test classes for nested production classes.
+        // In this case, the semantic difference between a top-level test class and a nested test class is none.
+        return generateDisplayNameForClass(aClass);
     }
 
     @Override
