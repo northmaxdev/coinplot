@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.lang;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -24,5 +25,9 @@ public final class Strings {
                 .stream()
                 .mapToObj(i -> s.substring(0, i))
                 .findFirst(); // No difference between findFirst and findAny because we'll always have at most 1 element
+    }
+
+    public static @Nullable String blankToNull(@Nullable String s) {
+        return s == null || s.isBlank() ? null : s;
     }
 }
