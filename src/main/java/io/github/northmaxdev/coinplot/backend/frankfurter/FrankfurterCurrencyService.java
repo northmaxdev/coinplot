@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public final class FrankfurterCurrencyService
@@ -42,10 +42,9 @@ public final class FrankfurterCurrencyService
     }
 
     @Override
-    protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() {
-        return customHost == null
-                ? new FrankfurterCurrencySetRequest()
-                : new FrankfurterCurrencySetRequest(customHost);
+    protected Optional<FrankfurterCurrencySetRequest> createAPIRequest() {
+        FrankfurterCurrencySetRequest request = FrankfurterCurrencySetRequest.forCustomOrElsePublicHost(customHost);
+        return Optional.of(request);
     }
 
     @Override
