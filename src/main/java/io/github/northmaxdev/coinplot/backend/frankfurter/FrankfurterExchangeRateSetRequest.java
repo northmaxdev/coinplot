@@ -44,6 +44,16 @@ public final class FrankfurterExchangeRateSetRequest
         this.dateInterval = dateInterval;
     }
 
+    public static FrankfurterExchangeRateSetRequest forCustomOrElsePublicHost(
+            @Nullable HttpHost customHost,
+            @Nullable Currency base,
+            Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) {
+        return customHost == null
+                ? new FrankfurterExchangeRateSetRequest(base, targets, dateInterval)
+                : new FrankfurterExchangeRateSetRequest(customHost, base, targets, dateInterval);
+    }
+
     @Override
     public Optional<Currency> getBase() {
         return Optional.ofNullable(base);
