@@ -10,7 +10,9 @@ import java.util.OptionalInt;
 
 public final class Strings {
 
-    private Strings() {}
+    private Strings() {
+        throw new UnsupportedOperationException();
+    }
 
     // This is merely a wrapper for String::indexOf to work with OptionalInt instances instead of magic constants like
     // -1. It does not add any additional behavior to String::indexOf, therefore, one should refer primarily to that

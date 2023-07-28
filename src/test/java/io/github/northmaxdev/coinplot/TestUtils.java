@@ -14,9 +14,12 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// This is the only case where we break the project's naming convention for static utility classes
 public final class TestUtils {
 
-    private TestUtils() {}
+    private TestUtils() {
+        throw new UnsupportedOperationException();
+    }
 
     ////////////////////
     // Currency stuff //

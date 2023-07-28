@@ -146,7 +146,9 @@ public final class ExchangeRateSetRequests {
         }
     }
 
-    private ExchangeRateSetRequests() {}
+    private ExchangeRateSetRequests() {
+        throw new UnsupportedOperationException();
+    }
 
     public static boolean basicPropertiesAreEqual(
             @Nonnull ExchangeRateSetRequest a,
