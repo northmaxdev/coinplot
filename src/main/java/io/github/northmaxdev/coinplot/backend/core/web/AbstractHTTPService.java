@@ -7,7 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.ResourceFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
-import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
 
@@ -36,7 +37,12 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
         this.logger = LoggerFactory.getLogger(getClass());
     }
 
-    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
+    protected final M fetch(@Nullable R apiRequest) throws ResourceFetchException {
+        // This is done to give more flexibility to subclasses
+        if (apiRequest == null) {
+            throw new ResourceFetchException("Cannot fetch without an API request");
+        }
+
         URI uri = apiRequest.getURI();
         Map<String, String> headers = apiRequest.getHeaders();
 
@@ -67,6 +73,13 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
         } catch (IOException | InterruptedException | DTOMappingException e) {
             throw new ResourceFetchException(e);
         }
+    }
+
+    // In general, this project follows the standard conventions regarding Optional. This case is an exception.
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    protected final M fetch(Optional<R> possiblyAnAPIRequest) throws ResourceFetchException {
+        @Nullable R apiRequest = possiblyAnAPIRequest.orElse(null);
+        return fetch(apiRequest);
     }
 
     protected abstract D parseResponseBody(byte[] responseBody, ObjectMapper jsonParser) throws IOException;
