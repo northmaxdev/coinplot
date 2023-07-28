@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.frontend;
+package io.github.northmaxdev.coinplot.frontend.i18n;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Component
-public final class FrontendI18NProvider implements I18NProvider {
+public final class PrimaryI18NProvider implements I18NProvider {
 
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
     private static final List<Locale> SUPPORTED_LOCALES = List.of(
