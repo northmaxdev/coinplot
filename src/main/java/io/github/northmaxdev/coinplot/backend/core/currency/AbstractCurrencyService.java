@@ -5,7 +5,6 @@ package io.github.northmaxdev.coinplot.backend.core.currency;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.ResourceFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractHTTPService;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.net.http.HttpClient;
@@ -39,11 +38,11 @@ public abstract class AbstractCurrencyService<R extends CurrencySetRequest, D>
         return repository.findByIDNullSafely(code);
     }
 
-    protected abstract @Nonnull R createAPIRequest();
+    protected abstract Optional<R> createAPIRequest();
 
     private void fetchIfEmptyRepository() throws ResourceFetchException {
         if (repository.isEmpty()) {
-            R apiRequest = createAPIRequest();
+            Optional<R> apiRequest = createAPIRequest();
             Set<Currency> fetchedCurrencies = fetch(apiRequest);
             repository.saveAll(fetchedCurrencies);
         }
