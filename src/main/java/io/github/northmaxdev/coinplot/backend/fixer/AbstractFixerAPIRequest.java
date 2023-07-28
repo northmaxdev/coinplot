@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.backend.fixer;
 
-import io.github.northmaxdev.coinplot.backend.core.web.request.APIKey;
 import io.github.northmaxdev.coinplot.backend.core.web.request.AbstractAPIRequest;
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;

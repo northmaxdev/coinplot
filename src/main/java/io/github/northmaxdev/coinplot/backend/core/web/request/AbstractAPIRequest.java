@@ -16,18 +16,60 @@ import java.util.Optional;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
-    //////////////////
-    //    Fields    //
-    //////////////////
+    /////////////////
+    // Inner types //
+    /////////////////
+
+    protected record APIKey(
+            @Nonnull String name,
+            @Nonnull String value,
+            @Nonnull SpecificationStrategy specificationStrategy) {
+
+        public enum SpecificationStrategy {
+            AS_QUERY_PARAMETER,
+            AS_HEADER,
+            NONE
+        }
+
+        private static final APIKey NONE = new APIKey("", "", SpecificationStrategy.NONE);
+
+        public static APIKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
+            return new APIKey(name, value, SpecificationStrategy.AS_QUERY_PARAMETER);
+        }
+
+        public static APIKey asHeader(@Nonnull String name, @Nonnull String value) {
+            return new APIKey(name, value, SpecificationStrategy.AS_HEADER);
+        }
+
+        public static APIKey none() {
+            return NONE;
+        }
+
+        public boolean isSpecifiedAsQueryParameter() {
+            return specificationStrategy == SpecificationStrategy.AS_QUERY_PARAMETER;
+        }
+
+        public boolean isSpecifiedAsHeader() {
+            return specificationStrategy == SpecificationStrategy.AS_HEADER;
+        }
+
+        public boolean isNotSpecified() {
+            return specificationStrategy == SpecificationStrategy.NONE;
+        }
+    }
+
+    ////////////
+    // Fields //
+    ////////////
 
     private final APIKey accessKey;
     // TODO:
     //  Lazy-compute and cache both URI and headers.
     //  Let readers know that in that case all subclasses must be deeply immutable to maintain integrity.
 
-    ////////////////////////
-    //    Constructors    //
-    ////////////////////////
+    //////////////////
+    // Constructors //
+    //////////////////
 
     protected AbstractAPIRequest() {
         this(APIKey.none());
@@ -37,9 +79,9 @@ public abstract class AbstractAPIRequest implements APIRequest {
         this.accessKey = accessKey;
     }
 
-    ////////////////////////////////////
-    //    Class Hierarchy API: URI    //
-    ////////////////////////////////////
+    //////////////////////////////
+    // Class Hierarchy API: URI //
+    //////////////////////////////
 
     protected abstract @Nonnull HttpHost getHost();
 
@@ -84,9 +126,9 @@ public abstract class AbstractAPIRequest implements APIRequest {
         }
     }
 
-    ////////////////////////////////////////
-    //    Class Hierarchy API: Headers    //
-    ////////////////////////////////////////
+    //////////////////////////////////
+    // Class Hierarchy API: Headers //
+    //////////////////////////////////
 
     // Deliberately non-final, merely a default impl
     protected Map<String, String> getHeadersExcludingAPIKey() {
@@ -106,9 +148,9 @@ public abstract class AbstractAPIRequest implements APIRequest {
         return headersWithoutKey;
     }
 
-    ///////////////////////////////
-    //    Standard Java stuff    //
-    ///////////////////////////////
+    /////////////////////////
+    // Standard Java stuff //
+    /////////////////////////
 
     protected final APIKey getAccessKey() {
         return accessKey;
