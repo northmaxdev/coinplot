@@ -20,18 +20,16 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Inner types //
     /////////////////
 
-    protected record APIKey(
-            @Nonnull String name,
-            @Nonnull String value,
-            @Nonnull SpecificationStrategy specificationStrategy) {
+    protected static final class APIKey {
 
-        public enum SpecificationStrategy {
+        private enum SpecificationStrategy {
             AS_QUERY_PARAMETER,
-            AS_HEADER,
-            NONE
+            AS_HEADER
         }
 
-        private static final APIKey NONE = new APIKey("", "", SpecificationStrategy.NONE);
+        private final @Nonnull String name;
+        private final @Nonnull String value;
+        private final @Nonnull SpecificationStrategy specificationStrategy;
 
         public static APIKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
             return new APIKey(name, value, SpecificationStrategy.AS_QUERY_PARAMETER);
@@ -41,8 +39,21 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return new APIKey(name, value, SpecificationStrategy.AS_HEADER);
         }
 
-        public static APIKey none() {
-            return NONE;
+        private APIKey(
+                @Nonnull String name,
+                @Nonnull String value,
+                @Nonnull SpecificationStrategy specificationStrategy) {
+            this.name = name;
+            this.value = value;
+            this.specificationStrategy = specificationStrategy;
+        }
+
+        public @Nonnull String getName() {
+            return name;
+        }
+
+        public @Nonnull String getValue() {
+            return value;
         }
 
         public boolean isSpecifiedAsQueryParameter() {
@@ -53,8 +64,22 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return specificationStrategy == SpecificationStrategy.AS_HEADER;
         }
 
-        public boolean isNotSpecified() {
-            return specificationStrategy == SpecificationStrategy.NONE;
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof APIKey that
+                    && Objects.equals(this.name, that.name)
+                    && Objects.equals(this.value, that.value)
+                    && this.specificationStrategy == that.specificationStrategy;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, value, specificationStrategy);
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 
@@ -116,7 +141,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
             Map<String, String> parameters = getParameters();
             parameters.forEach(builder::setParameter);
             if (accessKey.isSpecifiedAsQueryParameter()) {
-                builder.setParameter(accessKey.name(), accessKey.value());
+                builder.setParameter(accessKey.getName(), accessKey.getValue());
             }
 
             return builder.build();
@@ -141,7 +166,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
         if (accessKey.isSpecifiedAsHeader()) {
             Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
-            headersWithKey.put(accessKey.name(), accessKey.value());
+            headersWithKey.put(accessKey.getName(), accessKey.getValue());
             return headersWithKey;
         }
 
