@@ -20,6 +20,10 @@ public interface ExtendedJPARepository<T, I> extends JpaRepository<T, I> {
         return count() == 0L;
     }
 
+    default boolean isNotEmpty() {
+        return !isEmpty();
+    }
+
     default Set<T> findAllAsSet() {
         return new HashSet<>(findAll());
     }
