@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.web.request;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.net.URIBuilder;
 
@@ -87,7 +88,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Fields //
     ////////////
 
-    private final APIKey accessKey;
+    private final @Nullable APIKey accessKey;
     // TODO:
     //  Lazy-compute and cache both URI and headers.
     //  Let readers know that in that case all subclasses must be deeply immutable to maintain integrity.
@@ -97,10 +98,10 @@ public abstract class AbstractAPIRequest implements APIRequest {
     //////////////////
 
     protected AbstractAPIRequest() {
-        this(APIKey.none());
+        this(null);
     }
 
-    protected AbstractAPIRequest(@Nonnull APIKey accessKey) {
+    protected AbstractAPIRequest(@Nullable APIKey accessKey) {
         this.accessKey = accessKey;
     }
 
@@ -140,7 +141,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
             Map<String, String> parameters = getParameters();
             parameters.forEach(builder::setParameter);
-            if (accessKey.isSpecifiedAsQueryParameter()) {
+            if (accessKey != null && accessKey.isSpecifiedAsQueryParameter()) {
                 builder.setParameter(accessKey.getName(), accessKey.getValue());
             }
 
@@ -164,7 +165,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
     public final Map<String, String> getHeaders() {
         Map<String, String> headersWithoutKey = getHeadersExcludingAPIKey();
 
-        if (accessKey.isSpecifiedAsHeader()) {
+        if (accessKey != null && accessKey.isSpecifiedAsHeader()) {
             Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
             headersWithKey.put(accessKey.getName(), accessKey.getValue());
             return headersWithKey;
@@ -177,8 +178,8 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Standard Java stuff //
     /////////////////////////
 
-    protected final APIKey getAccessKey() {
-        return accessKey;
+    protected final Optional<APIKey> getAccessKey() {
+        return Optional.ofNullable(accessKey);
     }
 
     @Override
