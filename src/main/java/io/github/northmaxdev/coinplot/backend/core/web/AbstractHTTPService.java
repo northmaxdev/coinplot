@@ -3,7 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.backend.core.ResourceFetchException;
+import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
@@ -34,7 +34,7 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
         this.logger = LoggerFactory.getLogger(getClass());
     }
 
-    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchException {
+    protected final M fetch(@Nonnull R apiRequest) throws ResourceFetchFailureException {
         HttpRequest httpRequest = apiRequest.toHTTPRequestBuilder()
                 .GET()
                 .timeout(TIMEOUT_DURATION)
@@ -48,7 +48,7 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
             // returns 200 OK on a successful response, and in any other case we're going to be throwing an RFE anyway
             // (even in the case of other 2XX codes), so might as well inline this here.
             if (statusCode != 200) {
-                throw new ResourceFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
+                throw new ResourceFetchFailureException("Expected HTTP 200 OK, instead got: " + statusCode);
             }
 
             D dto = parseResponseBody(response.body(), jsonParser);
@@ -57,7 +57,7 @@ public abstract class AbstractHTTPService<R extends APIRequest, D, M> {
             logger.info("Completed request: " + apiRequest);
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
-            throw new ResourceFetchException(e);
+            throw new ResourceFetchFailureException(e);
         }
     }
 
