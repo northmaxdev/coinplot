@@ -7,7 +7,7 @@ import org.apache.hc.core5.http.HttpHost;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface CustomHostConfig {
+public interface CustomHostConfiguration {
 
     Optional<HttpHost> getCustomHost();
 }

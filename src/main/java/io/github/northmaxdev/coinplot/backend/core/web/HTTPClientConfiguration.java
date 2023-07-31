@@ -9,7 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpClient.Version;
 
 @Configuration
-public class HTTPClientConfig {
+public class HTTPClientConfiguration {
 
     @Bean
     public HttpClient httpClient() {

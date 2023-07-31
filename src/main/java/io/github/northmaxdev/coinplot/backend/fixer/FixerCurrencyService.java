@@ -17,14 +17,14 @@ import java.net.http.HttpClient;
 public final class FixerCurrencyService
         extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
 
-    private final FixerConfig config;
+    private final FixerConfiguration config;
 
     @Autowired
     public FixerCurrencyService(
             HttpClient httpClient,
             ObjectMapper jsonParser,
             CurrencyRepository repository,
-            FixerConfig config) {
+            FixerConfiguration config) {
         super(httpClient, jsonParser, new FixerCurrencySetDTOMapper(), repository);
         this.config = config;
     }

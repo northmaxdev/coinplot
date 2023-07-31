@@ -20,21 +20,21 @@ public final class FrankfurterCurrencyService
 
     private static final TypeReference<Map<String, String>> DTO_TYPE_REF = new TypeReference<>() {};
 
-    private final FrankfurterConfig config;
+    private final FrankfurterConfiguration config;
 
     @Autowired
     public FrankfurterCurrencyService(
             HttpClient httpClient,
             ObjectMapper jsonParser,
             CurrencyRepository repository,
-            FrankfurterConfig config) {
+            FrankfurterConfiguration config) {
         super(httpClient, jsonParser, new FrankfurterCurrencySetDTOMapper(), repository);
         this.config = config;
     }
 
     @Override
     protected FrankfurterCurrencySetRequest createAPIRequest() throws CannotFormAPIRequestException {
-        // Instead of throwing a NoHostException, just fall back to the public instance.
+        // Instead of throwing a NoHostException, just fall back to the public instance
         return config.getCustomHost()
                 .map(FrankfurterCurrencySetRequest::new)
                 .orElseGet(FrankfurterCurrencySetRequest::new);

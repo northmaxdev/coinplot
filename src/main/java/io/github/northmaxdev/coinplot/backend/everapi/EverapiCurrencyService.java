@@ -17,14 +17,14 @@ import java.net.http.HttpClient;
 public final class EverapiCurrencyService
         extends AbstractCurrencyFetchService<EverapiCurrencySetRequest, EverapiCurrencySetDTO> {
 
-    private final EverapiConfig config;
+    private final EverapiConfiguration config;
 
     @Autowired
     public EverapiCurrencyService(
             HttpClient httpClient,
             ObjectMapper jsonParser,
             CurrencyRepository repository,
-            EverapiConfig config) {
+            EverapiConfiguration config) {
         super(httpClient, jsonParser, new EverapiCurrencySetDTOMapper(), repository);
         this.config = config;
     }
