@@ -16,6 +16,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D, M> {
 
@@ -25,6 +27,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
     private final ObjectMapper jsonParser;
     private final DTOMapper<D, M> dtoMapper;
     private final Logger logger;
+    private final List<R> requestHistory;
 
     protected AbstractRemoteResourceFetchService(
             HttpClient httpClient,
@@ -34,6 +37,11 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
         this.jsonParser = jsonParser;
         this.dtoMapper = dtoMapper;
         this.logger = LoggerFactory.getLogger(getClass());
+        this.requestHistory = new LinkedList<>();
+    }
+
+    public final List<R> getRequestHistory() {
+        return requestHistory;
     }
 
     protected final M fetch(@Nonnull R apiRequest) throws RemoteResourceFetchFailureException {
@@ -57,6 +65,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
             M model = dtoMapper.map(dto);
 
             logger.info("Completed request: " + apiRequest);
+            requestHistory.add(apiRequest);
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
             throw new RemoteResourceFetchFailureException(e);
