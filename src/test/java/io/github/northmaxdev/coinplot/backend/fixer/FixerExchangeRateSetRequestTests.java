@@ -10,11 +10,11 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
 
-import static io.github.northmaxdev.coinplot.TestUtils.BAR_FRANC;
-import static io.github.northmaxdev.coinplot.TestUtils.BAZ_POUND;
-import static io.github.northmaxdev.coinplot.TestUtils.FOO_DOLLAR;
-import static io.github.northmaxdev.coinplot.TestUtils.assertExpectedURIsContainActual;
-import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
+import static io.github.northmaxdev.coinplot.TestUtilities.BAR_FRANC;
+import static io.github.northmaxdev.coinplot.TestUtilities.BAZ_POUND;
+import static io.github.northmaxdev.coinplot.TestUtilities.FOO_DOLLAR;
+import static io.github.northmaxdev.coinplot.TestUtilities.assertExpectedURIsContainActual;
+import static io.github.northmaxdev.coinplot.TestUtilities.verifyAPIRequestEquals;
 
 class FixerExchangeRateSetRequestTests {
 

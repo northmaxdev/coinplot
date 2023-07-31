@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import org.junit.jupiter.api.Test;
 
-import static io.github.northmaxdev.coinplot.TestUtils.verifyJPAEntityEquals;
+import static io.github.northmaxdev.coinplot.TestUtilities.verifyJPAEntityEquals;
 
 class ExchangeRateTests {
 

@@ -4,9 +4,9 @@ package io.github.northmaxdev.coinplot.backend.everapi;
 
 import org.junit.jupiter.api.Test;
 
-import static io.github.northmaxdev.coinplot.TestUtils.assertExpectedHeadersContainActual;
-import static io.github.northmaxdev.coinplot.TestUtils.assertExpectedURIsContainActual;
-import static io.github.northmaxdev.coinplot.TestUtils.verifyAPIRequestEquals;
+import static io.github.northmaxdev.coinplot.TestUtilities.assertExpectedHeadersContainActual;
+import static io.github.northmaxdev.coinplot.TestUtilities.assertExpectedURIsContainActual;
+import static io.github.northmaxdev.coinplot.TestUtilities.verifyAPIRequestEquals;
 import static java.util.Map.entry;
 
 class EverapiCurrencySetRequestTests {
