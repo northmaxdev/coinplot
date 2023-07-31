@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.web.response;
 
-public final class DTOMappingException extends RuntimeException {
+public class DTOMappingException extends RuntimeException {
 
     public DTOMappingException(String message) {
         super(message);
