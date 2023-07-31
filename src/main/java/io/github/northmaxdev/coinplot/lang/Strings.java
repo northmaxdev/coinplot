@@ -7,8 +7,11 @@ import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
 
 public final class Strings {
+
+    private static final Predicate<String> NOT_BLANK = Predicate.not(String::isBlank);
 
     private Strings() {
         throw new UnsupportedOperationException();
@@ -29,7 +32,8 @@ public final class Strings {
                 .findFirst(); // No difference between findFirst and findAny because we'll always have at most 1 element
     }
 
-    public static @Nullable String blankToNull(@Nullable String s) {
-        return s == null || s.isBlank() ? null : s;
+    public static Optional<String> blankToOptional(@Nullable String s) {
+        return Optional.ofNullable(s)
+                .filter(NOT_BLANK);
     }
 }
