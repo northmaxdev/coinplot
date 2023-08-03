@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetc
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.NoAccessKeyException;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public final class FixerCurrencyService
     }
 
     @Override
-    protected FixerCurrencySetRequest createAPIRequest() throws CannotFormAPIRequestException {
+    protected @Nonnull FixerCurrencySetRequest createAPIRequest() throws CannotFormAPIRequestException {
         return config.getAccessKey()
                 .map(FixerCurrencySetRequest::new)
                 .orElseThrow(NoAccessKeyException::new);

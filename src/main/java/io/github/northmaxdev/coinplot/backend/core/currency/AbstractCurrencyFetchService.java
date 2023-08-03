@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteResourceFetchService;
 import io.github.northmaxdev.coinplot.backend.core.web.RemoteResourceFetchFailureException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.net.http.HttpClient;
@@ -40,7 +41,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
         return repository.findByIDNullSafely(code);
     }
 
-    protected abstract R createAPIRequest() throws CannotFormAPIRequestException;
+    protected abstract @Nonnull R createAPIRequest() throws CannotFormAPIRequestException;
 
     private void fetchIntoRepoIfEmpty() throws RemoteResourceFetchFailureException {
         if (repository.isNotEmpty()) {
