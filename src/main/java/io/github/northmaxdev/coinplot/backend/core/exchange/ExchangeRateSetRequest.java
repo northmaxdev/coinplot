@@ -17,4 +17,10 @@ public interface ExchangeRateSetRequest extends APIRequest {
     Set<Currency> getTargets();
 
     @Nonnull LocalDateInterval getDateInterval();
+
+    default boolean isExplicitlyDefined() {
+        Optional<Currency> base = getBase();
+        Set<Currency> targets = getTargets();
+        return base.isPresent() && !targets.isEmpty();
+    }
 }
