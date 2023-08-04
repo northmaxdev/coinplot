@@ -6,7 +6,6 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Locale;
@@ -17,12 +16,8 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
-    public static ChronoUnitSelect forLocalDate() {
-        // Use a dummy value since LocalDate::isSupported is an instance method
-        return filtered(LocalDate.EPOCH::isSupported);
-    }
-
-    public static ChronoUnitSelect filtered(Predicate<ChronoUnit> filter) {
+    public static ChronoUnitSelect withSpecificUnits(Predicate<ChronoUnit> filter) {
+        // TODO: Sort units in ascending order (UX improvement)
         Collection<ChronoUnit> units = Stream.of(ChronoUnit.values())
                 .filter(filter)
                 .collect(toUnmodifiableSet());
