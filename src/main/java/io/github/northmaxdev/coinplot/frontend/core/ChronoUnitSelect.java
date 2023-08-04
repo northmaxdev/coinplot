@@ -28,6 +28,8 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
     private ChronoUnitSelect(Collection<ChronoUnit> units) {
         setItemLabelGenerator(unit -> getTranslatedUnitLabel(unit, getLocale()));
         setItems(units);
+        // Value may still be null at the very beginning before the user made a selection, so keep that in mind.
+        setEmptySelectionAllowed(false);
     }
 
     @Override
