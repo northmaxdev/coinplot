@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.frontend.core;
 
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.lang.TemporalOperation;
@@ -22,6 +23,7 @@ public final class TemporalOperationRadioButtonGroup
         setItems(TemporalOperation.values());
         setItemLabelGenerator(op -> getTranslatedOperationLabel(op, getLocale()));
         setValue(initialValue);
+        addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
     }
 
     @Override
