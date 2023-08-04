@@ -42,22 +42,22 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
 
     private String getTranslatedUnitLabel(ChronoUnit unit, Locale locale) {
         String propertyKey = switch (unit) {
-            case NANOS -> "chrono-unit-select.unit-label.nanos";
-            case MICROS -> "chrono-unit-select.unit-label.micros";
-            case MILLIS -> "chrono-unit-select.unit-label.millis";
-            case SECONDS -> "chrono-unit-select.unit-label.seconds";
-            case MINUTES -> "chrono-unit-select.unit-label.minutes";
-            case HOURS -> "chrono-unit-select.unit-label.hours";
-            case HALF_DAYS -> "chrono-unit-select.unit-label.half-days";
-            case DAYS -> "chrono-unit-select.unit-label.days";
-            case WEEKS -> "chrono-unit-select.unit-label.weeks";
-            case MONTHS -> "chrono-unit-select.unit-label.months";
-            case YEARS -> "chrono-unit-select.unit-label.years";
-            case DECADES -> "chrono-unit-select.unit-label.decades";
-            case CENTURIES -> "chrono-unit-select.unit-label.centuries";
-            case MILLENNIA -> "chrono-unit-select.unit-label.millennia";
-            case ERAS -> "chrono-unit-select.unit-label.eras";
-            case FOREVER -> "chrono-unit-select.unit-label.forever";
+            case NANOS -> "chrono-unit-select.item-label.nanos";
+            case MICROS -> "chrono-unit-select.item-label.micros";
+            case MILLIS -> "chrono-unit-select.item-label.millis";
+            case SECONDS -> "chrono-unit-select.item-label.seconds";
+            case MINUTES -> "chrono-unit-select.item-label.minutes";
+            case HOURS -> "chrono-unit-select.item-label.hours";
+            case HALF_DAYS -> "chrono-unit-select.item-label.half-days";
+            case DAYS -> "chrono-unit-select.item-label.days";
+            case WEEKS -> "chrono-unit-select.item-label.weeks";
+            case MONTHS -> "chrono-unit-select.item-label.months";
+            case YEARS -> "chrono-unit-select.item-label.years";
+            case DECADES -> "chrono-unit-select.item-label.decades";
+            case CENTURIES -> "chrono-unit-select.item-label.centuries";
+            case MILLENNIA -> "chrono-unit-select.item-label.millennia";
+            case ERAS -> "chrono-unit-select.item-label.eras";
+            case FOREVER -> "chrono-unit-select.item-label.forever";
         };
 
         return getTranslation(locale, propertyKey);
