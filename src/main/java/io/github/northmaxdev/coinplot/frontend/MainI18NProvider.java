@@ -14,11 +14,20 @@ import java.util.ResourceBundle;
 public final class MainI18NProvider implements I18NProvider {
 
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
-    private static final List<Locale> SUPPORTED_LOCALES = List.of(
-            // The first item in this list is the default option
-            new Locale("en"), // English
-            new Locale("ru")  // Russian
-    );
+    private static final List<Locale> SUPPORTED_LOCALES;
+
+    static {
+        Locale english = new Locale.Builder()
+                .setLanguage("en")
+                .build();
+
+        Locale russian = new Locale.Builder()
+                .setLanguage("ru")
+                .build();
+
+        // The first item in this list is the default option
+        SUPPORTED_LOCALES = List.of(english, russian);
+    }
 
     @Override
     public List<Locale> getProvidedLocales() {
