@@ -1,9 +1,18 @@
-# About
-**CoinPlot** is a small demo web application for exchange rate history visualization. It is a minimal full-stack 
-application implemented primarily using Java 17, Spring Boot 3, Vaadin 24 and the
-[Frankfurter web API](https://www.frankfurter.app/).
+# v2.0.0
+This branch is currently WIP.
 
-![Screenshot of CoinPlot in GNOME Web](screenshot.png)
+# About
+**CoinPlot** is a simple and modern web app for exchange rate history visualization and basic analytics.
+Its core features include:
+* Full support for multiple data providers
+  * [Fixer](https://fixer.io/)
+  * [Frankfurter](https://www.frankfurter.app/) *(including self-hosted instances)* 
+  * [currencyapi.com](https://currencyapi.com/)
+* An efficient internal architecture that intelligently makes heavy use of caching, which helps substantially minimize
+  or completely avoid outgoing API requests
+* Localization in multiple languages with support for RTL layouts
+* Modern, slick and responsive UI
+* Fully open source *(see [the license](LICENSE) for more information)*
 
 # Building & Installing
 *Coming soon!*
