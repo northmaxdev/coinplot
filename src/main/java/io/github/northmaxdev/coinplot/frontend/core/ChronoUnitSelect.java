@@ -16,10 +16,10 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
-    public static ChronoUnitSelect withSpecificUnits(Predicate<ChronoUnit> filter) {
+    public static ChronoUnitSelect withMatchingUnits(Predicate<ChronoUnit> condition) {
         // TODO: Sort units in ascending order (UX improvement)
         Collection<ChronoUnit> units = Stream.of(ChronoUnit.values())
-                .filter(filter)
+                .filter(condition)
                 .collect(toUnmodifiableSet());
 
         return new ChronoUnitSelect(units);
