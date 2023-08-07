@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.frontend.core;
 
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 
@@ -17,7 +18,6 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
     public static ChronoUnitSelect withMatchingUnits(Predicate<ChronoUnit> condition) {
-        // TODO: Sort units in ascending order (UX improvement)
         Collection<ChronoUnit> units = Stream.of(ChronoUnit.values())
                 .filter(condition)
                 .collect(toUnmodifiableSet());
@@ -27,8 +27,11 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
 
     private ChronoUnitSelect(Collection<ChronoUnit> units) {
         setItemLabelGenerator(unit -> getTranslatedUnitLabel(unit, getLocale()));
-        setItems(units);
-        // Value may still be null at the very beginning before the user made a selection, so keep that in mind.
+
+        ListDataProvider<ChronoUnit> dataProvider = new ListDataProvider<>(units);
+        dataProvider.setSortComparator(Enum::compareTo);
+        setItems(dataProvider);
+
         setEmptySelectionAllowed(false);
     }
 
