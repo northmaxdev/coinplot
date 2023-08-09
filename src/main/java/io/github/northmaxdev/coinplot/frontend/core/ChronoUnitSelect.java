@@ -10,6 +10,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -17,11 +18,15 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
-    public static ChronoUnitSelect withMatchingUnits(Predicate<ChronoUnit> condition) {
-        Collection<ChronoUnit> units = Stream.of(ChronoUnit.values())
-                .filter(condition)
-                .collect(toUnmodifiableSet());
+    public static ChronoUnitSelect with(ChronoUnit... units) {
+        Set<ChronoUnit> unitSet = Set.of(units);
+        return new ChronoUnitSelect(unitSet);
+    }
 
+    public static ChronoUnitSelect withMatching(Predicate<ChronoUnit> predicate) {
+        Collection<ChronoUnit> units = Stream.of(ChronoUnit.values())
+                .filter(predicate)
+                .collect(toUnmodifiableSet());
         return new ChronoUnitSelect(units);
     }
 
