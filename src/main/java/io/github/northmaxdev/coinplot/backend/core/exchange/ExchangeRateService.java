@@ -4,7 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
-import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
+import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

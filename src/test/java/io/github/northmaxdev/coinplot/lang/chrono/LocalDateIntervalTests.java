@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.lang;
+package io.github.northmaxdev.coinplot.lang.chrono;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

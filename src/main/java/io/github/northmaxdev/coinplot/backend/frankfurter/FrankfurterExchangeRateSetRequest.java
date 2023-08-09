@@ -5,7 +5,7 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.impl.ExchangeRateSetRequests;
-import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
+import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;

@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.frankfurter;
 
-import io.github.northmaxdev.coinplot.lang.LocalDateInterval;
+import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
