@@ -6,10 +6,14 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import jakarta.annotation.Nullable;
 
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -38,6 +42,18 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
         setItems(dataProvider);
 
         setEmptySelectionAllowed(false);
+    }
+
+    public Optional<Period> mapSelectionToPeriod(int amountOfUnit) {
+        @Nullable Period p = switch (getValue()) {
+            case null -> null;
+            case DAYS -> Period.ofDays(amountOfUnit);
+            case MONTHS -> Period.ofMonths(amountOfUnit);
+            case YEARS -> Period.ofYears(amountOfUnit);
+            default -> throw new UnsupportedTemporalTypeException("Unsupported unit");
+        };
+
+        return Optional.ofNullable(p);
     }
 
     @Override
