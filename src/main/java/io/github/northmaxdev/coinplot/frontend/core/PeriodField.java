@@ -17,7 +17,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     private final IntegerField unitAmountField;
 
     public PeriodField() {
-        this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
+        this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.WEEKS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
 
         add(unitSelect, unitAmountField);
@@ -34,6 +34,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         return switch (unitSelect.getValue()) {
             case null -> null;
             case DAYS -> Period.ofDays(unitAmount);
+            case WEEKS -> Period.ofWeeks(unitAmount);
             case MONTHS -> Period.ofMonths(unitAmount);
             case YEARS -> Period.ofYears(unitAmount);
             default -> throw new IllegalStateException("Unsupported ChronoUnit");
