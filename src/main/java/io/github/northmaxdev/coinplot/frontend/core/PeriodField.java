@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.frontend.core;
 
 import com.vaadin.flow.component.customfield.CustomField;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
@@ -37,6 +38,10 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
 
+        unitAmountField.setStepButtonsVisible(true);
+        HorizontalLayout layout = new HorizontalLayout(unitSelect, unitAmountField);
+        add(layout);
+
         unitSelect.addValueChangeListener(event -> {
             @Nullable ChronoUnit newUnitSelection = event.getValue();
             updateAmountFieldForUnit(newUnitSelection);
@@ -51,10 +56,6 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         });
 
         setValue(Periods.zeroIfNull(initialValue));
-
-        add(unitSelect, unitAmountField);
-
-        unitAmountField.setStepButtonsVisible(true);
     }
 
     @Override
