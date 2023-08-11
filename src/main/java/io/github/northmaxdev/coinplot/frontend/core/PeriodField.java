@@ -7,26 +7,74 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.lang.Ints;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public final class PeriodField extends CustomField<Period> implements LocaleChangeObserver {
 
     private final ChronoUnitSelect unitSelect;
     private final IntegerField unitAmountField;
 
+    private int days = 0;
+    private int months = 0;
+    private int years = 0;
+
     public PeriodField() {
-        this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.WEEKS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
+        this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
+
+        unitSelect.addValueChangeListener(event -> {
+            @Nullable ChronoUnit newUnitSelection = event.getValue();
+            OptionalInt amount = getUnitAmount(newUnitSelection);
+            amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
+        });
+
+        unitAmountField.addValueChangeListener(event -> {
+            Optional<ChronoUnit> selectedUnit = unitSelect.getOptionalValue();
+            int newAmount = Ints.zeroIfNull(event.getValue());
+            selectedUnit.ifPresent(unit -> updateUnitAmount(unit, newAmount));
+        });
+
+        //       +---------------------------+
+        //       | Event: new unit selection |
+        //       +-+------------------------++
+        //         |                        |
+        //     +---v---+           +--------v-----------+
+        //     | Y/M/D |           | null or unexpected |
+        //     +---+---+           +--------+-----------+
+        //         |                        |
+        //     +---v------+            +----v--+
+        //     | setValue |            | clear |
+        //     +---+------+            +----+--+
+        //         |                        |
+        //         |                        |
+        //         |                        |
+        //         |                        |
+        //         |                        |
+        //         |  +-------------------+ |
+        //         +--> Event: new amount <-+
+        //            +---------+---------+
+        //                      |
+        //        +-------------v---------------+
+        //        | Get currently selected unit |
+        //        +---+----------------------+--+
+        //            |                      |
+        //       +----v-----+            +---v--+
+        //       | non-null |            | null |
+        //       +----+-----+            +---+--+
+        //            |                      |
+        //            |                      |
+        // +----------v----------+     +-----v--+
+        // | update saved values |     | ignore |
+        // +---------------------+     +--------+
+
         add(unitSelect, unitAmountField);
 
-        // Extras
-        unitSelect.addValueChangeListener(event -> {
-            boolean enableAmountField = event.getValue() != null;
-            unitAmountField.setEnabled(enableAmountField);
-        });
-        unitSelect.setValue(ChronoUnit.DAYS); // Trigger the listener that was just added
         unitAmountField.setStepButtonsVisible(true);
     }
 
@@ -40,29 +88,49 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         return Period.ZERO;
     }
 
+    ///////////////////////
+    // CustomField stuff //
+    ///////////////////////
+
     @Override
     protected Period generateModelValue() {
-        int unitAmount = Ints.zeroIfNull(unitAmountField.getValue());
-        return switch (unitSelect.getValue()) {
-            case DAYS -> Period.ofDays(unitAmount);
-            case WEEKS -> Period.ofWeeks(unitAmount);
-            case MONTHS -> Period.ofMonths(unitAmount);
-            case YEARS -> Period.ofYears(unitAmount);
-            case null -> Period.ZERO;
-            default -> throw new IllegalStateException("Unsupported ChronoUnit");
-        };
+        return Period.of(years, months, days);
     }
 
     @Override
     protected void setPresentationValue(Period period) {
-        if (period == null || period.isZero()) {
-            unitSelect.clear();
-            unitAmountField.clear();
+        // TODO: Update view
+
+        if (period == null) {
+            days = 0;
+            months = 0;
+            years = 0;
         } else {
-            // TODO:
-            //  Convert a given java.time.Period into a single-unit representation (truncating if
-            //  amount exceeds Integer.MAX_VALUE is OK so long as the user is notified about it).
-            //  Example: Period.of(2, 5, 12) --> Period.of(0, 0, 892)
+            days = period.getDays();
+            months = period.getMonths();
+            years = period.getYears();
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    // Read/write for internally stored Y/M/D values //
+    ///////////////////////////////////////////////////
+
+    private OptionalInt getUnitAmount(@Nullable ChronoUnit unit) {
+        return switch (unit) {
+            case DAYS -> OptionalInt.of(days);
+            case MONTHS -> OptionalInt.of(months);
+            case YEARS -> OptionalInt.of(years);
+            case null, default -> OptionalInt.empty();
+        };
+    }
+
+    private void updateUnitAmount(@Nonnull ChronoUnit unit, int amount) {
+        switch (unit) {
+            case DAYS -> days = amount;
+            case MONTHS -> months = amount;
+            case YEARS -> years = amount;
+            default -> throw new IllegalStateException("Cannot update amount for unexpected unit: " + unit);
         }
     }
 }
