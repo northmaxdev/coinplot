@@ -30,14 +30,13 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
 
         unitSelect.addValueChangeListener(event -> {
             @Nullable ChronoUnit newUnitSelection = event.getValue();
-            OptionalInt amount = getUnitAmount(newUnitSelection);
-            amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
+            updateAmountFieldForUnit(newUnitSelection);
         });
 
         unitAmountField.addValueChangeListener(event -> {
             Optional<ChronoUnit> selectedUnit = unitSelect.getOptionalValue();
             int newAmount = Ints.zeroIfNull(event.getValue());
-            selectedUnit.ifPresent(unit -> updateUnitAmount(unit, newAmount));
+            selectedUnit.ifPresent(unit -> setSavedUnitAmount(unit, newAmount));
         });
 
         //       +---------------------------+
@@ -99,8 +98,6 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
 
     @Override
     protected void setPresentationValue(Period period) {
-        // TODO: Update view
-
         if (period == null) {
             days = 0;
             months = 0;
@@ -110,13 +107,16 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
             months = period.getMonths();
             years = period.getYears();
         }
+
+        @Nullable ChronoUnit currentlySelectedUnit = unitSelect.getValue();
+        updateAmountFieldForUnit(currentlySelectedUnit);
     }
 
-    ///////////////////////////////////////////////////
-    // Read/write for internally stored Y/M/D values //
-    ///////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    // Read/write on internally stored Y/M/D values //
+    //////////////////////////////////////////////////
 
-    private OptionalInt getUnitAmount(@Nullable ChronoUnit unit) {
+    private OptionalInt getSavedUnitAmount(@Nullable ChronoUnit unit) {
         return switch (unit) {
             case DAYS -> OptionalInt.of(days);
             case MONTHS -> OptionalInt.of(months);
@@ -125,12 +125,21 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         };
     }
 
-    private void updateUnitAmount(@Nonnull ChronoUnit unit, int amount) {
+    private void setSavedUnitAmount(@Nonnull ChronoUnit unit, int amount) {
         switch (unit) {
             case DAYS -> days = amount;
             case MONTHS -> months = amount;
             case YEARS -> years = amount;
-            default -> throw new IllegalStateException("Cannot update amount for unexpected unit: " + unit);
+            default -> throw new IllegalStateException("Unexpected unit: " + unit);
         }
+    }
+
+    /////////////////////////////////
+    // Internal UI component stuff //
+    /////////////////////////////////
+
+    private void updateAmountFieldForUnit(@Nullable ChronoUnit unit) {
+        OptionalInt amount = getSavedUnitAmount(unit);
+        amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
     }
 }
