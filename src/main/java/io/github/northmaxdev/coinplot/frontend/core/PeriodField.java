@@ -19,8 +19,15 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     public PeriodField() {
         this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.WEEKS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
-
         add(unitSelect, unitAmountField);
+
+        // Extras
+        unitSelect.addValueChangeListener(event -> {
+            boolean enableAmountField = event.getValue() != null;
+            unitAmountField.setEnabled(enableAmountField);
+        });
+        unitSelect.setValue(ChronoUnit.DAYS); // Trigger the listener that was just added
+        unitAmountField.setStepButtonsVisible(true);
     }
 
     @Override
