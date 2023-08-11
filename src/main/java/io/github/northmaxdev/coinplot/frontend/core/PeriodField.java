@@ -34,43 +34,12 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         });
 
         unitAmountField.addValueChangeListener(event -> {
-            Optional<ChronoUnit> selectedUnit = unitSelect.getOptionalValue();
-            int newAmount = Ints.zeroIfNull(event.getValue());
-            selectedUnit.ifPresent(unit -> setSavedUnitAmount(unit, newAmount));
+            if (event.isFromClient()) {
+                Optional<ChronoUnit> selectedUnit = unitSelect.getOptionalValue();
+                int newAmount = Ints.zeroIfNull(event.getValue());
+                selectedUnit.ifPresent(unit -> setSavedUnitAmount(unit, newAmount));
+            }
         });
-
-        //       +---------------------------+
-        //       | Event: new unit selection |
-        //       +-+------------------------++
-        //         |                        |
-        //     +---v---+           +--------v-----------+
-        //     | Y/M/D |           | null or unexpected |
-        //     +---+---+           +--------+-----------+
-        //         |                        |
-        //     +---v------+            +----v--+
-        //     | setValue |            | clear |
-        //     +---+------+            +----+--+
-        //         |                        |
-        //         |                        |
-        //         |                        |
-        //         |                        |
-        //         |                        |
-        //         |  +-------------------+ |
-        //         +--> Event: new amount <-+
-        //            +---------+---------+
-        //                      |
-        //        +-------------v---------------+
-        //        | Get currently selected unit |
-        //        +---+----------------------+--+
-        //            |                      |
-        //       +----v-----+            +---v--+
-        //       | non-null |            | null |
-        //       +----+-----+            +---+--+
-        //            |                      |
-        //            |                      |
-        // +----------v----------+     +-----v--+
-        // | update saved values |     | ignore |
-        // +---------------------+     +--------+
 
         add(unitSelect, unitAmountField);
 
