@@ -16,6 +16,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+// NOTE:
+// It's still possible to get nulls if calling setValue(null) or doing something similar.
+// This is due to Vaadin's CustomField and AbstractField APIs, which I'm not going to delve into that deeply.
+// Prefer using clear() or setValue(Period.ZERO) unless you like getting NPEs.
 public final class PeriodField extends CustomField<Period> implements LocaleChangeObserver {
 
     private final ChronoUnitSelect unitSelect;
@@ -26,6 +30,10 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     private int years = 0;
 
     public PeriodField() {
+        this(Period.ZERO);
+    }
+
+    public PeriodField(@Nullable Period initialValue) {
         this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
 
@@ -41,6 +49,8 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
                 selectedUnit.ifPresent(unit -> setSavedUnitAmount(unit, newAmount));
             }
         });
+
+        setValue(Periods.zeroIfNull(initialValue));
 
         add(unitSelect, unitAmountField);
 
