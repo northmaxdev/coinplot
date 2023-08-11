@@ -7,6 +7,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.lang.Ints;
+import io.github.northmaxdev.coinplot.lang.chrono.Periods;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -66,16 +67,11 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     }
 
     @Override
-    protected void setPresentationValue(Period period) {
-        if (period == null) {
-            days = 0;
-            months = 0;
-            years = 0;
-        } else {
-            days = period.getDays();
-            months = period.getMonths();
-            years = period.getYears();
-        }
+    protected void setPresentationValue(Period newPresentationValue) {
+        @Nonnull Period period = Periods.zeroIfNull(newPresentationValue);
+        days = period.getDays();
+        months = period.getMonths();
+        years = period.getYears();
 
         @Nullable ChronoUnit currentlySelectedUnit = unitSelect.getValue();
         updateAmountFieldForUnit(currentlySelectedUnit);
