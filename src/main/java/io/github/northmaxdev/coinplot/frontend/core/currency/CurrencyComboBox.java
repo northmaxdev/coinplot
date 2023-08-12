@@ -9,7 +9,6 @@ public final class CurrencyComboBox extends ComboBox<Currency> {
 
     public CurrencyComboBox() {
         setItemLabelGenerator(CurrencyComboBoxes.DEFAULT_CURRENCY_LABEL_GENERATOR);
-        setPrefixComponent(CurrencyComboBoxes.DEFAULT_ICON_FACTORY.create());
         setAllowCustomValue(false);
     }
 }
