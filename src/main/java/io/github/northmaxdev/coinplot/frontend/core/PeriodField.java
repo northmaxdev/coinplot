@@ -9,6 +9,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import io.github.northmaxdev.coinplot.frontend.i18n.I18NSupport;
 import io.github.northmaxdev.coinplot.lang.Ints;
 import io.github.northmaxdev.coinplot.lang.chrono.Periods;
 import jakarta.annotation.Nonnull;
@@ -16,7 +17,6 @@ import jakarta.annotation.Nullable;
 
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -25,6 +25,8 @@ import java.util.OptionalInt;
 // This is due to Vaadin's CustomField and AbstractField APIs, which I'm not going to delve into that deeply.
 // Prefer using clear() or setValue(Period.ZERO) unless you like getting NPEs.
 public final class PeriodField extends CustomField<Period> implements LocaleChangeObserver {
+
+    private static final String HELPER_TEXT_KEY = "period-field.helper-text";
 
     private final ChronoUnitSelect unitSelect;
     private final IntegerField unitAmountField;
@@ -55,7 +57,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         });
 
         unitAmountField.setStepButtonsVisible(true);
-        setTranslatedHelperText(getLocale());
+        I18NSupport.setHelperText(this, getLocale(), HELPER_TEXT_KEY);
         HorizontalLayout layout = createLayout(unitSelect, unitAmountField);
         add(layout);
 
@@ -92,6 +94,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
     }
 
+    // TODO: Move this to a proper utility class
     private static HorizontalLayout createLayout(Component... children) {
         HorizontalLayout layout = new HorizontalLayout(children);
 
@@ -109,12 +112,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     @Override
     public void localeChange(LocaleChangeEvent event) {
         unitSelect.localeChange(event);
-        setTranslatedHelperText(event.getLocale());
-    }
-
-    private void setTranslatedHelperText(Locale locale) {
-        String text = getTranslation(locale, "period-field.helper-text");
-        setHelperText(text);
+        I18NSupport.setHelperText(this, event, HELPER_TEXT_KEY);
     }
 
     //////////////////////////////////////////////////
