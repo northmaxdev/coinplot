@@ -60,20 +60,14 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         setTranslatedHelperText(getLocale());
     }
 
-    @Override
-    public void localeChange(LocaleChangeEvent event) {
-        unitSelect.localeChange(event);
-        setTranslatedHelperText(event.getLocale());
-    }
+    //////////////////////
+    // Model/view stuff //
+    //////////////////////
 
     @Override
     public Period getEmptyValue() {
         return Period.ZERO;
     }
-
-    ///////////////////////
-    // CustomField stuff //
-    ///////////////////////
 
     @Override
     protected Period generateModelValue() {
@@ -89,6 +83,26 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
 
         @Nullable ChronoUnit currentlySelectedUnit = unitSelect.getValue();
         updateAmountFieldForUnit(currentlySelectedUnit);
+    }
+
+    private void updateAmountFieldForUnit(@Nullable ChronoUnit unit) {
+        OptionalInt amount = getSavedUnitAmount(unit);
+        amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
+    }
+
+    //////////
+    // I18N //
+    //////////
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        unitSelect.localeChange(event);
+        setTranslatedHelperText(event.getLocale());
+    }
+
+    private void setTranslatedHelperText(Locale locale) {
+        String text = getTranslation(locale, "period-field.helper-text");
+        setHelperText(text);
     }
 
     //////////////////////////////////////////////////
@@ -111,23 +125,5 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
             case YEARS -> years = amount;
             default -> throw new IllegalStateException("Unexpected unit: " + unit);
         }
-    }
-
-    /////////////////////////////////
-    // Internal UI component stuff //
-    /////////////////////////////////
-
-    private void updateAmountFieldForUnit(@Nullable ChronoUnit unit) {
-        OptionalInt amount = getSavedUnitAmount(unit);
-        amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
-    }
-
-    //////////
-    // I18N //
-    //////////
-
-    private void setTranslatedHelperText(Locale locale) {
-        String text = getTranslation(locale, "period-field.helper-text");
-        setHelperText(text);
     }
 }
