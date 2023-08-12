@@ -20,8 +20,6 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
     }
 
     private ChronoUnitSelect(Collection<ChronoUnit> units) {
-        setItemLabelGenerator(unit -> getTranslatedUnitLabel(unit, getLocale()));
-
         ListDataProvider<ChronoUnit> dataProvider = new ListDataProvider<>(units);
         dataProvider.setSortComparator(Enum::compareTo);
         setItems(dataProvider);
@@ -29,6 +27,7 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
         setEmptySelectionAllowed(false);
     }
 
+    // This also gets triggered on component init
     @Override
     public void localeChange(LocaleChangeEvent event) {
         setItemLabelGenerator(unit -> getTranslatedUnitLabel(unit, event.getLocale()));

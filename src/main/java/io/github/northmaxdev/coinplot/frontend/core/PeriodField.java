@@ -57,7 +57,6 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         });
 
         unitAmountField.setStepButtonsVisible(true);
-        I18NSupport.setHelperText(this, getLocale(), HELPER_TEXT_KEY);
         HorizontalLayout layout = createLayout(unitSelect, unitAmountField);
         add(layout);
 
@@ -109,6 +108,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     // I18N //
     //////////
 
+    // This also gets triggered on component init
     @Override
     public void localeChange(LocaleChangeEvent event) {
         unitSelect.localeChange(event);
