@@ -11,7 +11,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Component
-public final class MainI18NProvider implements I18NProvider {
+// Using the "impl" suffix is normally against the project's naming conventions, but in this case the exception is made
+// to signal that this class is "the" implementation for the given framework interface.
+public final class I18NProviderImpl implements I18NProvider {
 
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
     private static final List<Locale> SUPPORTED_LOCALES = List.of(
