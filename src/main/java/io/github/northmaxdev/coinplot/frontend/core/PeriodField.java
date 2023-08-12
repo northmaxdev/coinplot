@@ -14,6 +14,7 @@ import jakarta.annotation.Nullable;
 
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -56,11 +57,13 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         });
 
         setValue(Periods.zeroIfNull(initialValue));
+        setTranslatedHelperText(getLocale());
     }
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
         unitSelect.localeChange(event);
+        setTranslatedHelperText(event.getLocale());
     }
 
     @Override
@@ -117,5 +120,14 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     private void updateAmountFieldForUnit(@Nullable ChronoUnit unit) {
         OptionalInt amount = getSavedUnitAmount(unit);
         amount.ifPresentOrElse(unitAmountField::setValue, unitAmountField::clear);
+    }
+
+    //////////
+    // I18N //
+    //////////
+
+    private void setTranslatedHelperText(Locale locale) {
+        String text = getTranslation(locale, "period-field.helper-text");
+        setHelperText(text);
     }
 }
