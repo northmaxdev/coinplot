@@ -9,7 +9,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NSupport;
+import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.Ints;
 import io.github.northmaxdev.coinplot.lang.chrono.Periods;
 import jakarta.annotation.Nonnull;
@@ -112,7 +112,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     @Override
     public void localeChange(LocaleChangeEvent event) {
         unitSelect.localeChange(event);
-        I18NSupport.setHelperText(this, event, HELPER_TEXT_KEY);
+        I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
     }
 
     //////////////////////////////////////////////////

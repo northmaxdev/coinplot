@@ -11,9 +11,11 @@ import jakarta.annotation.Nonnull;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-public final class I18NSupport {
+// Make an exception for the project's naming convention (e.g., Strings or Ints)
+// due to "I18N" being too ambiguous as a class name.
+public final class I18NUtilities {
 
-    private I18NSupport() {
+    private I18NUtilities() {
         throw new UnsupportedOperationException();
     }
 
