@@ -7,6 +7,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import io.github.northmaxdev.coinplot.frontend.core.ThemableLayouts.Spacing;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nullable;
@@ -30,8 +31,7 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
         this.periodField = new PeriodField();
 
         startPicker.setRequired(true);
-        // TODO: Move this (layout config) to a proper utility class
-        HorizontalLayout layout = new HorizontalLayout(startPicker, periodField);
+        HorizontalLayout layout = ThemableLayouts.createHorizontal(Spacing.MEDIUM, startPicker, periodField);
         add(layout);
 
         setValue(initialValue);
