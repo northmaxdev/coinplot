@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.frontend.i18n;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.HasLabel;
+import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import jakarta.annotation.Nonnull;
 
@@ -19,13 +20,14 @@ public final class I18NUtilities {
         throw new UnsupportedOperationException();
     }
 
+    // locale and propertyKey are not annotated due to getTranslation's ambiguity regarding the same parameters
+
     ///////////
     // Label //
     ///////////
 
     public static <C extends Component & HasLabel> void setLabel(
             @Nonnull C component,
-            // locale and propertyKey are not annotated due to getTranslation's ambiguity regarding the same parameters
             Locale locale,
             String propertyKey) {
         set(component, locale, propertyKey, C::setLabel);
@@ -34,9 +36,26 @@ public final class I18NUtilities {
     public static <C extends Component & HasLabel> void setLabel(
             @Nonnull C component,
             @Nonnull LocaleChangeEvent localeChangeEvent,
-            // propertyKey is not annotated due to getTranslation's ambiguity regarding the same parameter
             String propertyKey) {
         setLabel(component, localeChangeEvent.getLocale(), propertyKey);
+    }
+
+    //////////
+    // Text //
+    //////////
+
+    public static <C extends Component & HasText> void setText(
+            @Nonnull C component,
+            Locale locale,
+            String propertyKey) {
+        set(component, locale, propertyKey, C::setText);
+    }
+
+    public static <C extends Component & HasText> void setText(
+            @Nonnull C component,
+            LocaleChangeEvent localeChangeEvent,
+            String propertyKey) {
+        setText(component, localeChangeEvent.getLocale(), propertyKey);
     }
 
     /////////////////
@@ -45,7 +64,6 @@ public final class I18NUtilities {
 
     public static <C extends Component & HasHelper> void setHelperText(
             @Nonnull C component,
-            // locale and propertyKey are not annotated due to getTranslation's ambiguity regarding the same parameters
             Locale locale,
             String propertyKey) {
         set(component, locale, propertyKey, C::setHelperText);
@@ -54,7 +72,6 @@ public final class I18NUtilities {
     public static <C extends Component & HasHelper> void setHelperText(
             @Nonnull C component,
             @Nonnull LocaleChangeEvent localeChangeEvent,
-            // propertyKey is not annotated due to getTranslation's ambiguity regarding the same parameter
             String propertyKey) {
         setHelperText(component, localeChangeEvent.getLocale(), propertyKey);
     }
@@ -65,7 +82,6 @@ public final class I18NUtilities {
 
     private static <C extends Component> void set(
             @Nonnull C component,
-            // locale and propertyKey are not annotated due to getTranslation's ambiguity regarding the same parameters
             Locale locale,
             String propertyKey,
             BiConsumer<C, String> componentTypeSetterReference) {
