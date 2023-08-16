@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import jakarta.annotation.Nonnull;
 
@@ -74,6 +75,24 @@ public final class I18NUtilities {
             @Nonnull LocaleChangeEvent localeChangeEvent,
             String propertyKey) {
         setHelperText(component, localeChangeEvent.getLocale(), propertyKey);
+    }
+
+    ///////////////////
+    // Error Message //
+    ///////////////////
+
+    public static <C extends Component & HasValidation> void setErrorMessage(
+            @Nonnull C component,
+            Locale locale,
+            String propertyKey) {
+        set(component, locale, propertyKey, C::setErrorMessage);
+    }
+
+    public static <C extends Component & HasValidation> void setErrorMessage(
+            @Nonnull C component,
+            @Nonnull LocaleChangeEvent localeChangeEvent,
+            String propertyKey) {
+        setErrorMessage(component, localeChangeEvent.getLocale(), propertyKey);
     }
 
     //////////
