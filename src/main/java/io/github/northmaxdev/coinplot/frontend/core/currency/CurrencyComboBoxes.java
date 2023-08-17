@@ -14,10 +14,12 @@ final class CurrencyComboBoxes { // Package-private
 
     // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
 
-    public static final ItemLabelGenerator<Currency> DEFAULT_CURRENCY_LABEL_GENERATOR = Currency::getName;
+    public static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getName;
+    public static final boolean ALLOW_CUSTOM_VALUE = false;
     // See SerializableComparator class JavaDoc for more information
-    public static final SerializableComparator<Currency> DEFAULT_COMPARATOR =
+    public static final SerializableComparator<Currency> COMPARATOR =
             Comparator.comparing(Currency::getCode)::compare;
+    public static final String FAILED_FETCH_ERROR_MESSAGE_KEY = "currency-combo-boxes.error-message.failed-fetch";
 
     private CurrencyComboBoxes() {
         throw new UnsupportedOperationException();
@@ -25,7 +27,7 @@ final class CurrencyComboBoxes { // Package-private
 
     public static ListDataProvider<Currency> createDataProvider(Set<Currency> currencies) {
         ListDataProvider<Currency> dataProvider = new ListDataProvider<>(currencies);
-        dataProvider.setSortComparator(DEFAULT_COMPARATOR);
+        dataProvider.setSortComparator(COMPARATOR);
         return dataProvider;
     }
 }
