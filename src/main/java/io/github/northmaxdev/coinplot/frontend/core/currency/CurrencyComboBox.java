@@ -18,9 +18,7 @@ public final class CurrencyComboBox extends ComboBox<Currency> implements Locale
 
     public CurrencyComboBox(@Nonnull CurrencyService dataSource) {
         this.dataSource = dataSource;
-
-        setItemLabelGenerator(CurrencyComboBoxes.CURRENCY_LABEL_GENERATOR);
-        setAllowCustomValue(CurrencyComboBoxes.ALLOW_CUSTOM_VALUE);
+        CurrencyComboBoxes.setBasicConfiguration(this);
 
         fetchItems();
     }

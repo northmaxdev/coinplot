@@ -16,18 +16,21 @@ import java.util.Set;
 
 final class CurrencyComboBoxes { // Package-private
 
-    // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
-
-    public static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getName;
-    public static final boolean ALLOW_CUSTOM_VALUE = false;
     public static final String FAILED_FETCH_ERROR_MESSAGE_KEY = "currency-combo-boxes.error-message.failed-fetch";
 
+    private static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getName;
+    // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
     // See SerializableComparator class JavaDoc for more information
     private static final SerializableComparator<Currency> COMPARATOR =
             Comparator.comparing(Currency::getCode)::compare;
 
     private CurrencyComboBoxes() {
         throw new UnsupportedOperationException();
+    }
+
+    public static <C extends ComboBoxBase<C, Currency, ?>> void setBasicConfiguration(@Nonnull C component) {
+        component.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
+        component.setAllowCustomValue(false);
     }
 
     public static <C extends ComboBoxBase<C, Currency, ?>> void fetchItemsInto(
