@@ -21,16 +21,15 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Inner types //
     /////////////////
 
-    protected static final class APIKey {
+    protected record APIKey(
+            @Nonnull String name,
+            @Nonnull String value,
+            @Nonnull SpecificationStrategy specificationStrategy) {
 
-        private enum SpecificationStrategy {
+        public enum SpecificationStrategy {
             AS_QUERY_PARAMETER,
             AS_HEADER
         }
-
-        private final @Nonnull String name;
-        private final @Nonnull String value;
-        private final @Nonnull SpecificationStrategy specificationStrategy;
 
         public static APIKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
             return new APIKey(name, value, SpecificationStrategy.AS_QUERY_PARAMETER);
@@ -40,42 +39,12 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return new APIKey(name, value, SpecificationStrategy.AS_HEADER);
         }
 
-        private APIKey(
-                @Nonnull String name,
-                @Nonnull String value,
-                @Nonnull SpecificationStrategy specificationStrategy) {
-            this.name = name;
-            this.value = value;
-            this.specificationStrategy = specificationStrategy;
-        }
-
-        public @Nonnull String getName() {
-            return name;
-        }
-
-        public @Nonnull String getValue() {
-            return value;
-        }
-
         public boolean isSpecifiedAsQueryParameter() {
             return specificationStrategy == SpecificationStrategy.AS_QUERY_PARAMETER;
         }
 
         public boolean isSpecifiedAsHeader() {
             return specificationStrategy == SpecificationStrategy.AS_HEADER;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof APIKey that
-                    && Objects.equals(this.name, that.name)
-                    && Objects.equals(this.value, that.value)
-                    && this.specificationStrategy == that.specificationStrategy;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(name, value, specificationStrategy);
         }
 
         @Override
@@ -89,9 +58,6 @@ public abstract class AbstractAPIRequest implements APIRequest {
     ////////////
 
     private final @Nullable APIKey accessKey;
-    // TODO:
-    //  Lazy-compute and cache both URI and headers.
-    //  Let readers know that in that case all subclasses must be deeply immutable to maintain integrity.
 
     //////////////////
     // Constructors //
@@ -142,7 +108,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
             Map<String, String> parameters = getParameters();
             parameters.forEach(builder::setParameter);
             if (accessKey != null && accessKey.isSpecifiedAsQueryParameter()) {
-                builder.setParameter(accessKey.getName(), accessKey.getValue());
+                builder.setParameter(accessKey.name(), accessKey.value());
             }
 
             return builder.build();
@@ -167,7 +133,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
         if (accessKey != null && accessKey.isSpecifiedAsHeader()) {
             Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
-            headersWithKey.put(accessKey.getName(), accessKey.getValue());
+            headersWithKey.put(accessKey.name(), accessKey.value());
             return headersWithKey;
         }
 
