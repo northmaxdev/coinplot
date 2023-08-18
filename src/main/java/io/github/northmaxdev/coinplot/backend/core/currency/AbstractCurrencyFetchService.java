@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
 import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -41,7 +41,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
         return repository.findByIDNullSafely(code);
     }
 
-    protected abstract @Nonnull R createAPIRequest() throws CannotFormAPIRequestException;
+    protected abstract @Nonnull R createAPIRequest() throws CannotCreateAPIRequestException;
 
     private void fetchIntoRepoIfEmpty() throws FailedRemoteDataFetchException {
         if (repository.isNotEmpty()) {
@@ -52,7 +52,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
             R apiRequest = createAPIRequest();
             Set<Currency> currencies = fetch(apiRequest);
             repository.saveAll(currencies);
-        } catch (CannotFormAPIRequestException e) {
+        } catch (CannotCreateAPIRequestException e) {
             throw new FailedRemoteDataFetchException(e);
         }
     }

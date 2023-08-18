@@ -7,7 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
 import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -43,7 +43,10 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
             } else {
             }
 
-        } catch (CannotFormAPIRequestException e) {
+            // This is here temporarily so the codebase is able to compile
+            throw new UnsupportedOperationException();
+
+        } catch (CannotCreateAPIRequestException e) {
             throw new FailedRemoteDataFetchException(e);
         }
     }
@@ -51,5 +54,5 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
     protected abstract @Nonnull R createAPIRequest(
             @Nullable Currency base,
             Set<Currency> targets,
-            @Nonnull LocalDateInterval dateInterval) throws CannotFormAPIRequestException;
+            @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException;
 }
