@@ -22,4 +22,8 @@ public interface ExchangeRateSetHandler {
     static ExchangeRateSetHandler of(ExchangeRateSetHandler... handlers) {
         return new SingleThreadedExchangeRateSetCompositeHandler(handlers);
     }
+
+    static ExchangeRateSetHandler ofParallel(ExchangeRateSetHandler... handlers) {
+        return new ParallelExchangeRateSetCompositeHandler(handlers);
+    }
 }
