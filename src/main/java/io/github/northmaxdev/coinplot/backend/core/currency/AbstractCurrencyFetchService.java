@@ -4,8 +4,8 @@ package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
-import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteResourceFetchService;
-import io.github.northmaxdev.coinplot.backend.core.web.RemoteResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
+import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest, D>
-        extends AbstractRemoteResourceFetchService<R, D, Set<Currency>>
+        extends AbstractRemoteDataFetchService<R, D, Set<Currency>>
         implements CurrencyService {
 
     private final CurrencyRepository repository;
@@ -43,7 +43,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
 
     protected abstract @Nonnull R createAPIRequest() throws CannotFormAPIRequestException;
 
-    private void fetchIntoRepoIfEmpty() throws RemoteResourceFetchFailureException {
+    private void fetchIntoRepoIfEmpty() throws FailedRemoteDataFetchException {
         if (repository.isNotEmpty()) {
             return;
         }
@@ -53,7 +53,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
             Set<Currency> currencies = fetch(apiRequest);
             repository.saveAll(currencies);
         } catch (CannotFormAPIRequestException e) {
-            throw new RemoteResourceFetchFailureException(e);
+            throw new FailedRemoteDataFetchException(e);
         }
     }
 }

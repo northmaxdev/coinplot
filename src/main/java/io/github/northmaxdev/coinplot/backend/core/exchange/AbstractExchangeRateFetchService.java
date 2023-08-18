@@ -5,8 +5,8 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
-import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteResourceFetchService;
-import io.github.northmaxdev.coinplot.backend.core.web.RemoteResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
+import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
@@ -16,7 +16,7 @@ import java.net.http.HttpClient;
 import java.util.Set;
 
 public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSetRequest, D>
-        extends AbstractRemoteResourceFetchService<R, D, Set<ExchangeRate>>
+        extends AbstractRemoteDataFetchService<R, D, Set<ExchangeRate>>
         implements ExchangeRateService {
 
     private final ExchangeRateRepository repository;
@@ -44,7 +44,7 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
             }
 
         } catch (CannotFormAPIRequestException e) {
-            throw new RemoteResourceFetchFailureException(e);
+            throw new FailedRemoteDataFetchException(e);
         }
     }
 

@@ -4,13 +4,13 @@ package io.github.northmaxdev.coinplot.backend.core.web;
 
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 
-public class RemoteResourceFetchFailureException extends FailedDataFetchException {
+public class FailedRemoteDataFetchException extends FailedDataFetchException {
 
-    public RemoteResourceFetchFailureException(String message) {
+    public FailedRemoteDataFetchException(String message) {
         super(message);
     }
 
-    public RemoteResourceFetchFailureException(Throwable cause) {
+    public FailedRemoteDataFetchException(Throwable cause) {
         super(cause);
     }
 }

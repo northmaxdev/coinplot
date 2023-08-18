@@ -19,7 +19,7 @@ import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D, M> {
+public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M> {
 
     private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
 
@@ -29,7 +29,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
     private final Logger logger;
     private final List<R> requestHistory;
 
-    protected AbstractRemoteResourceFetchService(
+    protected AbstractRemoteDataFetchService(
             HttpClient httpClient,
             ObjectMapper jsonParser,
             DTOMapper<D, M> dtoMapper) {
@@ -44,7 +44,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
         return requestHistory;
     }
 
-    protected final M fetch(@Nonnull R apiRequest) throws RemoteResourceFetchFailureException {
+    protected final M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
         HttpRequest httpRequest = apiRequest.toHTTPRequestBuilder()
                 .GET()
                 .timeout(TIMEOUT_DURATION)
@@ -58,7 +58,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
             // returns 200 OK on a successful response, and in any other case we're going to be throwing an RFE anyway
             // (even in the case of other 2XX codes), so might as well inline this here.
             if (statusCode != 200) {
-                throw new RemoteResourceFetchFailureException("Expected HTTP 200 OK, instead got: " + statusCode);
+                throw new FailedRemoteDataFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
             }
 
             D dto = parseResponseBody(response.body(), jsonParser);
@@ -69,7 +69,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
             logger.error("Failed request: " + apiRequest + " (reason: " + e + ')');
-            throw new RemoteResourceFetchFailureException(e);
+            throw new FailedRemoteDataFetchException(e);
         }
     }
 
