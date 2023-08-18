@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.core.web;
+package io.github.northmaxdev.coinplot.backend.core.web.request;
 
 import java.util.Optional;
 
 @FunctionalInterface
-public interface AccessKeyConfiguration {
+public interface AccessKeySupplier {
 
     Optional<String> getAccessKey();
 }

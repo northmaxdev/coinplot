@@ -2,19 +2,18 @@
 
 package io.github.northmaxdev.coinplot.backend.everapi;
 
-import io.github.northmaxdev.coinplot.backend.core.web.AccessKeyConfiguration;
-import jakarta.annotation.Nullable;
+import io.github.northmaxdev.coinplot.backend.core.web.request.AccessKeySupplier;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
 
 @Configuration
-public class EverapiConfiguration implements AccessKeyConfiguration {
+public class EverapiConfiguration implements AccessKeySupplier {
 
-    private @Nullable String accessKey = null;
+    // TODO: Implement this
 
     @Override
     public Optional<String> getAccessKey() {
-        return Optional.ofNullable(accessKey);
+        return Optional.empty();
     }
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public final class FrankfurterCurrencyService
     }
 
     @Override
-    protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() throws CannotFormAPIRequestException {
+    protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() throws CannotCreateAPIRequestException {
         // Instead of throwing a NoHostException, just fall back to the public instance
         return config.getCustomHost()
                 .map(FrankfurterCurrencySetRequest::new)

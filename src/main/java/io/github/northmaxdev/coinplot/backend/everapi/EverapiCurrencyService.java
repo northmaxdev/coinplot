@@ -5,8 +5,7 @@ package io.github.northmaxdev.coinplot.backend.everapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
-import io.github.northmaxdev.coinplot.backend.core.web.request.NoAccessKeyException;
+import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,10 +30,10 @@ public final class EverapiCurrencyService
     }
 
     @Override
-    protected @Nonnull EverapiCurrencySetRequest createAPIRequest() throws CannotFormAPIRequestException {
+    protected @Nonnull EverapiCurrencySetRequest createAPIRequest() throws CannotCreateAPIRequestException {
         return config.getAccessKey()
                 .map(EverapiCurrencySetRequest::new)
-                .orElseThrow(NoAccessKeyException::new);
+                .orElseThrow(CannotCreateAPIRequestException::forNoAccessKey);
     }
 
     @Override
