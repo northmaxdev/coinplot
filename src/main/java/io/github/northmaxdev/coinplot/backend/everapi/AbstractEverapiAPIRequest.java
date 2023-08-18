@@ -30,7 +30,7 @@ public abstract class AbstractEverapiAPIRequest extends AbstractAPIRequest {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) { // Non-final
         return obj instanceof AbstractEverapiAPIRequest that
                 && Objects.equals(this.getAccessKey(), that.getAccessKey());
     }

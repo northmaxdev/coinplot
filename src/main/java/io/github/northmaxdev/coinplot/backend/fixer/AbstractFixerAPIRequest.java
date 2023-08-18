@@ -30,7 +30,7 @@ public abstract class AbstractFixerAPIRequest extends AbstractAPIRequest {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) { // Non-final
         return obj instanceof AbstractFixerAPIRequest that
                 && Objects.equals(this.getAccessKey(), that.getAccessKey());
     }
