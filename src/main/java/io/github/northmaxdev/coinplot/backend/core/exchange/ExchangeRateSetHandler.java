@@ -19,11 +19,11 @@ public interface ExchangeRateSetHandler {
         }
     }
 
-    static ExchangeRateSetHandler of(ExchangeRateSetHandler... handlers) {
+    static ExchangeRateSetHandler composite(ExchangeRateSetHandler... handlers) {
         return new SingleThreadedExchangeRateSetCompositeHandler(handlers);
     }
 
-    static ExchangeRateSetHandler ofParallel(ExchangeRateSetHandler... handlers) {
+    static ExchangeRateSetHandler parallelComposite(ExchangeRateSetHandler... handlers) {
         return new ParallelExchangeRateSetCompositeHandler(handlers);
     }
 }

@@ -8,10 +8,11 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// Cannot be instantiated directly. Use ExchangeRateSetHandler::ofParallel
+// Cannot be instantiated directly, use ExchangeRateSetHandler::parallelComposite
 final class ParallelExchangeRateSetCompositeHandler extends AbstractExchangeRateSetCompositeHandler {
 
-    // FIXME: Review implementation for correctness
+    // FIXME: Review implementation of the actual multithreading for correctness
+    // FIXME: This should probably implement AutoCloseable for the ExecutorService
 
     private final ExecutorService executorService;
 

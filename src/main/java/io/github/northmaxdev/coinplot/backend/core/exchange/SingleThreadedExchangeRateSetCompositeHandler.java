@@ -6,7 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
-// Cannot be instantiated directly. Use ExchangeRateSetHandler::of
+// Cannot be instantiated directly, use ExchangeRateSetHandler::composite
 final class SingleThreadedExchangeRateSetCompositeHandler extends AbstractExchangeRateSetCompositeHandler {
 
     public SingleThreadedExchangeRateSetCompositeHandler(ExchangeRateSetHandler... children) {
