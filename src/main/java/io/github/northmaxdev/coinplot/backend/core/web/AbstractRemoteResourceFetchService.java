@@ -68,6 +68,7 @@ public abstract class AbstractRemoteResourceFetchService<R extends APIRequest, D
             requestHistory.add(apiRequest);
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
+            logger.error("Failed request: " + apiRequest + " (reason: " + e + ')');
             throw new RemoteResourceFetchFailureException(e);
         }
     }
