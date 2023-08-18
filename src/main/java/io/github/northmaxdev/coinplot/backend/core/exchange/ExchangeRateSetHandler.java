@@ -18,4 +18,8 @@ public interface ExchangeRateSetHandler {
             handler.handle(dataset);
         }
     }
+
+    static ExchangeRateSetHandler of(ExchangeRateSetHandler... handlers) {
+        return new SingleThreadedExchangeRateSetCompositeHandler(handlers);
+    }
 }
