@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
@@ -16,5 +16,5 @@ public interface ExchangeRateService {
             @Nullable Currency base,
             Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval
-    ) throws ResourceFetchFailureException;
+    ) throws FailedDataFetchException;
 }

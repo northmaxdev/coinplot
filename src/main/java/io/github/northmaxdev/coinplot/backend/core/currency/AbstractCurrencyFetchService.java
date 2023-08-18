@@ -3,7 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteResourceFetchService;
 import io.github.northmaxdev.coinplot.backend.core.web.RemoteResourceFetchFailureException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotFormAPIRequestException;
@@ -30,13 +30,13 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
     }
 
     @Override
-    public final Set<Currency> getAvailableCurrencies() throws ResourceFetchFailureException {
+    public final Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
         fetchIntoRepoIfEmpty();
         return repository.findAllAsSet();
     }
 
     @Override
-    public final Optional<Currency> getCurrency(@Nullable String code) throws ResourceFetchFailureException {
+    public final Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException {
         fetchIntoRepoIfEmpty();
         return repository.findByIDNullSafely(code);
     }

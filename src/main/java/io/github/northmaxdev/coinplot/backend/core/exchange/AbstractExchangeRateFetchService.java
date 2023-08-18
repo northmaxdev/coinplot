@@ -3,7 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteResourceFetchService;
 import io.github.northmaxdev.coinplot.backend.core.web.RemoteResourceFetchFailureException;
@@ -34,7 +34,7 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
     public final Set<ExchangeRate> getExchangeRates(
             @Nullable Currency base,
             Set<Currency> targets,
-            @Nonnull LocalDateInterval dateInterval) throws ResourceFetchFailureException {
+            @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException {
         try {
             R apiRequest = createAPIRequest(base, targets, dateInterval);
 

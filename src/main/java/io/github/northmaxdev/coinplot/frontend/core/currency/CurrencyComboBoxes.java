@@ -6,7 +6,7 @@ import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializableComparator;
-import io.github.northmaxdev.coinplot.backend.core.ResourceFetchFailureException;
+import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import jakarta.annotation.Nonnull;
@@ -45,7 +45,7 @@ final class CurrencyComboBoxes { // Package-private
             component.setItems(dataProvider);
 
             // The flag is already "false"
-        } catch (ResourceFetchFailureException e) {
+        } catch (FailedDataFetchException e) {
             failed = true;
         } finally {
             component.setEnabled(!failed);
