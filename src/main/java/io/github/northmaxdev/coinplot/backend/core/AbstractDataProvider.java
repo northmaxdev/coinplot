@@ -8,7 +8,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
-// TODO: Subclasses (Frankfurter, Fixer, EverapiCurrencyAPI)
+// TODO: Subclasses (Frankfurter, EverapiCurrencyAPI)
 public abstract class AbstractDataProvider implements DataProvider {
 
     private final @Nonnull CurrencyService currencyService;
