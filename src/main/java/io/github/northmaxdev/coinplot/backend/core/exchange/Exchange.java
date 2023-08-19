@@ -16,7 +16,7 @@ import java.util.Objects;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
 @Embeddable
-public class Exchange implements Serializable {
+public class Exchange implements Serializable { // IDK if JPA requires an @Embeddable to be non-final, but just in case
 
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
@@ -33,9 +33,9 @@ public class Exchange implements Serializable {
     private @Nonnull LocalDate date;
 
     public Exchange(@Nonnull Currency base, @Nonnull Currency target, @Nonnull LocalDate date) {
-        this.base = base;
-        this.target = target;
-        this.date = date;
+        this.base = Objects.requireNonNull(base, "base is null");
+        this.target = Objects.requireNonNull(target, "target is null");
+        this.date = Objects.requireNonNull(date, "date is null");
     }
 
     protected Exchange() {
@@ -56,6 +56,7 @@ public class Exchange implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        // Null-safety just in case
         return obj instanceof Exchange that
                 && Objects.equals(this.base, that.base)
                 && Objects.equals(this.target, that.target)
@@ -68,7 +69,7 @@ public class Exchange implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         return '[' + base.getCode() + " --> " + target.getCode() + ", " + date.format(ISO_LOCAL_DATE) + ']';
     }
 }

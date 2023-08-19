@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-public class ExchangeRate implements Serializable {
+public class ExchangeRate implements Serializable { // Non-final (JPA requirement)
 
     @Serial
     private static final long serialVersionUID = 7191575760397094585L;
@@ -32,8 +32,8 @@ public class ExchangeRate implements Serializable {
             @Nonnull Currency target,
             @Nonnull LocalDate date,
             @Nonnull BigDecimal value) {
-        this.exchange = new Exchange(base, target, date);
-        this.value = value;
+        exchange = new Exchange(base, target, date);
+        this.value = Objects.requireNonNull(value, "value is null");
     }
 
     protected ExchangeRate() {
@@ -58,17 +58,19 @@ public class ExchangeRate implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        // Null-safety just in case
         return obj instanceof ExchangeRate that
                 && Objects.equals(this.exchange, that.exchange);
     }
 
     @Override
     public int hashCode() {
+        // Null-safety just in case
         return Objects.hashCode(exchange);
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         return exchange + " (" + value + ')';
     }
 }

@@ -13,28 +13,28 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.net.http.HttpClient;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSetRequest, D>
         extends AbstractRemoteDataFetchService<R, D, Set<ExchangeRate>>
         implements ExchangeRateService {
 
-    private final ExchangeRateRepository repository;
+    private final @Nonnull ExchangeRateRepository repository;
 
     protected AbstractExchangeRateFetchService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            ExchangeRateSetDTOMapper<D> dtoMapper,
-            ExchangeRateRepository repository) {
+            @Nonnull HttpClient httpClient,
+            @Nonnull ObjectMapper jsonParser,
+            @Nonnull ExchangeRateSetDTOMapper<D> dtoMapper,
+            @Nonnull ExchangeRateRepository repository) {
         super(httpClient, jsonParser, dtoMapper);
-        this.repository = repository;
+        this.repository = Objects.requireNonNull(repository, "repository is null");
     }
 
     @Override
-    public final Set<ExchangeRate> getExchangeRates(
-            @Nullable Currency base,
-            Set<Currency> targets,
-            @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException {
+    public final Set<ExchangeRate> getExchangeRates(@Nullable Currency base,
+                                                    Set<Currency> targets,
+                                                    @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException {
         try {
             R apiRequest = createAPIRequest(base, targets, dateInterval);
 
@@ -51,8 +51,7 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
         }
     }
 
-    protected abstract @Nonnull R createAPIRequest(
-            @Nullable Currency base,
-            Set<Currency> targets,
-            @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException;
+    protected abstract @Nonnull R createAPIRequest(@Nullable Currency base,
+                                                   Set<Currency> targets,
+                                                   @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException;
 }

@@ -6,17 +6,17 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
-// Cannot be instantiated directly, use ExchangeRateSetHandler::composite
+// Cannot be instantiated directly (package-private), use ExchangeRateSetHandler::composedOf
 final class SingleThreadedExchangeRateSetCompositeHandler extends AbstractExchangeRateSetCompositeHandler {
 
-    public SingleThreadedExchangeRateSetCompositeHandler(ExchangeRateSetHandler... children) {
-        super(children);
+    public SingleThreadedExchangeRateSetCompositeHandler(@Nonnull ExchangeRateSetHandler... children) {
+        super(children); // Null-check in super
     }
 
     @Override
-    public void handle(@Nonnull Set<ExchangeRate> dataset) {
+    public void handle(Set<ExchangeRate> dataset) {
         for (ExchangeRateSetHandler child : getChildren()) {
-            child.handle(dataset);
+            ExchangeRateSetHandler.handleIfNotNull(child, dataset); // Null-safety because why not?
         }
     }
 }
