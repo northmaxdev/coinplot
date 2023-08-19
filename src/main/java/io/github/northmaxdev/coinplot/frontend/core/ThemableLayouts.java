@@ -5,6 +5,9 @@ package io.github.northmaxdev.coinplot.frontend.core;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.ThemeList;
+import jakarta.annotation.Nonnull;
+
+import java.util.Objects;
 
 public final class ThemableLayouts {
 
@@ -31,7 +34,9 @@ public final class ThemableLayouts {
         throw new UnsupportedOperationException();
     }
 
-    public static HorizontalLayout createHorizontal(Spacing spacing, Component... children) {
+    public static @Nonnull HorizontalLayout createHorizontal(@Nonnull Spacing spacing, Component... children) {
+        Objects.requireNonNull(spacing, "spacing is null");
+
         HorizontalLayout layout = new HorizontalLayout(children);
 
         layout.setSpacing(false); // Remove default setting (the Vaadin component docs do this themselves)

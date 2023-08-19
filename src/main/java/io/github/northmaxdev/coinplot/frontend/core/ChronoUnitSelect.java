@@ -6,15 +6,18 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import jakarta.annotation.Nonnull;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
-    public static ChronoUnitSelect with(ChronoUnit... units) {
+    public static @Nonnull ChronoUnitSelect with(@Nonnull ChronoUnit... units) {
+        Objects.requireNonNull(units, "units (varargs) is null");
         Set<ChronoUnit> s = Set.of(units);
         return new ChronoUnitSelect(s);
     }
@@ -34,6 +37,7 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
     }
 
     private String getTranslatedUnitLabel(ChronoUnit unit, Locale locale) {
+        // Annotate "unit" as @Nullable and add a null case to switch if supporting an empty selection
         String propertyKey = switch (unit) {
             case NANOS -> "chrono-unit-select.item-label.nanos";
             case MICROS -> "chrono-unit-select.item-label.micros";

@@ -67,17 +67,17 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     //////////////////////
 
     @Override
-    public Period getEmptyValue() {
+    public @Nonnull Period getEmptyValue() {
         return Period.ZERO;
     }
 
     @Override
-    protected Period generateModelValue() {
+    protected @Nonnull Period generateModelValue() {
         return Period.of(years, months, days);
     }
 
     @Override
-    protected void setPresentationValue(Period newPresentationValue) {
+    protected void setPresentationValue(@Nullable Period newPresentationValue) {
         @Nonnull Period period = Periods.zeroIfNull(newPresentationValue);
         days = period.getDays();
         months = period.getMonths();

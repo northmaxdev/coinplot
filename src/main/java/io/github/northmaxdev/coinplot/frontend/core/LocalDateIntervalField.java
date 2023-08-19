@@ -42,7 +42,7 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
     //////////////////////
 
     @Override
-    protected LocalDateInterval generateModelValue() {
+    protected @Nullable LocalDateInterval generateModelValue() {
         Period period = periodField.getValue();
         return startPicker.getOptionalValue()
                 .map(start -> LocalDateInterval.ofStartPlusPeriod(start, period))
@@ -50,7 +50,7 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
     }
 
     @Override
-    protected void setPresentationValue(LocalDateInterval newPresentationValue) {
+    protected void setPresentationValue(@Nullable LocalDateInterval newPresentationValue) {
         if (newPresentationValue == null) {
             startPicker.clear();
             periodField.clear();

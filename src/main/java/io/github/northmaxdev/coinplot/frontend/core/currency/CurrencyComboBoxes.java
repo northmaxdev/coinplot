@@ -29,6 +29,7 @@ final class CurrencyComboBoxes { // Package-private
     }
 
     public static <C extends ComboBoxBase<C, Currency, ?>> void setBasicConfiguration(@Nonnull C component) {
+        // Don't null-check: this is a package-private class
         component.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         component.setAllowCustomValue(false);
     }
@@ -36,6 +37,7 @@ final class CurrencyComboBoxes { // Package-private
     public static <C extends ComboBoxBase<C, Currency, ?>> void fetchItemsInto(
             @Nonnull C component,
             @Nonnull CurrencyService dataSource) {
+        // Don't null-check: this is a package-private class
         boolean failed = false;
         try {
             Set<Currency> currencies = dataSource.getAvailableCurrencies();

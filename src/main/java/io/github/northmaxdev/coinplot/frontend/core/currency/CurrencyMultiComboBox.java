@@ -10,6 +10,8 @@ import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 
+import java.util.Objects;
+
 public final class CurrencyMultiComboBox extends MultiSelectComboBox<Currency> implements LocaleChangeObserver {
 
     private static final String HELPER_TEXT_KEY = "currency-multi-combo-box.helper-text";
@@ -17,7 +19,7 @@ public final class CurrencyMultiComboBox extends MultiSelectComboBox<Currency> i
     private final CurrencyService dataSource;
 
     public CurrencyMultiComboBox(@Nonnull CurrencyService dataSource) {
-        this.dataSource = dataSource;
+        this.dataSource = Objects.requireNonNull(dataSource, "dataSource is null");
         CurrencyComboBoxes.setBasicConfiguration(this);
 
         fetchItems();
