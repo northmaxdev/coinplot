@@ -2,13 +2,15 @@
 
 package io.github.northmaxdev.coinplot.backend.core.web.response;
 
-public class DTOMappingException extends RuntimeException {
+import jakarta.annotation.Nullable;
 
-    public DTOMappingException(String message) {
+public class DTOMappingException extends RuntimeException { // Non-final
+
+    public DTOMappingException(@Nullable String message) {
         super(message);
     }
 
-    public DTOMappingException(String message, Throwable cause) {
+    public DTOMappingException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 }
