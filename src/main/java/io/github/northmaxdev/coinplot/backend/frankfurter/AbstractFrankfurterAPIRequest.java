@@ -14,14 +14,14 @@ public abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest {
 
     private static final HttpHost PUBLIC_INSTANCE_HOST = new HttpHost(HTTPS.getId(), "api.frankfurter.app");
 
-    private final HttpHost host;
+    private final @Nonnull HttpHost host;
 
     protected AbstractFrankfurterAPIRequest() {
         this(PUBLIC_INSTANCE_HOST);
     }
 
     protected AbstractFrankfurterAPIRequest(@Nonnull HttpHost customHost) {
-        this.host = customHost;
+        this.host = Objects.requireNonNull(customHost, "customHost is null");
     }
 
     @Override

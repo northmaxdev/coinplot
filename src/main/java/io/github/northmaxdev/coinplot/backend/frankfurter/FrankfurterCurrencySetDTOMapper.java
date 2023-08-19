@@ -8,6 +8,7 @@ import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingExcept
 import jakarta.annotation.Nonnull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -16,7 +17,8 @@ public final class FrankfurterCurrencySetDTOMapper implements CurrencySetDTOMapp
 
     @Override
     public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) throws DTOMappingException {
-        return dto.entrySet()
+        return Objects.requireNonNull(dto, "dto is null")
+                .entrySet()
                 .stream()
                 .map(Currency::ofMapEntry)
                 .collect(toSet());

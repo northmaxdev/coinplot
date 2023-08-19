@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public final class FrankfurterCurrencyService
@@ -21,28 +22,29 @@ public final class FrankfurterCurrencyService
 
     private static final TypeReference<Map<String, String>> DTO_TYPE_REF = new TypeReference<>() {};
 
-    private final FrankfurterConfiguration config;
+    private final @Nonnull FrankfurterConfiguration config;
 
     @Autowired
     public FrankfurterCurrencyService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            CurrencyRepository repository,
-            FrankfurterConfiguration config) {
+            @Nonnull HttpClient httpClient,
+            @Nonnull ObjectMapper jsonParser,
+            @Nonnull CurrencyRepository repository,
+            @Nonnull FrankfurterConfiguration config) {
         super(httpClient, jsonParser, new FrankfurterCurrencySetDTOMapper(), repository);
-        this.config = config;
+        this.config = Objects.requireNonNull(config, "config is null");
     }
 
     @Override
     protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() throws CannotCreateAPIRequestException {
-        // Instead of throwing a NoHostException, just fall back to the public instance
+        // Instead of throwing an exception, just fall back to the public instance
         return config.getCustomHost()
                 .map(FrankfurterCurrencySetRequest::new)
                 .orElseGet(FrankfurterCurrencySetRequest::new);
     }
 
+    // @Nonnull annotation applied to a collection only due to the base class' method contract
     @Override
-    protected Map<String, String> parseResponseBody(byte[] responseBody, ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull Map<String, String> parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, DTO_TYPE_REF);
     }
 }
