@@ -11,6 +11,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.net.http.HttpClient;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,15 +19,15 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
         extends AbstractRemoteDataFetchService<R, D, Set<Currency>>
         implements CurrencyService {
 
-    private final CurrencyRepository repository;
+    private final @Nonnull CurrencyRepository repository;
 
     protected AbstractCurrencyFetchService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            CurrencySetDTOMapper<D> dtoMapper,
-            CurrencyRepository repository) {
+            @Nonnull HttpClient httpClient,
+            @Nonnull ObjectMapper jsonParser,
+            @Nonnull CurrencySetDTOMapper<D> dtoMapper,
+            @Nonnull CurrencyRepository repository) {
         super(httpClient, jsonParser, dtoMapper);
-        this.repository = repository;
+        this.repository = Objects.requireNonNull(repository, "repository is null");
     }
 
     @Override

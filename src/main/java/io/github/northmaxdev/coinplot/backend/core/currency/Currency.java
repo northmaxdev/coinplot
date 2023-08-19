@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Entity
 @SuppressWarnings("NotNullFieldNotInitialized")
-public class Currency implements Serializable {
+public class Currency implements Serializable { // Non-final (JPA requirement)
 
     @Serial
     private static final long serialVersionUID = -1322860514883265661L;
@@ -31,17 +31,18 @@ public class Currency implements Serializable {
     @Column
     private @Nullable String nativeSymbol;
 
-    public Currency(@Nonnull String code, @Nonnull String name, @Nullable String nativeSymbol) {
-        this.code = code;
-        this.name = name;
-        this.nativeSymbol = nativeSymbol;
-    }
-
     public Currency(@Nonnull String code, @Nonnull String name) {
         this(code, name, null);
     }
 
-    public static Currency ofMapEntry(Map.Entry<String, String> mapEntry) {
+    public Currency(@Nonnull String code, @Nonnull String name, @Nullable String nativeSymbol) {
+        this.code = Objects.requireNonNull(code, "code is null");
+        this.name = Objects.requireNonNull(name, "name is null");
+        this.nativeSymbol = nativeSymbol;
+    }
+
+    public static @Nonnull Currency ofMapEntry(@Nonnull Map.Entry<String, String> mapEntry) {
+        Objects.requireNonNull(mapEntry, "mapEntry is null");
         return new Currency(mapEntry.getKey(), mapEntry.getValue());
     }
 
@@ -63,17 +64,19 @@ public class Currency implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        // Null-safety just in case
         return obj instanceof Currency that
                 && Objects.equals(this.code, that.code);
     }
 
     @Override
     public int hashCode() {
+        // Null-safety just in case
         return Objects.hashCode(code);
     }
 
     @Override
-    public String toString() {
+    public String toString() { // Unknown whether this is nullable or not
         return name;
     }
 }
