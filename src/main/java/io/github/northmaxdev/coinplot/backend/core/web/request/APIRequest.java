@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.util.Map;
 
-// Semantically not a @FunctionalInterface
+// Semantically not a @FunctionalInterface (additional abstract methods may be added in the future)
 public interface APIRequest {
 
     @Nonnull URI getURI();
@@ -17,7 +17,7 @@ public interface APIRequest {
         return Map.of();
     }
 
-    default HttpRequest.Builder toHTTPRequestBuilder() {
+    default @Nonnull HttpRequest.Builder toHTTPRequestBuilder() {
         URI uri = getURI();
         Map<String, String> headers = getHeaders();
 

@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.web.request;
 
+import io.github.northmaxdev.coinplot.lang.Strings;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
@@ -17,27 +18,44 @@ import java.util.Optional;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
-    /////////////////
-    // Inner types //
-    /////////////////
+    //////////////////////////////////////
+    // Inner types (AbstractAPIRequest) //
+    //////////////////////////////////////
 
-    protected record APIKey(
-            @Nonnull String name,
-            @Nonnull String value,
-            @Nonnull SpecificationStrategy specificationStrategy) {
+    protected record AccessKey(@Nonnull String name,
+                               @Nonnull String value,
+                               @Nonnull SpecificationStrategy specificationStrategy) {
+
+        /////////////////////////////
+        // Inner types (AccessKey) //
+        /////////////////////////////
 
         public enum SpecificationStrategy {
             AS_QUERY_PARAMETER,
             AS_HEADER
         }
 
-        public static APIKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
-            return new APIKey(name, value, SpecificationStrategy.AS_QUERY_PARAMETER);
+        ///////////////////////////////
+        // Instantiation (AccessKey) //
+        ///////////////////////////////
+
+        public AccessKey {
+            Strings.requireNonNullAndBlank(name, "name is null or blank");
+            Strings.requireNonNullAndBlank(value, "value is null or blank");
+            Objects.requireNonNull(specificationStrategy, "specificationStrategy is null");
         }
 
-        public static APIKey asHeader(@Nonnull String name, @Nonnull String value) {
-            return new APIKey(name, value, SpecificationStrategy.AS_HEADER);
+        public static @Nonnull AccessKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
+            return new AccessKey(name, value, SpecificationStrategy.AS_QUERY_PARAMETER);
         }
+
+        public static @Nonnull AccessKey asHeader(@Nonnull String name, @Nonnull String value) {
+            return new AccessKey(name, value, SpecificationStrategy.AS_HEADER);
+        }
+
+        /////////////////////////
+        // Getters (AccessKey) //
+        /////////////////////////
 
         public boolean isSpecifiedAsQueryParameter() {
             return specificationStrategy == SpecificationStrategy.AS_QUERY_PARAMETER;
@@ -47,27 +65,31 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return specificationStrategy == SpecificationStrategy.AS_HEADER;
         }
 
+        //////////////////////////////////////////
+        // equals/hashCode/toString (AccessKey) //
+        //////////////////////////////////////////
+
         @Override
-        public String toString() {
+        public @Nonnull String toString() {
             return value;
         }
     }
 
-    ////////////
-    // Fields //
-    ////////////
+    /////////////////////////////////
+    // Fields (AbstractAPIRequest) //
+    /////////////////////////////////
 
-    private final @Nullable APIKey accessKey;
+    private final @Nullable AccessKey accessKey;
 
-    //////////////////
-    // Constructors //
-    //////////////////
+    ////////////////////////////////////////
+    // Instantiation (AbstractAPIRequest) //
+    ////////////////////////////////////////
 
     protected AbstractAPIRequest() {
         this(null);
     }
 
-    protected AbstractAPIRequest(@Nullable APIKey accessKey) {
+    protected AbstractAPIRequest(@Nullable AccessKey accessKey) {
         this.accessKey = accessKey;
     }
 
@@ -77,14 +99,17 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     protected abstract @Nonnull HttpHost getHost();
 
-    // Deliberately non-final, merely a default impl
+    // Deliberately non-final, merely a default implementation.
+    // Subclass must supply a known-to-be-valid String value.
     protected Optional<String> getRootPathSegment() {
         return Optional.empty();
     }
 
+    // Subclass must supply a known-to-be-valid String value.
     protected abstract @Nonnull String getEndpoint();
 
-    // Deliberately non-final, merely a default impl
+    // Deliberately non-final, merely a default implementation.
+    // Subclass must supply known-to-be-valid String values.
     protected Map<String, String> getParameters() {
         return Map.of();
     }
@@ -92,8 +117,8 @@ public abstract class AbstractAPIRequest implements APIRequest {
     @Override
     public final @Nonnull URI getURI() {
         try {
-            // Ideally, each one of those abstract methods above should be called exactly once,
-            // as they may or may not include expensive computations.
+            // Ideally, each one of those abstract methods above should be called
+            // exactly once, as they may or may not include expensive computations.
 
             URIBuilder builder = new URIBuilder();
             HttpHost host = getHost();
@@ -113,8 +138,8 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
             return builder.build();
         } catch (URISyntaxException e) {
-            // Should never happen unless an implementation accepts unvalidated direct user input
-            throw new IllegalStateException("Produced malformed URI. Please check impl for syntax oversights.");
+            // As the message suggests, this should never happen
+            throw new IllegalStateException("Produced a malformed URI, please check subclass implementation for developer mistakes!");
         }
     }
 
@@ -122,14 +147,15 @@ public abstract class AbstractAPIRequest implements APIRequest {
     // Class Hierarchy API: Headers //
     //////////////////////////////////
 
-    // Deliberately non-final, merely a default impl
-    protected Map<String, String> getHeadersExcludingAPIKey() {
+    // Deliberately non-final, merely a default implementation.
+    // Subclass must supply known-to-be-valid String values.
+    protected Map<String, String> getHeadersExcludingAccessKey() {
         return Map.of();
     }
 
     @Override
     public final Map<String, String> getHeaders() {
-        Map<String, String> headersWithoutKey = getHeadersExcludingAPIKey();
+        Map<String, String> headersWithoutKey = getHeadersExcludingAccessKey();
 
         if (accessKey != null && accessKey.isSpecifiedAsHeader()) {
             Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
@@ -140,13 +166,18 @@ public abstract class AbstractAPIRequest implements APIRequest {
         return headersWithoutKey;
     }
 
-    /////////////////////////
-    // Standard Java stuff //
-    /////////////////////////
+    //////////////////////////////////
+    // Getters (AbstractAPIRequest) //
+    //////////////////////////////////
 
-    protected final Optional<APIKey> getAccessKey() {
+    // Needed primarily for subclass' equals/hashCode
+    protected final Optional<AccessKey> getAccessKey() {
         return Optional.ofNullable(accessKey);
     }
+
+    ///////////////////////////////////////////////////
+    // equals/hashCode/toString (AbstractAPIRequest) //
+    ///////////////////////////////////////////////////
 
     @Override
     public boolean equals(Object obj) { // Non-final
