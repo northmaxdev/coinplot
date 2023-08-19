@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.Objects;
 
 @Service
-public final class EverapiCurrencyService
-        extends AbstractCurrencyFetchService<EverapiCurrencySetRequest, EverapiCurrencySetDTO> {
+public final class EverapiCurrencyService extends AbstractCurrencyFetchService<EverapiCurrencySetRequest, EverapiCurrencySetDTO> {
 
     private final EverapiConfiguration config;
 
     @Autowired
     public EverapiCurrencyService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            CurrencyRepository repository,
-            EverapiConfiguration config) {
+            @Nonnull HttpClient httpClient,
+            @Nonnull ObjectMapper jsonParser,
+            @Nonnull CurrencyRepository repository,
+            @Nonnull EverapiConfiguration config) {
         super(httpClient, jsonParser, new EverapiCurrencySetDTOMapper(), repository);
-        this.config = config;
+        this.config = Objects.requireNonNull(config, "config is null");
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class EverapiCurrencyService
     }
 
     @Override
-    protected EverapiCurrencySetDTO parseResponseBody(byte[] responseBody, ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull EverapiCurrencySetDTO parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, EverapiCurrencySetDTO.class);
     }
 }

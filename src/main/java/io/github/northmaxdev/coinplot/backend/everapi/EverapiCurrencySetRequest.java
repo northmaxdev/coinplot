@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public final class EverapiCurrencySetRequest extends AbstractEverapiAPIRequest implements CurrencySetRequest {
 
-    public EverapiCurrencySetRequest(@Nonnull String accessKey) {
-        super(accessKey);
+    public EverapiCurrencySetRequest(@Nonnull String accessKeyValue) {
+        super(accessKeyValue);
     }
 
     @Override

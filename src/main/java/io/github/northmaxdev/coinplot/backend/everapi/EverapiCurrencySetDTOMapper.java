@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.currency.CurrencySetDTOMapper
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
 
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -15,7 +16,8 @@ public final class EverapiCurrencySetDTOMapper implements CurrencySetDTOMapper<E
 
     @Override
     public @Nonnull Set<Currency> map(@Nonnull EverapiCurrencySetDTO dto) throws DTOMappingException {
-        return dto.data()
+        return Objects.requireNonNull(dto, "dto is null")
+                .data()
                 .entrySet()
                 .stream()
                 .map(entry -> {

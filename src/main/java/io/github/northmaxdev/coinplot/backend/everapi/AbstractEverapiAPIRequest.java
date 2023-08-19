@@ -15,8 +15,8 @@ public abstract class AbstractEverapiAPIRequest extends AbstractAPIRequest {
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "api.currencyapi.com");
 
-    protected AbstractEverapiAPIRequest(@Nonnull String accessKey) {
-        super(APIKey.asHeader("apikey", accessKey));
+    protected AbstractEverapiAPIRequest(@Nonnull String accessKeyValue) {
+        super(AccessKey.asHeader("apikey", accessKeyValue));
     }
 
     @Override
