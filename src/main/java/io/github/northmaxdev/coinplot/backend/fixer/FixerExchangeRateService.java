@@ -46,7 +46,9 @@ public final class FixerExchangeRateService extends
     }
 
     @Override
-    protected @Nonnull FixerExchangeRateSetDTO parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull FixerExchangeRateSetDTO parseResponseBody(
+            byte[] responseBody,
+            @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, FixerExchangeRateSetDTO.class);
     }
 }

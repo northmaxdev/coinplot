@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public final class MainView extends AppLayout {
 
     @Autowired
-    public MainView(@Nonnull EverapiDataProvider everapi, @Nonnull FixerDataProvider fixer, @Nonnull FrankfurterDataProvider frankfurter) {
+    public MainView(
+            @Nonnull EverapiDataProvider everapi,
+            @Nonnull FixerDataProvider fixer,
+            @Nonnull FrankfurterDataProvider frankfurter) {
     }
 }

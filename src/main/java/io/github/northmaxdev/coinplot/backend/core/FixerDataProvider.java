@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 public final class FixerDataProvider extends AbstractDataProvider {
 
     @Autowired
-    public FixerDataProvider(@Nonnull FixerCurrencyService currencyService, @Nonnull FixerExchangeRateService exchangeRateService) {
+    public FixerDataProvider(
+            @Nonnull FixerCurrencyService currencyService,
+            @Nonnull FixerExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 

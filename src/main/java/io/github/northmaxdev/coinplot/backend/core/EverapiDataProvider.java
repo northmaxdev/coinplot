@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 public final class EverapiDataProvider extends AbstractDataProvider {
 
     @Autowired
-    public EverapiDataProvider(@Nonnull EverapiCurrencyService currencyService, @Nonnull EverapiExchangeRateService exchangeRateService) {
+    public EverapiDataProvider(
+            @Nonnull EverapiCurrencyService currencyService,
+            @Nonnull EverapiExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 

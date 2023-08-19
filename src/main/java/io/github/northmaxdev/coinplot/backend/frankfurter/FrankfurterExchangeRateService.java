@@ -46,7 +46,9 @@ public final class FrankfurterExchangeRateService extends
     }
 
     @Override
-    protected @Nonnull FrankfurterExchangeRateSetDTO parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull FrankfurterExchangeRateSetDTO parseResponseBody(
+            byte[] responseBody,
+            @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, FrankfurterExchangeRateSetDTO.class);
     }
 }
