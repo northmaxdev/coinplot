@@ -3,14 +3,15 @@
 package io.github.northmaxdev.coinplot.backend.core.web;
 
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
+import jakarta.annotation.Nullable;
 
-public class FailedRemoteDataFetchException extends FailedDataFetchException {
+public class FailedRemoteDataFetchException extends FailedDataFetchException { // Non-final
 
-    public FailedRemoteDataFetchException(String message) {
+    public FailedRemoteDataFetchException(@Nullable String message) {
         super(message);
     }
 
-    public FailedRemoteDataFetchException(Throwable cause) {
+    public FailedRemoteDataFetchException(@Nullable Throwable cause) {
         super(cause);
     }
 }
