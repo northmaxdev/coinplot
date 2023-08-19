@@ -36,4 +36,15 @@ public final class Strings {
         return Optional.ofNullable(s)
                 .filter(NOT_BLANK);
     }
+
+    // The first argument is deliberately not annotated to not screw with static analysis tools
+    public static @Nonnull String requireNonNullAndBlank(String s, @Nullable String message) {
+        if (s == null) {
+            throw new NullPointerException(message);
+        }
+        if (s.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+        return s;
+    }
 }
