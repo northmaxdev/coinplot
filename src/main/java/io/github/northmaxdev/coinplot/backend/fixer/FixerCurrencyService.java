@@ -12,21 +12,21 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.Objects;
 
 @Service
-public final class FixerCurrencyService
-        extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
+public final class FixerCurrencyService extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
 
     private final FixerConfiguration config;
 
     @Autowired
     public FixerCurrencyService(
-            HttpClient httpClient,
-            ObjectMapper jsonParser,
-            CurrencyRepository repository,
-            FixerConfiguration config) {
+            @Nonnull HttpClient httpClient,
+            @Nonnull ObjectMapper jsonParser,
+            @Nonnull CurrencyRepository repository,
+            @Nonnull FixerConfiguration config) {
         super(httpClient, jsonParser, new FixerCurrencySetDTOMapper(), repository);
-        this.config = config;
+        this.config = Objects.requireNonNull(config, "config is null");
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class FixerCurrencyService
     }
 
     @Override
-    protected FixerCurrencySetDTO parseResponseBody(byte[] responseBody, ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull FixerCurrencySetDTO parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, FixerCurrencySetDTO.class);
     }
 }

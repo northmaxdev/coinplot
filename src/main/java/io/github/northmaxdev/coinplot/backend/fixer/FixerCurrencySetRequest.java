@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public final class FixerCurrencySetRequest extends AbstractFixerAPIRequest implements CurrencySetRequest {
 
-    public FixerCurrencySetRequest(@Nonnull String accessKey) {
-        super(accessKey);
+    public FixerCurrencySetRequest(@Nonnull String accessKeyValue) {
+        super(accessKeyValue);
     }
 
     @Override
