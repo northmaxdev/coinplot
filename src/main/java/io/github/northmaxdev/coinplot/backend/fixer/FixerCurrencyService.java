@@ -17,7 +17,7 @@ import java.util.Objects;
 @Service
 public final class FixerCurrencyService extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
 
-    private final FixerConfiguration config;
+    private @Nonnull final FixerConfiguration config;
 
     @Autowired
     public FixerCurrencyService(

@@ -30,11 +30,11 @@ public final class EverapiExchangeRateSetRequest
     private final @Nonnull LocalDateInterval dateInterval;
 
     public EverapiExchangeRateSetRequest(
-            @Nonnull String accessKey,
+            @Nonnull String accessKeyValue,
             @Nullable Currency base,
             Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
-        super(accessKey);
+        super(accessKeyValue);
         this.base = base;
         this.targets = targets;
         this.dateInterval = Objects.requireNonNull(dateInterval, "dateInterval is null");

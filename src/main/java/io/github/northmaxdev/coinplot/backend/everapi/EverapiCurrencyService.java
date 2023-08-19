@@ -17,7 +17,7 @@ import java.util.Objects;
 @Service
 public final class EverapiCurrencyService extends AbstractCurrencyFetchService<EverapiCurrencySetRequest, EverapiCurrencySetDTO> {
 
-    private final EverapiConfiguration config;
+    private final @Nonnull EverapiConfiguration config;
 
     @Autowired
     public EverapiCurrencyService(
