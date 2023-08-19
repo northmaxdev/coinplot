@@ -10,11 +10,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+// Repository interfaces that extend this one should generally override these
+// inefficient default method implementations with more efficient JPQL queries.
 @NoRepositoryBean
-public interface ExtendedJPARepository<T, I> extends JpaRepository<T, I> {
-
-    // Repository interfaces that extend this one should "override" these inefficient default implementations with more
-    // efficient JPQL queries whenever possible.
+public interface EnhancedJPARepository<T, I> extends JpaRepository<T, I> {
 
     default boolean isEmpty() {
         return count() == 0L;
@@ -28,8 +27,9 @@ public interface ExtendedJPARepository<T, I> extends JpaRepository<T, I> {
         return new HashSet<>(findAll());
     }
 
-    // findById is not null-safe
+    // CrudRepository::findById is not null-safe, according to its documentation
     default Optional<T> findByIDNullSafely(@Nullable I id) {
-        return id == null ? Optional.empty() : findById(id);
+        return Optional.ofNullable(id)
+                .flatMap(this::findById);
     }
 }
