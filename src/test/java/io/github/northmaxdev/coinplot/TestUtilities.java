@@ -2,14 +2,19 @@
 
 package io.github.northmaxdev.coinplot;
 
+import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
+import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
+import jakarta.annotation.Nullable;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +32,22 @@ public final class TestUtilities {
     public static final Currency FOO_DOLLAR = new Currency("FOO", "Foo Dollar");
     public static final Currency BAR_FRANC = new Currency("BAR", "Bar Franc");
     public static final Currency BAZ_POUND = new Currency("BAZ", "Baz Pound");
+    public static final CurrencyService CURRENCY_SERVICE_MOCK = new CurrencyService() {
+        @Override
+        public Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
+            return Set.of(FOO_DOLLAR, BAR_FRANC, BAZ_POUND);
+        }
+
+        @Override
+        public Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException {
+            return switch (code) {
+                case "FOO" -> Optional.of(FOO_DOLLAR);
+                case "BAR" -> Optional.of(BAR_FRANC);
+                case "BAZ" -> Optional.of(BAZ_POUND);
+                case null, default -> Optional.empty();
+            };
+        }
+    };
 
     //////////////////////
     // APIRequest stuff //
