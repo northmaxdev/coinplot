@@ -5,9 +5,9 @@ package io.github.northmaxdev.coinplot.frontend;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import io.github.northmaxdev.coinplot.backend.core.EverapiDataProvider;
-import io.github.northmaxdev.coinplot.backend.core.FixerDataProvider;
-import io.github.northmaxdev.coinplot.backend.core.FrankfurterDataProvider;
+import io.github.northmaxdev.coinplot.backend.everapi.EverapiDataProvider;
+import io.github.northmaxdev.coinplot.backend.fixer.FixerDataProvider;
+import io.github.northmaxdev.coinplot.backend.frankfurter.FrankfurterDataProvider;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 
