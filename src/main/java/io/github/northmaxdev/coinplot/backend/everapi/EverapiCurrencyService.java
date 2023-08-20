@@ -26,7 +26,7 @@ public final class EverapiCurrencyService extends AbstractCurrencyFetchService<E
             @Nonnull CurrencyRepository repository,
             @Nonnull EverapiConfiguration config) {
         super(httpClient, jsonParser, new EverapiCurrencySetDTOMapper(), repository);
-        this.config = Objects.requireNonNull(config, "config is null");
+        this.config = Objects.requireNonNull(config, "Cannot initialize EverapiCurrencyService with a null config");
     }
 
     @Override
