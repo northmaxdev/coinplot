@@ -32,7 +32,7 @@ public final class EverapiExchangeRateService extends
             @Nonnull ExchangeRateRepository repository,
             @Nonnull EverapiConfiguration config) {
         super(httpClient, jsonParser, new EverapiExchangeRateSetDTOMapper(currencyService), repository);
-        this.config = Objects.requireNonNull(config, "config is null");
+        this.config = Objects.requireNonNull(config, "Cannot initialize EverapiExchangeRateService with a null config");
     }
 
     @Override
