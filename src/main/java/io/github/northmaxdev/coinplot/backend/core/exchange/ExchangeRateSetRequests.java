@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
+import io.github.northmaxdev.coinplot.lang.Strings;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -13,13 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 
 public final class ExchangeRateSetRequests {
 
     public static final class ParametersBuilder {
+
+        private static final String STANDARD_TARGET_DELIMITER = ",";
 
         private final @Nonnull ExchangeRateSetRequest request;
         private @Nullable String baseParameterName;
@@ -92,20 +94,13 @@ public final class ExchangeRateSetRequests {
         }
 
         private Optional<String> joinTargetCodes() {
-            Set<Currency> targets = request.getTargets();
-
-            if (targets.isEmpty()) {
-                return Optional.empty();
-            }
-
-            String s = targets.stream()
+            String s = request.getTargets()
+                    .stream()
                     .filter(Objects::nonNull) // Just in case
                     .map(Currency::getCode)
-                    .collect(joining(","));
+                    .collect(joining(STANDARD_TARGET_DELIMITER));
 
-            return s.isEmpty()
-                    ? Optional.empty()
-                    : Optional.of(s);
+            return Strings.emptyToOptional(s);
         }
 
         @Override
