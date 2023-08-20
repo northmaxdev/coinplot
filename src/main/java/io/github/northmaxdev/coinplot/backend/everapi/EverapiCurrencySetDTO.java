@@ -8,10 +8,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.Map;
 
-// Keep in mind that this provider does not explicitly document the nullability of the provided data
-public record EverapiCurrencySetDTO(Map<String, CurrencyData> data) {
+// Reference: https://currencyapi.com/docs/currencies (last checked: 20-08-2023 18:00)
+// Keep in mind that this provider does not explicitly document the nullability of the provided data.
+public record EverapiCurrencySetDTO(Map<String, CurrencyObject> data) {
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnoreProperties({"symbol", "decimal_digits", "rounding", "code", "name_plural"})
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public record CurrencyData(String name, String symbolNative) {}
+    public record CurrencyObject(String name, String symbolNative) {}
 }

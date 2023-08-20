@@ -20,9 +20,9 @@ public final class EverapiCurrencySetDTOMapper implements CurrencySetDTOMapper<E
                 .data()
                 .entrySet()
                 .stream()
-                .map(entry -> {
-                    EverapiCurrencySetDTO.CurrencyData currencyData = entry.getValue();
-                    return new Currency(entry.getKey(), currencyData.name(), currencyData.symbolNative());
+                .map(mapEntry -> {
+                    EverapiCurrencySetDTO.CurrencyObject currencyObject = mapEntry.getValue();
+                    return new Currency(mapEntry.getKey(), currencyObject.name(), currencyObject.symbolNative());
                 })
                 .collect(toSet());
     }

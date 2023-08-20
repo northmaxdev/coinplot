@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.everapi;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
+import io.github.northmaxdev.coinplot.backend.everapi.EverapiCurrencySetDTO.CurrencyObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -14,13 +15,11 @@ class EverapiCurrencySetDTOMapperTests {
 
     @Test
     void mapsDTO() {
-        EverapiCurrencySetDTO dto = new EverapiCurrencySetDTO(
-                Map.of(
-                        "FOO", new EverapiCurrencySetDTO.CurrencyData("Foo Dollar", "*"),
-                        "BAR", new EverapiCurrencySetDTO.CurrencyData("Bar Lira", "@"),
-                        "BAZ", new EverapiCurrencySetDTO.CurrencyData("Baz Pound", "&")
-                )
-        );
+        var dto = new EverapiCurrencySetDTO(Map.of(
+                "FOO", new CurrencyObject("Foo Dollar", "*"),
+                "BAR", new CurrencyObject("Bar Lira", "@"),
+                "BAZ", new CurrencyObject("Baz Pound", "&")
+        ));
         var mapper = new EverapiCurrencySetDTOMapper();
 
         Set<Currency> expected = Set.of(
