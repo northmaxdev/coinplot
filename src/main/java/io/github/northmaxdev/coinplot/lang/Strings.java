@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 public final class Strings {
 
     private static final Predicate<String> NOT_BLANK = Predicate.not(String::isBlank);
+    private static final Predicate<String> NOT_EMPTY = Predicate.not(String::isEmpty);
 
     private Strings() {
         throw new UnsupportedOperationException();
@@ -35,6 +36,11 @@ public final class Strings {
     public static Optional<String> blankToOptional(@Nullable String s) {
         return Optional.ofNullable(s)
                 .filter(NOT_BLANK);
+    }
+
+    public static Optional<String> emptyToOptional(@Nullable String s) {
+        return Optional.ofNullable(s)
+                .filter(NOT_EMPTY);
     }
 
     // The first argument is deliberately not annotated to not screw with static analysis tools
