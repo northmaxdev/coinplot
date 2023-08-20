@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.Map;
 
+// Keep in mind that this provider does not explicitly document the nullability of the provided data
 public record EverapiCurrencySetDTO(Map<String, CurrencyData> data) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)

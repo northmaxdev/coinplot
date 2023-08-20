@@ -15,14 +15,14 @@ import static java.util.stream.Collectors.toSet;
 public final class EverapiCurrencySetDTOMapper implements CurrencySetDTOMapper<EverapiCurrencySetDTO> {
 
     @Override
-    public @Nonnull Set<Currency> map(@Nonnull EverapiCurrencySetDTO dto) throws DTOMappingException {
-        return Objects.requireNonNull(dto, "dto is null")
+    public Set<Currency> map(@Nonnull EverapiCurrencySetDTO dto) throws DTOMappingException {
+        return Objects.requireNonNull(dto, "EverapiCurrencySetDTOMapper received null DTO")
                 .data()
                 .entrySet()
                 .stream()
                 .map(entry -> {
-                    EverapiCurrencySetDTO.CurrencyData data = entry.getValue();
-                    return new Currency(entry.getKey(), data.name(), data.symbolNative());
+                    EverapiCurrencySetDTO.CurrencyData currencyData = entry.getValue();
+                    return new Currency(entry.getKey(), currencyData.name(), currencyData.symbolNative());
                 })
                 .collect(toSet());
     }
