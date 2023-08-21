@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,10 +11,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @Entity
-@SuppressWarnings("NotNullFieldNotInitialized")
 public class Currency implements Serializable { // Non-final (JPA requirement)
 
     @Serial
@@ -28,21 +25,13 @@ public class Currency implements Serializable { // Non-final (JPA requirement)
     @Column(nullable = false)
     private @Nonnull String name;
 
-    @Column
-    private @Nullable String nativeSymbol;
-
     public Currency(@Nonnull String code, @Nonnull String name) {
-        this(code, name, null);
-    }
-
-    public Currency(@Nonnull String code, @Nonnull String name, @Nullable String nativeSymbol) {
-        this.code = Objects.requireNonNull(code, "code is null");
-        this.name = Objects.requireNonNull(name, "name is null");
-        this.nativeSymbol = nativeSymbol;
+        this.code = Objects.requireNonNull(code, "Currency code cannot be null");
+        this.name = Objects.requireNonNull(name, "Currency name cannot be null");
     }
 
     public static @Nonnull Currency ofMapEntry(@Nonnull Map.Entry<String, String> mapEntry) {
-        Objects.requireNonNull(mapEntry, "mapEntry is null");
+        Objects.requireNonNull(mapEntry);
         return new Currency(mapEntry.getKey(), mapEntry.getValue());
     }
 
@@ -56,10 +45,6 @@ public class Currency implements Serializable { // Non-final (JPA requirement)
 
     public @Nonnull String getName() {
         return name;
-    }
-
-    public Optional<String> getNativeSymbol() {
-        return Optional.ofNullable(nativeSymbol);
     }
 
     @Override
@@ -76,7 +61,9 @@ public class Currency implements Serializable { // Non-final (JPA requirement)
     }
 
     @Override
-    public String toString() { // Unknown whether this is nullable or not
-        return name;
+    public String toString() {
+        // AFAIK, accessing via getters gives a better guarantee that the
+        // persistence provider will actually initialize the property.
+        return getName();
     }
 }
