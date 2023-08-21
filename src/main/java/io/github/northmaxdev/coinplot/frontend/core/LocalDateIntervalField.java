@@ -43,9 +43,9 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
 
     @Override
     protected @Nullable LocalDateInterval generateModelValue() {
-        Period period = periodField.getValue();
+        Period periodToAdd = periodField.getValue();
         return startPicker.getOptionalValue()
-                .map(start -> LocalDateInterval.ofStartPlusPeriod(start, period))
+                .map(start -> LocalDateInterval.ofAddition(start, periodToAdd))
                 .orElse(null);
     }
 
