@@ -5,12 +5,14 @@ package io.github.northmaxdev.coinplot.lang;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
 
 public final class Strings {
 
+    private static final int INDEX_NOT_FOUND = -1;
     private static final Predicate<String> NOT_BLANK = Predicate.not(String::isBlank);
     private static final Predicate<String> NOT_EMPTY = Predicate.not(String::isEmpty);
 
@@ -18,19 +20,19 @@ public final class Strings {
         throw new UnsupportedOperationException();
     }
 
-    // This is merely a wrapper for String::indexOf to work with OptionalInt instances instead of magic constants like
-    // -1. It does not add any additional behavior to String::indexOf, therefore, one should refer primarily to that
-    // method's documentation.
     public static OptionalInt indexOf(@Nonnull String haystack, @Nonnull String needle) {
+        Objects.requireNonNull(haystack);
+        Objects.requireNonNull(needle);
+
         int index = haystack.indexOf(needle);
-        return index == -1 ? OptionalInt.empty() : OptionalInt.of(index);
+        return index == INDEX_NOT_FOUND ? OptionalInt.empty() : OptionalInt.of(index);
     }
 
     public static Optional<String> substringBefore(@Nonnull String s, @Nonnull String delimiter) {
-        return indexOf(s, delimiter)
+        return indexOf(s, delimiter) // Implicit null-check
                 .stream()
                 .mapToObj(i -> s.substring(0, i))
-                .findFirst(); // No difference between findFirst and findAny because we'll always have at most 1 element
+                .findFirst(); // No difference between findFirst and findAny because we'll always have at most one element
     }
 
     public static Optional<String> blankToOptional(@Nullable String s) {
@@ -41,16 +43,5 @@ public final class Strings {
     public static Optional<String> emptyToOptional(@Nullable String s) {
         return Optional.ofNullable(s)
                 .filter(NOT_EMPTY);
-    }
-
-    // The first argument is deliberately not annotated to not screw with static analysis tools
-    public static @Nonnull String requireNonNullAndBlank(String s, @Nullable String message) {
-        if (s == null) {
-            throw new NullPointerException(message);
-        }
-        if (s.isBlank()) {
-            throw new IllegalArgumentException(message);
-        }
-        return s;
     }
 }
