@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -18,11 +19,13 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M> {
 
     private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
+    private static final int HTTP_OK = 200;
 
     // External dependencies
     private final @Nonnull HttpClient httpClient;
@@ -31,7 +34,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
 
     // Internal
     private final @Nonnull Logger logger;
-    private final List<R> requestHistory;
+    private final @Nonnull List<R> requestHistory;
 
     protected AbstractRemoteDataFetchService(
             @Nonnull HttpClient httpClient,
@@ -45,14 +48,20 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         requestHistory = new LinkedList<>(); // Rationale: most likely we'll have more writes than reads
     }
 
-    public final List<R> getRequestHistory() {
+    public final @Nonnull List<R> getRequestHistory() {
         return requestHistory;
     }
 
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
-        Objects.requireNonNull(apiRequest, "apiRequest is null");
-        HttpRequest httpRequest = apiRequest.toHTTPRequestBuilder()
-                .GET()
+        Objects.requireNonNull(apiRequest);
+
+        URI uri = apiRequest.getURI();
+        Map<String, String> headers = apiRequest.getHeaders();
+
+        HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder(uri);
+        headers.forEach(httpRequestBuilder::setHeader);
+
+        HttpRequest httpRequest = httpRequestBuilder.GET()
                 .timeout(TIMEOUT_DURATION)
                 .build();
 
@@ -63,7 +72,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             // While this might seem limited at first, every web service that follows industry conventions
             // and norms returns 200 OK on a successful response, and in any other case we're going to be
             // throwing an RFE anyway (even in the case of other 2XX codes), so might as well inline this here.
-            if (statusCode != 200) {
+            if (statusCode != HTTP_OK) {
                 throw new FailedRemoteDataFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
             }
 
@@ -79,5 +88,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         }
     }
 
-    protected abstract @Nonnull D parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException;
+    protected abstract @Nonnull D parseResponseBody(
+            @Nonnull byte[] responseBody,
+            @Nonnull ObjectMapper jsonParser) throws IOException;
 }
