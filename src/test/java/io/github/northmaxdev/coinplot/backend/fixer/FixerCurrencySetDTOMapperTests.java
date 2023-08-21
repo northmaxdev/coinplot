@@ -14,17 +14,15 @@ class FixerCurrencySetDTOMapperTests {
 
     @Test
     void mapsDTO() {
-        FixerCurrencySetDTO dto = new FixerCurrencySetDTO(
-                Map.of(
-                        "FOO", "Foo Dollar",
-                        "BAR", "Bar Pound"
-                )
-        );
+        var dto = new FixerCurrencySetDTO(Map.of(
+                "FOO", "Foo Dollar",
+                "BAR", "Bar Pound"
+        ));
         var mapper = new FixerCurrencySetDTOMapper();
 
         Set<Currency> expected = Set.of(
                 new Currency("FOO", "Foo Dollar"),
-                new Currency("BAR", "Bar Dollar")
+                new Currency("BAR", "Bar Pound")
         );
         Set<Currency> actual = mapper.map(dto);
 
