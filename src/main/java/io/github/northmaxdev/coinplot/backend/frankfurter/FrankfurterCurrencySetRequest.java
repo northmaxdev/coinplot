@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencySetRequest;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 
 import java.util.Objects;
@@ -14,7 +15,7 @@ public final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIR
         super();
     }
 
-    public FrankfurterCurrencySetRequest(@Nonnull HttpHost customHost) {
+    public FrankfurterCurrencySetRequest(@Nullable HttpHost customHost) {
         super(customHost);
     }
 
