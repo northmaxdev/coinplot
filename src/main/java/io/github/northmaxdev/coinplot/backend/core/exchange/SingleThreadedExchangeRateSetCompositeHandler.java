@@ -3,20 +3,21 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Set;
 
 // Cannot be instantiated directly (package-private), use ExchangeRateSetHandler::composedOf
 final class SingleThreadedExchangeRateSetCompositeHandler extends AbstractExchangeRateSetCompositeHandler {
 
-    public SingleThreadedExchangeRateSetCompositeHandler(@Nonnull ExchangeRateSetHandler... children) {
-        super(children); // Null-check in super
+    public SingleThreadedExchangeRateSetCompositeHandler(@Nullable ExchangeRateSetHandler... children) {
+        super(children);
     }
 
     @Override
-    public void handle(Set<ExchangeRate> dataset) {
+    public void handle(@Nonnull Set<ExchangeRate> dataset) {
         for (ExchangeRateSetHandler child : getChildren()) {
-            ExchangeRateSetHandler.handleIfNotNull(child, dataset); // Null-safety because why not?
+            ExchangeRateSetHandler.handleIfNotNull(child, dataset);
         }
     }
 }

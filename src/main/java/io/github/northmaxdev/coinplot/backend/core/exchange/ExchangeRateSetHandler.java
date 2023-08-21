@@ -10,20 +10,20 @@ import java.util.Set;
 @FunctionalInterface
 public interface ExchangeRateSetHandler {
 
-    void handle(Set<ExchangeRate> dataset);
+    void handle(@Nonnull Set<ExchangeRate> dataset);
 
     // Imitation of Kotlin/C# null-safe method calls
-    static void handleIfNotNull(@Nullable ExchangeRateSetHandler handler, Set<ExchangeRate> dataset) {
+    static void handleIfNotNull(@Nullable ExchangeRateSetHandler handler, @Nonnull Set<ExchangeRate> dataset) {
         if (handler != null) {
             handler.handle(dataset);
         }
     }
 
-    static @Nonnull ExchangeRateSetHandler composedOf(@Nonnull ExchangeRateSetHandler... handlers) {
+    static @Nonnull ExchangeRateSetHandler composedOf(@Nullable ExchangeRateSetHandler... handlers) {
         return new SingleThreadedExchangeRateSetCompositeHandler(handlers);
     }
 
-    static @Nonnull ExchangeRateSetHandler parallelComposedOf(@Nonnull ExchangeRateSetHandler... handlers) {
+    static @Nonnull ExchangeRateSetHandler parallelComposedOf(@Nullable ExchangeRateSetHandler... handlers) {
         return new ParallelExchangeRateSetCompositeHandler(handlers);
     }
 }

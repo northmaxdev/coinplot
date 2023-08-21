@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -17,13 +18,16 @@ final class ParallelExchangeRateSetCompositeHandler extends AbstractExchangeRate
 
     private final ExecutorService executorService;
 
-    public ParallelExchangeRateSetCompositeHandler(@Nonnull ExchangeRateSetHandler... children) {
-        super(children); // Null-check in super
-        executorService = Executors.newFixedThreadPool(children.length);
+    public ParallelExchangeRateSetCompositeHandler(@Nullable ExchangeRateSetHandler... children) {
+        super(children);
+        // Null-safe way to get array length
+        int threadCount = getChildren()
+                .size();
+        executorService = Executors.newFixedThreadPool(threadCount);
     }
 
     @Override
-    public void handle(Set<ExchangeRate> dataset) {
+    public void handle(@Nonnull Set<ExchangeRate> dataset) {
         getChildren()
                 .stream()
                 .map(handler -> (Runnable) () -> ExchangeRateSetHandler.handleIfNotNull(handler, dataset))
