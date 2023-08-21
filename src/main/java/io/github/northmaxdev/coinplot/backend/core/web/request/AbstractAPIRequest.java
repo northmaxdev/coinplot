@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.backend.core.web.request;
 
-import io.github.northmaxdev.coinplot.lang.Strings;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
@@ -39,10 +38,11 @@ public abstract class AbstractAPIRequest implements APIRequest {
         // Instantiation (AccessKey) //
         ///////////////////////////////
 
+        // Subclass must supply known-to-be-valid String values.
         public AccessKey {
-            Strings.requireNonNullAndBlank(name, "name is null or blank");
-            Strings.requireNonNullAndBlank(value, "value is null or blank");
-            Objects.requireNonNull(specificationStrategy, "specificationStrategy is null");
+            Objects.requireNonNull(name, "Access key name cannot be null");
+            Objects.requireNonNull(value, "Access key value cannot be null");
+            Objects.requireNonNull(specificationStrategy, "Access key specification strategy cannot be null");
         }
 
         public static @Nonnull AccessKey asQueryParameter(@Nonnull String name, @Nonnull String value) {
@@ -70,7 +70,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
         //////////////////////////////////////////
 
         @Override
-        public @Nonnull String toString() {
+        public String toString() {
             return value;
         }
     }
@@ -110,7 +110,7 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     // Deliberately non-final, merely a default implementation.
     // Subclass must supply known-to-be-valid String values.
-    protected Map<String, String> getParameters() {
+    protected @Nonnull Map<String, String> getParameters() {
         return Map.of();
     }
 
@@ -149,12 +149,12 @@ public abstract class AbstractAPIRequest implements APIRequest {
 
     // Deliberately non-final, merely a default implementation.
     // Subclass must supply known-to-be-valid String values.
-    protected Map<String, String> getHeadersExcludingAccessKey() {
+    protected @Nonnull Map<String, String> getHeadersExcludingAccessKey() {
         return Map.of();
     }
 
     @Override
-    public final Map<String, String> getHeaders() {
+    public final @Nonnull Map<String, String> getHeaders() {
         Map<String, String> headersWithoutKey = getHeadersExcludingAccessKey();
 
         if (accessKey != null && accessKey.isSpecifiedAsHeader()) {
