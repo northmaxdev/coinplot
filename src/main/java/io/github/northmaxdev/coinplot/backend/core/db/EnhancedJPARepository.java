@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.db;
 
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -23,7 +24,7 @@ public interface EnhancedJPARepository<T, I> extends JpaRepository<T, I> {
         return !isEmpty();
     }
 
-    default Set<T> findAllAsSet() {
+    default @Nonnull Set<T> findAllAsSet() {
         return new HashSet<>(findAll());
     }
 
