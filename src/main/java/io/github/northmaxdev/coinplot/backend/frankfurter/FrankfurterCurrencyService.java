@@ -17,8 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
-public final class FrankfurterCurrencyService
-        extends AbstractCurrencyFetchService<FrankfurterCurrencySetRequest, Map<String, String>> {
+public final class FrankfurterCurrencyService extends AbstractCurrencyFetchService<FrankfurterCurrencySetRequest, Map<String, String>> {
 
     private static final TypeReference<Map<String, String>> DTO_TYPE_REF = new TypeReference<>() {};
 
@@ -31,7 +30,7 @@ public final class FrankfurterCurrencyService
             @Nonnull CurrencyRepository repository,
             @Nonnull FrankfurterConfiguration config) {
         super(httpClient, jsonParser, new FrankfurterCurrencySetDTOMapper(), repository);
-        this.config = Objects.requireNonNull(config, "config is null");
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -42,9 +41,10 @@ public final class FrankfurterCurrencyService
                 .orElseGet(FrankfurterCurrencySetRequest::new);
     }
 
-    // @Nonnull annotation applied to a collection only due to the base class' method contract
     @Override
-    protected @Nonnull Map<String, String> parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull Map<String, String> parseResponseBody(
+            @Nonnull byte[] responseBody,
+            @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, DTO_TYPE_REF);
     }
 }
