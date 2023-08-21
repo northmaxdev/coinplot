@@ -33,9 +33,9 @@ public class Exchange implements Serializable { // IDK if JPA requires an @Embed
     private @Nonnull LocalDate date;
 
     public Exchange(@Nonnull Currency base, @Nonnull Currency target, @Nonnull LocalDate date) {
-        this.base = Objects.requireNonNull(base, "base is null");
-        this.target = Objects.requireNonNull(target, "target is null");
-        this.date = Objects.requireNonNull(date, "date is null");
+        this.base = Objects.requireNonNull(base, "Exchange base currency cannot be null");
+        this.target = Objects.requireNonNull(target, "Exchange target currency cannot be null");
+        this.date = Objects.requireNonNull(date, "Exchange date cannot be null");
     }
 
     protected Exchange() {
@@ -69,7 +69,8 @@ public class Exchange implements Serializable { // IDK if JPA requires an @Embed
     }
 
     @Override
-    public @Nonnull String toString() {
+    public String toString() {
+        // Note: this might be problematic in terms of null-safety (see related note in Currency::toString)
         return '[' + base.getCode() + " --> " + target.getCode() + ", " + date.format(ISO_LOCAL_DATE) + ']';
     }
 }

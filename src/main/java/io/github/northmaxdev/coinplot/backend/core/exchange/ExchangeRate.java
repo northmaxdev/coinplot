@@ -33,7 +33,7 @@ public class ExchangeRate implements Serializable { // Non-final (JPA requiremen
             @Nonnull LocalDate date,
             @Nonnull BigDecimal value) {
         exchange = new Exchange(base, target, date);
-        this.value = Objects.requireNonNull(value, "value is null");
+        this.value = Objects.requireNonNull(value, "Exchange rate value cannot be null");
     }
 
     protected ExchangeRate() {
@@ -70,7 +70,8 @@ public class ExchangeRate implements Serializable { // Non-final (JPA requiremen
     }
 
     @Override
-    public @Nonnull String toString() {
+    public String toString() {
+        // Note: this might be problematic in terms of null-safety (see related note in Currency::toString)
         return exchange + " (" + value + ')';
     }
 }
