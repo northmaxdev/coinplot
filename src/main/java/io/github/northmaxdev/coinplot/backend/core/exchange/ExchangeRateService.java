@@ -13,7 +13,8 @@ import java.util.Set;
 // Semantically not a @FunctionalInterface (additional abstract methods may be added in the future)
 public interface ExchangeRateService {
 
-    Set<ExchangeRate> getExchangeRates(@Nullable Currency base,
-                                       Set<Currency> targets,
-                                       @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException;
+    @Nonnull Set<ExchangeRate> getExchangeRates(
+            @Nullable Currency base,
+            @Nullable Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException;
 }

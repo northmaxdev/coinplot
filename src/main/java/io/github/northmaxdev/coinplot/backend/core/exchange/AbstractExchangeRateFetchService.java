@@ -28,13 +28,14 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
             @Nonnull ExchangeRateSetDTOMapper<D> dtoMapper,
             @Nonnull ExchangeRateRepository repository) {
         super(httpClient, jsonParser, dtoMapper);
-        this.repository = Objects.requireNonNull(repository, "repository is null");
+        this.repository = Objects.requireNonNull(repository);
     }
 
     @Override
-    public final Set<ExchangeRate> getExchangeRates(@Nullable Currency base,
-                                                    Set<Currency> targets,
-                                                    @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException {
+    public final @Nonnull Set<ExchangeRate> getExchangeRates(
+            @Nullable Currency base,
+            @Nullable Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException {
         try {
             R apiRequest = createAPIRequest(base, targets, dateInterval);
 
@@ -51,7 +52,8 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
         }
     }
 
-    protected abstract @Nonnull R createAPIRequest(@Nullable Currency base,
-                                                   Set<Currency> targets,
-                                                   @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException;
+    protected abstract @Nonnull R createAPIRequest(
+            @Nullable Currency base,
+            @Nullable Set<Currency> targets,
+            @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException;
 }
