@@ -40,9 +40,9 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             @Nonnull HttpClient httpClient,
             @Nonnull ObjectMapper jsonParser,
             @Nonnull DTOMapper<D, M> dtoMapper) {
-        this.httpClient = Objects.requireNonNull(httpClient, "httpClient is null");
-        this.jsonParser = Objects.requireNonNull(jsonParser, "jsonParser is null");
-        this.dtoMapper = Objects.requireNonNull(dtoMapper, "dtoMapper is null");
+        this.httpClient = Objects.requireNonNull(httpClient);
+        this.jsonParser = Objects.requireNonNull(jsonParser);
+        this.dtoMapper = Objects.requireNonNull(dtoMapper);
 
         logger = LoggerFactory.getLogger(getClass());
         requestHistory = new LinkedList<>(); // Rationale: most likely we'll have more writes than reads

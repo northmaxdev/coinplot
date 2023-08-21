@@ -14,8 +14,8 @@ public abstract class AbstractDataProvider implements DataProvider {
     private final @Nonnull ExchangeRateService exchangeRateService;
 
     protected AbstractDataProvider(@Nonnull CurrencyService currencyService, @Nonnull ExchangeRateService exchangeRateService) {
-        this.currencyService = Objects.requireNonNull(currencyService, "currencyService is null");
-        this.exchangeRateService = Objects.requireNonNull(exchangeRateService, "exchangeRateService is null");
+        this.currencyService = Objects.requireNonNull(currencyService);
+        this.exchangeRateService = Objects.requireNonNull(exchangeRateService);
     }
 
     @Override
