@@ -14,7 +14,7 @@ public interface ExchangeRateSetRequest extends APIRequest {
 
     Optional<Currency> getBase();
 
-    Set<Currency> getTargets();
+    @Nonnull Set<Currency> getTargets();
 
     @Nonnull LocalDateInterval getDateInterval();
 

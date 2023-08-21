@@ -22,6 +22,7 @@ public final class ExchangeRateSetRequests {
     public static final class ParametersBuilder {
 
         private static final String STANDARD_TARGET_DELIMITER = ",";
+        private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
         private final @Nonnull ExchangeRateSetRequest request;
         private @Nullable String baseParameterName;
@@ -31,40 +32,41 @@ public final class ExchangeRateSetRequests {
         private @Nonnull DateTimeFormatter dateFormatter;
 
         public ParametersBuilder(@Nonnull ExchangeRateSetRequest request) {
-            this.request = Objects.requireNonNull(request, "request is null");
-            this.baseParameterName = null;
-            this.targetsParameterName = null;
-            this.startParameterName = null;
-            this.endParameterName = null;
-            this.dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+            this.request = Objects.requireNonNull(request);
+
+            baseParameterName = null;
+            targetsParameterName = null;
+            startParameterName = null;
+            endParameterName = null;
+            dateFormatter = DEFAULT_DATE_FORMATTER;
         }
 
-        public ParametersBuilder baseName(@Nullable String parameterName) {
-            this.baseParameterName = parameterName;
+        public ParametersBuilder baseParameterName(@Nullable String s) {
+            baseParameterName = s;
             return this;
         }
 
-        public ParametersBuilder targetsName(@Nullable String parameterName) {
-            this.targetsParameterName = parameterName;
+        public ParametersBuilder targetsParameterName(@Nullable String s) {
+            targetsParameterName = s;
             return this;
         }
 
-        public ParametersBuilder startName(@Nullable String parameterName) {
-            this.startParameterName = parameterName;
+        public ParametersBuilder startParameterName(@Nullable String s) {
+            startParameterName = s;
             return this;
         }
 
-        public ParametersBuilder endName(@Nullable String parameterName) {
-            this.endParameterName = parameterName;
+        public ParametersBuilder endParameterName(@Nullable String s) {
+            endParameterName = s;
             return this;
         }
 
-        public ParametersBuilder dateFormatter(@Nonnull DateTimeFormatter formatter) {
-            this.dateFormatter = Objects.requireNonNull(formatter, "formatter is null");
+        public ParametersBuilder dateFormatter(@Nullable DateTimeFormatter f) {
+            dateFormatter = Objects.requireNonNullElse(f, DEFAULT_DATE_FORMATTER);
             return this;
         }
 
-        public Map<String, String> build() {
+        public @Nonnull Map<String, String> build() {
             Map<String, String> parameters = new HashMap<>(4);
 
             if (baseParameterName != null) {
@@ -144,18 +146,16 @@ public final class ExchangeRateSetRequests {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean basicPropertiesAreEqual(
-            @Nonnull ExchangeRateSetRequest a,
-            @Nonnull ExchangeRateSetRequest b) {
-        Objects.requireNonNull(a, "a is null");
-        Objects.requireNonNull(b, "b is null");
+    public static boolean commonPropertiesAreEqual(@Nonnull ExchangeRateSetRequest a, @Nonnull ExchangeRateSetRequest b) {
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
+
         return Objects.equals(a.getBase(), b.getBase())
                 && Objects.equals(a.getTargets(), b.getTargets())
                 && Objects.equals(a.getDateInterval(), b.getDateInterval());
     }
 
-    public static int hashBasicProperties(@Nonnull ExchangeRateSetRequest request) {
-        Objects.requireNonNull(request, "request is null");
-        return Objects.hash(request.getBase(), request.getTargets(), request.getDateInterval());
+    public static int hashCommonProperties(@Nullable ExchangeRateSetRequest r) {
+        return r == null ? 0 : Objects.hash(r.getBase(), r.getTargets(), r.getDateInterval());
     }
 }
