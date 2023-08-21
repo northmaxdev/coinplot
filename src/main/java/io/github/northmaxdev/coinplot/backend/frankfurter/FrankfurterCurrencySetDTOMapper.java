@@ -17,7 +17,7 @@ public final class FrankfurterCurrencySetDTOMapper implements CurrencySetDTOMapp
 
     @Override
     public @Nonnull Set<Currency> map(@Nonnull Map<String, String> dto) throws DTOMappingException {
-        return Objects.requireNonNull(dto, "dto is null")
+        return Objects.requireNonNull(dto)
                 .entrySet()
                 .stream()
                 .map(Currency::ofMapEntry)

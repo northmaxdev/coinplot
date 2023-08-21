@@ -14,7 +14,7 @@ class FrankfurterCurrencySetDTOMapperTests {
 
     @Test
     void mapsDTO() {
-        Map<String, String> dto = Map.of(
+        var dto = Map.of(
                 "EUR", "Euro",
                 "CHF", "Swiss Franc"
         );
