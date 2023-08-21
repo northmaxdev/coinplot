@@ -27,11 +27,11 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
             @Nonnull CurrencySetDTOMapper<D> dtoMapper,
             @Nonnull CurrencyRepository repository) {
         super(httpClient, jsonParser, dtoMapper);
-        this.repository = Objects.requireNonNull(repository, "repository is null");
+        this.repository = Objects.requireNonNull(repository);
     }
 
     @Override
-    public final Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
+    public final @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
         fetchIntoRepoIfEmpty();
         return repository.findAllAsSet();
     }

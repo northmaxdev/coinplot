@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -34,7 +35,7 @@ public final class TestUtilities {
     public static final Currency BAZ_POUND = new Currency("BAZ", "Baz Pound");
     public static final CurrencyService CURRENCY_SERVICE_MOCK = new CurrencyService() {
         @Override
-        public Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
+        public @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
             return Set.of(FOO_DOLLAR, BAR_FRANC, BAZ_POUND);
         }
 
