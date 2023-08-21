@@ -10,23 +10,22 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public abstract class AbstractExchangeRateSetDTOMapper<D> implements ExchangeRateSetDTOMapper<D> {
 
     private final @Nonnull CurrencyService currencyDataSource;
 
     protected AbstractExchangeRateSetDTOMapper(@Nonnull CurrencyService currencyDataSource) {
-        this.currencyDataSource = Objects.requireNonNull(currencyDataSource, "currencyDataSource is null");
+        this.currencyDataSource = Objects.requireNonNull(currencyDataSource);
     }
 
     // Utility method for subclasses. @Nullable on parameter is to merely mirror CurrencyService::getCurrency signature.
-    protected final @Nonnull Currency getCurrencyOrThrowDME(@Nullable String code) throws DTOMappingException {
+    protected final @Nonnull Currency tryGetCurrency(@Nullable String code) throws DTOMappingException {
         try {
-            Optional<Currency> result = currencyDataSource.getCurrency(code);
-            return result.orElseThrow(() -> new DTOMappingException("Currency by code \"" + code + "\" was not found"));
+            return currencyDataSource.getCurrency(code)
+                    .orElseThrow(() -> new DTOMappingException("Unknown currency: " + code));
         } catch (FailedDataFetchException e) {
-            throw new DTOMappingException("Failed to retrieve currency data (code: " + code + ')', e);
+            throw new DTOMappingException("Failed to fetch currency data", e);
         }
     }
 }
