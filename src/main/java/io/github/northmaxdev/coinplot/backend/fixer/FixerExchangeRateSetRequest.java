@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequests;
+import io.github.northmaxdev.coinplot.lang.MoreCollections;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -20,18 +21,18 @@ public final class FixerExchangeRateSetRequest
         implements ExchangeRateSetRequest {
 
     private final @Nullable Currency base;
-    private final Set<Currency> targets;
+    private final @Nonnull Set<Currency> targets;
     private final @Nonnull LocalDateInterval dateInterval;
 
     public FixerExchangeRateSetRequest(
             @Nonnull String accessKeyValue,
             @Nullable Currency base,
-            Set<Currency> targets,
+            @Nullable Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
         super(accessKeyValue);
         this.base = base;
-        this.targets = targets;
-        this.dateInterval = Objects.requireNonNull(dateInterval, "dateInterval is null");
+        this.targets = MoreCollections.emptyIfNull(targets);
+        this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
     @Override
@@ -40,7 +41,7 @@ public final class FixerExchangeRateSetRequest
     }
 
     @Override
-    public Set<Currency> getTargets() {
+    public @Nonnull Set<Currency> getTargets() {
         return targets;
     }
 
