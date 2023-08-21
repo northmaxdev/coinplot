@@ -5,44 +5,44 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequests;
+import io.github.northmaxdev.coinplot.lang.MoreCollections;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-
 public final class FrankfurterExchangeRateSetRequest
         extends AbstractFrankfurterAPIRequest
         implements ExchangeRateSetRequest {
 
+    private static final DateTimeFormatter ENDPOINT_DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+
     private final @Nullable Currency base;
-    private final Set<Currency> targets;
+    private final @Nonnull Set<Currency> targets;
     private final @Nonnull LocalDateInterval dateInterval;
 
     public FrankfurterExchangeRateSetRequest(
             @Nullable Currency base,
-            Set<Currency> targets,
+            @Nullable Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
-        this.base = base;
-        this.targets = targets;
-        this.dateInterval = Objects.requireNonNull(dateInterval, "dateInterval is null");
+        this(null, base, targets, dateInterval);
     }
 
     public FrankfurterExchangeRateSetRequest(
-            @Nonnull HttpHost customHost,
+            @Nullable HttpHost customHost,
             @Nullable Currency base,
-            Set<Currency> targets,
+            @Nullable Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
         super(customHost);
         this.base = base;
-        this.targets = targets;
-        this.dateInterval = Objects.requireNonNull(dateInterval, "dateInterval is null");
+        this.targets = MoreCollections.emptyIfNull(targets);
+        this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
     @Override
@@ -51,7 +51,7 @@ public final class FrankfurterExchangeRateSetRequest
     }
 
     @Override
-    public Set<Currency> getTargets() {
+    public @Nonnull Set<Currency> getTargets() {
         return targets;
     }
 
@@ -62,14 +62,14 @@ public final class FrankfurterExchangeRateSetRequest
 
     @Override
     protected @Nonnull String getEndpoint() {
-        return ISO_LOCAL_DATE.format(dateInterval.start()) + ".." + ISO_LOCAL_DATE.format(dateInterval.end());
+        return ENDPOINT_DATE_FORMATTER.format(dateInterval.start()) + ".." + ENDPOINT_DATE_FORMATTER.format(dateInterval.end());
     }
 
     @Override
-    protected Map<String, String> getParameters() {
+    protected @Nonnull Map<String, String> getParameters() {
         return new ExchangeRateSetRequests.ParametersBuilder(this)
-                .baseName("from")
-                .targetsName("to")
+                .baseParameterName("from")
+                .targetsParameterName("to")
                 .build();
     }
 
@@ -77,11 +77,11 @@ public final class FrankfurterExchangeRateSetRequest
     public boolean equals(Object obj) {
         return obj instanceof FrankfurterExchangeRateSetRequest that
                 && super.equals(obj) // For superclass fields
-                && ExchangeRateSetRequests.basicPropertiesAreEqual(this, that);
+                && ExchangeRateSetRequests.commonPropertiesAreEqual(this, that);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ ExchangeRateSetRequests.hashBasicProperties(this);
+        return super.hashCode() ^ ExchangeRateSetRequests.hashCommonProperties(this);
     }
 }
