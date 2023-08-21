@@ -56,12 +56,12 @@ public final class FixerExchangeRateSetRequest
     }
 
     @Override
-    protected Map<String, String> getParameters() {
+    protected @Nonnull Map<String, String> getParameters() {
         return new ExchangeRateSetRequests.ParametersBuilder(this)
-                .baseName("base")
-                .targetsName("symbols")
-                .startName("start_date")
-                .endName("end_date")
+                .baseParameterName("base")
+                .targetsParameterName("symbols")
+                .startParameterName("start_date")
+                .endParameterName("end_date")
                 .dateFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
                 .build();
     }
@@ -70,11 +70,11 @@ public final class FixerExchangeRateSetRequest
     public boolean equals(Object obj) {
         return obj instanceof FixerExchangeRateSetRequest that
                 && super.equals(obj) // For superclass fields
-                && ExchangeRateSetRequests.basicPropertiesAreEqual(this, that);
+                && ExchangeRateSetRequests.commonPropertiesAreEqual(this, that);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ ExchangeRateSetRequests.hashBasicProperties(this);
+        return super.hashCode() ^ ExchangeRateSetRequests.hashCommonProperties(this);
     }
 }

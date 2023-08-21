@@ -6,13 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
-import io.github.northmaxdev.coinplot.lang.NullChecks;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.util.Objects;
 
 @Service
 public final class FixerCurrencyService extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
@@ -26,7 +26,7 @@ public final class FixerCurrencyService extends AbstractCurrencyFetchService<Fix
             @Nonnull CurrencyRepository repository,
             @Nonnull FixerConfiguration config) {
         super(httpClient, jsonParser, new FixerCurrencySetDTOMapper(), repository);
-        this.config = NullChecks.forConfiguration(config);
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -37,7 +37,9 @@ public final class FixerCurrencyService extends AbstractCurrencyFetchService<Fix
     }
 
     @Override
-    protected @Nonnull FixerCurrencySetDTO parseResponseBody(byte[] responseBody, @Nonnull ObjectMapper jsonParser) throws IOException {
+    protected @Nonnull FixerCurrencySetDTO parseResponseBody(
+            @Nonnull byte[] responseBody,
+            @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, FixerCurrencySetDTO.class);
     }
 }

@@ -7,12 +7,12 @@ import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.AbstractExchangeRateSetDTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
-import io.github.northmaxdev.coinplot.lang.NullChecks;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -25,9 +25,10 @@ public final class FixerExchangeRateSetDTOMapper extends AbstractExchangeRateSet
     }
 
     @Override
-    public Set<ExchangeRate> map(@Nonnull FixerExchangeRateSetDTO dto) throws DTOMappingException {
-        NullChecks.forDTO(dto);
-        Currency base = getCurrencyOrThrowDME(dto.base());
+    public @Nonnull Set<ExchangeRate> map(@Nonnull FixerExchangeRateSetDTO dto) throws DTOMappingException {
+        Objects.requireNonNull(dto);
+
+        Currency base = tryGetCurrency(dto.base());
         return dto.rates()
                 .entrySet()
                 .stream()
@@ -40,7 +41,7 @@ public final class FixerExchangeRateSetDTOMapper extends AbstractExchangeRateSet
         return m.entrySet()
                 .stream()
                 .map(entry -> {
-                    Currency target = getCurrencyOrThrowDME(entry.getKey());
+                    Currency target = tryGetCurrency(entry.getKey());
                     BigDecimal value = entry.getValue();
                     return new ExchangeRate(base, target, date, value);
                 });
