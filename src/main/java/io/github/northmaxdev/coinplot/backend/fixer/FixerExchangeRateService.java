@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.exchange.AbstractExchangeRateFetchService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
+import io.github.northmaxdev.coinplot.lang.NullChecks;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
-import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -32,7 +32,7 @@ public final class FixerExchangeRateService extends
             @Nonnull ExchangeRateRepository repository,
             @Nonnull FixerConfiguration config) {
         super(httpClient, jsonParser, new FixerExchangeRateSetDTOMapper(currencyService), repository);
-        this.config = Objects.requireNonNull(config, "config is null");
+        this.config = NullChecks.forConfiguration(config);
     }
 
     @Override
