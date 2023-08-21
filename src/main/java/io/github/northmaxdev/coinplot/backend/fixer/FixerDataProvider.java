@@ -19,6 +19,6 @@ public final class FixerDataProvider extends AbstractDataProvider {
 
     @Override
     public @Nonnull String getDisplayName() {
-        return "fixer.io";
+        return "Fixer";
     }
 }
