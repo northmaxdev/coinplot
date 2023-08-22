@@ -1,4 +1,4 @@
-# v2.0.0
+# `v2.0.0`
 This branch is currently WIP.
 
 # About
@@ -6,8 +6,7 @@ This branch is currently WIP.
 Its core features include:
 * Full support for multiple data providers
   * [Fixer](https://fixer.io/)
-  * [Frankfurter](https://www.frankfurter.app/) *(including self-hosted instances)* 
-  * [currencyapi.com](https://currencyapi.com/)
+  * [Frankfurter](https://www.frankfurter.app/) *(including self-hosted instances)*
 * An efficient internal architecture that intelligently makes heavy use of caching, which helps substantially minimize
   or completely avoid outgoing API requests
 * Localization in multiple languages with support for RTL layouts
