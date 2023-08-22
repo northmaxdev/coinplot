@@ -12,11 +12,11 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,12 +54,12 @@ public final class Tests {
     // APIRequest stuff //
     //////////////////////
 
-    public static <R extends APIRequest> void assertExpectedURIsContainActual(
-            Supplier<R> requestSupplier,
-            String... possibleOutcomes) {
-        R request = requestSupplier.get();
+    public static <R extends APIRequest> void assertExpectedURIsContainActual(@Nonnull R request, @Nonnull String... possibleOutcomes) {
+        Objects.requireNonNull(request);
+        Objects.requireNonNull(possibleOutcomes);
 
-        Iterable<URI> expected = Arrays.stream(possibleOutcomes)
+        Iterable<URI> expected = Stream.of(possibleOutcomes)
+                .filter(Objects::nonNull) // Just in case
                 .map(URI::create)
                 .toList();
         URI actual = request.getURI();
@@ -68,10 +68,11 @@ public final class Tests {
     }
 
     @SafeVarargs
-    public static <R extends APIRequest> void assertExpectedHeadersContainActual(
-            Supplier<R> requestSupplier,
-            Map.Entry<String, String>... expectedHeaders) {
-        R request = requestSupplier.get();
+    public static <R extends APIRequest> void assertExpectedHeadersEqualActual(
+            @Nonnull R request,
+            @Nonnull Map.Entry<String, String>... expectedHeaders) {
+        Objects.requireNonNull(request);
+        // Map::ofEntries performs a deep null-check on its parameter
 
         Map<String, String> expected = Map.ofEntries(expectedHeaders);
         Map<String, String> actual = request.getHeaders();
