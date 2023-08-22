@@ -4,8 +4,8 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import org.junit.jupiter.api.Test;
 
-import static io.github.northmaxdev.coinplot.TestUtilities.assertExpectedURIsContainActual;
-import static io.github.northmaxdev.coinplot.TestUtilities.verifyAPIRequestEquals;
+import static io.github.northmaxdev.coinplot.Tests.assertExpectedURIsContainActual;
+import static io.github.northmaxdev.coinplot.Tests.verifyAPIRequestEquals;
 
 class FrankfurterCurrencySetRequestTests {
 

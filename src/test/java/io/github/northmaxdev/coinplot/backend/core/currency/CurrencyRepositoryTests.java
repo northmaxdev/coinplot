@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Set;
 
-import static io.github.northmaxdev.coinplot.TestUtilities.BAR_FRANC;
-import static io.github.northmaxdev.coinplot.TestUtilities.FOO_DOLLAR;
+import static io.github.northmaxdev.coinplot.Tests.BAR_FRANC;
+import static io.github.northmaxdev.coinplot.Tests.FOO_DOLLAR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest

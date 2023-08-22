@@ -11,10 +11,10 @@ import java.time.Month;
 import java.util.Map;
 import java.util.Set;
 
-import static io.github.northmaxdev.coinplot.TestUtilities.BAR_FRANC;
-import static io.github.northmaxdev.coinplot.TestUtilities.BAZ_POUND;
-import static io.github.northmaxdev.coinplot.TestUtilities.CURRENCY_SERVICE_MOCK;
-import static io.github.northmaxdev.coinplot.TestUtilities.FOO_DOLLAR;
+import static io.github.northmaxdev.coinplot.Tests.BAR_FRANC;
+import static io.github.northmaxdev.coinplot.Tests.BAZ_POUND;
+import static io.github.northmaxdev.coinplot.Tests.CURRENCY_SERVICE_MOCK;
+import static io.github.northmaxdev.coinplot.Tests.FOO_DOLLAR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FrankfurterExchangeRateSetDTOMapperTests {

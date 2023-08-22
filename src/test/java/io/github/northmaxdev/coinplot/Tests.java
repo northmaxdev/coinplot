@@ -20,9 +20,9 @@ import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public final class TestUtilities {
+public final class Tests {
 
-    private TestUtilities() {
+    private Tests() {
         throw new UnsupportedOperationException();
     }
 
