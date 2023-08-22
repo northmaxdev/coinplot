@@ -11,7 +11,7 @@ class FrankfurterCurrencySetRequestTests {
 
     @Test
     void reqURI() {
-        assertExpectedURIsContainActual(FrankfurterCurrencySetRequest::new, "https://api.frankfurter.app/currencies");
+        assertExpectedURIsContainActual(new FrankfurterCurrencySetRequest(), "https://api.frankfurter.app/currencies");
     }
 
     @Test
