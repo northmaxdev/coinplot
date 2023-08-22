@@ -32,13 +32,13 @@ public final class FrankfurterExchangeRateService extends
             @Nonnull ExchangeRateRepository repository,
             @Nonnull FrankfurterConfiguration config) {
         super(httpClient, jsonParser, new FrankfurterExchangeRateSetDTOMapper(currencyService), repository);
-        this.config = Objects.requireNonNull(config, "config is null");
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(
             @Nullable Currency base,
-            Set<Currency> targets,
+            @Nullable Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException {
         return config.getCustomHost()
                 .map(host -> new FrankfurterExchangeRateSetRequest(host, base, targets, dateInterval))
@@ -47,7 +47,7 @@ public final class FrankfurterExchangeRateService extends
 
     @Override
     protected @Nonnull FrankfurterExchangeRateSetDTO parseResponseBody(
-            byte[] responseBody,
+            @Nonnull byte[] responseBody,
             @Nonnull ObjectMapper jsonParser) throws IOException {
         return jsonParser.readValue(responseBody, FrankfurterExchangeRateSetDTO.class);
     }
