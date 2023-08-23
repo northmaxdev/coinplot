@@ -16,8 +16,6 @@ final class SingleThreadedExchangeRateSetCompositeHandler extends AbstractExchan
 
     @Override
     public void handle(@Nonnull Set<ExchangeRate> dataset) {
-        for (ExchangeRateSetHandler child : getChildren()) {
-            ExchangeRateSetHandler.handleIfNotNull(child, dataset);
-        }
+        getChildren().forEach(child -> ExchangeRateSetHandler.handleIfNotNull(child, dataset));
     }
 }
