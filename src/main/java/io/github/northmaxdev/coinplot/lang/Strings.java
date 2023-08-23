@@ -29,10 +29,14 @@ public final class Strings {
     }
 
     public static Optional<String> substringBefore(@Nonnull String s, @Nonnull String delimiter) {
-        return indexOf(s, delimiter) // Implicit null-check
-                .stream()
-                .mapToObj(i -> s.substring(0, i))
-                .findFirst(); // No difference between findFirst and findAny because we'll always have at most one element
+        OptionalInt delimiterIndex = indexOf(s, delimiter); // Implicit null-check
+
+        if (delimiterIndex.isEmpty()) {
+            return Optional.empty();
+        }
+
+        String substring = s.substring(0, delimiterIndex.getAsInt());
+        return Optional.of(substring);
     }
 
     public static Optional<String> blankToOptional(@Nullable String s) {
