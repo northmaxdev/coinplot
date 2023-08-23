@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public final class MoreCollections {
+public final class MoreCollections { // To avoid name collisions with java.util.Collections
 
     private MoreCollections() {
         throw new UnsupportedOperationException();
