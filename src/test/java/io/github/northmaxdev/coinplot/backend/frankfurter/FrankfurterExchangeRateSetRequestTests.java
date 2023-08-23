@@ -28,10 +28,11 @@ class FrankfurterExchangeRateSetRequestTests {
         );
 
         assertExpectedURIsContainActual(request,
-                // Targets might themselves be specified in varying orders
+                // Order of targets: BAR (1st), BAZ (2nd)
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&to=BAR%2CBAZ",
-                "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&to=BAZ%2CBAR",
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?to=BAR%2CBAZ&from=FOO",
+                // Order of targets: BAZ (1st), BAR (2nd)
+                "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&to=BAZ%2CBAR",
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?to=BAZ%2CBAR&from=FOO"
         );
     }
