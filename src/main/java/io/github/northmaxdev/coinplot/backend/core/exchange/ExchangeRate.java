@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-public class ExchangeRate implements Serializable { // Non-final (JPA requirement)
+public class ExchangeRate implements Serializable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.1)
 
     @Serial
     private static final long serialVersionUID = 7191575760397094585L;
@@ -37,7 +37,7 @@ public class ExchangeRate implements Serializable { // Non-final (JPA requiremen
     }
 
     protected ExchangeRate() {
-        // JPA spec requires a public or protected no-arg constructor
+        // JPA spec requires a public or protected no-arg constructor (JPA 3.1, section 2.1)
     }
 
     public @Nonnull Currency getBase() {
@@ -58,20 +58,17 @@ public class ExchangeRate implements Serializable { // Non-final (JPA requiremen
 
     @Override
     public boolean equals(Object obj) {
-        // Null-safety just in case
         return obj instanceof ExchangeRate that
                 && Objects.equals(this.exchange, that.exchange);
     }
 
     @Override
     public int hashCode() {
-        // Null-safety just in case
         return Objects.hashCode(exchange);
     }
 
     @Override
     public String toString() {
-        // Note: this might be problematic in terms of null-safety (see related note in Currency::toString)
         return exchange + " (" + value + ')';
     }
 }
