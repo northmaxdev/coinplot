@@ -13,10 +13,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-
 @Embeddable
-public class Exchange implements Serializable { // IDK if JPA requires an @Embeddable to be non-final, but just in case
+public class Exchange implements Serializable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.6)
 
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
@@ -39,7 +37,7 @@ public class Exchange implements Serializable { // IDK if JPA requires an @Embed
     }
 
     protected Exchange() {
-        // JPA spec requires a public or protected no-arg constructor
+        // JPA spec requires a public or protected no-arg constructor (JPA 3.1, section 2.1)
     }
 
     public @Nonnull Currency getBase() {
@@ -56,21 +54,21 @@ public class Exchange implements Serializable { // IDK if JPA requires an @Embed
 
     @Override
     public boolean equals(Object obj) {
-        // Null-safety just in case
+        // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
         return obj instanceof Exchange that
-                && Objects.equals(this.base, that.base)
-                && Objects.equals(this.target, that.target)
+                && Objects.equals(this.getBase(), that.getBase())
+                && Objects.equals(this.getTarget(), that.getTarget())
                 && Objects.equals(this.date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(base, target, date);
+        // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
+        return Objects.hash(getBase(), getTarget(), date);
     }
 
     @Override
     public String toString() {
-        // Note: this might be problematic in terms of null-safety (see related note in Currency::toString)
-        return '[' + base.getCode() + " --> " + target.getCode() + ", " + date.format(ISO_LOCAL_DATE) + ']';
+        return "[%s --> %s, %s]".formatted(base, target, date);
     }
 }
