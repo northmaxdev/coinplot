@@ -16,7 +16,11 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
             entry("eq", "equals/hashCode contract"),
             entry("reqURI", "APIRequest actual URI is contained in expected outcomes"),
             entry("reqHeaders", "APIRequest actual headers equal to expected"),
-            entry("mapsDTO", "DTO maps to a model representation as expected")
+            entry("mapsDTO", "DTO maps to a model representation as expected"),
+            entry("repoEmpty", "isEmpty returns true on empty repository"),
+            entry("repoNonEmpty", "isEmpty returns false on non-empty repository"),
+            entry("findAllAsSetOnEmpty", "findAllAsSet returns empty Set on empty repository"),
+            entry("findAllAsSetOnNonEmpty", "findAllAsSet returns non-empty Set on non-empty repository")
     );
 
     @Override
