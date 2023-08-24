@@ -3,6 +3,8 @@
 package io.github.northmaxdev.coinplot;
 
 import io.github.northmaxdev.coinplot.lang.Strings;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.DisplayNameGenerator;
 
 import java.lang.reflect.Method;
@@ -31,28 +33,29 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
     );
 
     @Override
-    public String generateDisplayNameForClass(Class<?> aClass) {
+    public @Nonnull String generateDisplayNameForClass(@Nonnull Class<?> aClass) {
+        // Explicit null-checks are not needed here
         String testClassName = aClass.getSimpleName();
         return Strings.substringBefore(testClassName, "Tests")
                 .map(s -> "Tests for: [" + s + ']')
-                .orElse(markedAsIs(testClassName));
+                .orElse(markedUnknown(testClassName));
     }
 
     @Override
-    public String generateDisplayNameForNestedClass(Class<?> aClass) {
+    public @Nonnull String generateDisplayNameForNestedClass(@Nonnull Class<?> aClass) {
         // The convention in this project is to use nested test classes for nested production classes.
         // In this case, the semantic difference between a top-level test class and a nested test class is none.
         return generateDisplayNameForClass(aClass);
     }
 
     @Override
-    public String generateDisplayNameForMethod(Class<?> aClass, Method method) {
+    public @Nonnull String generateDisplayNameForMethod(@Nonnull Class<?> aClass, @Nonnull Method method) {
+        // Explicit null-checks are not needed here
         String testMethodName = method.getName();
-        return MAGIC_TEST_METHOD_NAMES.getOrDefault(testMethodName, markedAsIs(testMethodName));
+        return MAGIC_TEST_METHOD_NAMES.getOrDefault(testMethodName, markedUnknown(testMethodName));
     }
 
-    private static String markedAsIs(String s) {
-        // There's no conventional syntax for the purpose of this method; Just do whatever.
-        return '<' + s + '>';
+    private static @Nonnull String markedUnknown(@Nullable String name) {
+        return "(!) " + name;
     }
 }
