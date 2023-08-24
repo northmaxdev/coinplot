@@ -5,13 +5,17 @@ package io.github.northmaxdev.coinplot;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,6 +53,35 @@ public final class Tests {
             };
         }
     };
+
+    ////////////////////////
+    // ExchangeRate stuff //
+    ////////////////////////
+
+    public static final ExchangeRate FOO_TO_BAR_JAN_1_2000 = new ExchangeRate(
+            FOO_DOLLAR,
+            BAR_FRANC,
+            LocalDate.of(2000, Month.JANUARY, 1),
+            BigDecimal.valueOf(1.618)
+    );
+    public static final ExchangeRate FOO_TO_BAZ_JAN_1_2000 = new ExchangeRate(
+            FOO_DOLLAR,
+            BAZ_POUND,
+            LocalDate.of(2000, Month.JANUARY, 1),
+            BigDecimal.valueOf(3.1415)
+    );
+    public static final ExchangeRate FOO_TO_BAR_JAN_2_2000 = new ExchangeRate(
+            FOO_DOLLAR,
+            BAR_FRANC,
+            LocalDate.of(2000, Month.JANUARY, 2),
+            BigDecimal.valueOf(1.619)
+    );
+    public static final ExchangeRate FOO_TO_BAZ_JAN_2_2000 = new ExchangeRate(
+            FOO_DOLLAR,
+            BAZ_POUND,
+            LocalDate.of(2000, Month.JANUARY, 2),
+            BigDecimal.valueOf(3.1401)
+    );
 
     //////////////////////
     // APIRequest stuff //
