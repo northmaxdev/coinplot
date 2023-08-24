@@ -3,41 +3,55 @@
 package io.github.northmaxdev.coinplot.lang.chrono;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.Period;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class LocalDateIntervalTests {
 
-    @Test
-    @DisplayName("Method isReversed returns true if start is after end")
-    void isReversedOnAfter() {
-        LocalDate start = LocalDate.of(2000, Month.FEBRUARY, 1);
-        LocalDate end = LocalDate.of(2000, Month.JANUARY, 1);
-        LocalDateInterval dateRange = new LocalDateInterval(start, end);
+    static final LocalDate JAN_1 = LocalDate.of(2000, Month.JANUARY, 1);
+    static final LocalDate JAN_14 = LocalDate.of(2000, Month.JANUARY, 14);
 
-        assertThat(dateRange.isReversed()).isTrue();
+    @ParameterizedTest
+    @MethodSource("provideIsReversedExpectations")
+    @DisplayName("isReversed returns the expected value for a given interval")
+    void isReversedWhenExpected(LocalDate start, LocalDate end, boolean expected) {
+        LocalDateInterval interval = new LocalDateInterval(start, end);
+
+        assertThat(interval.isReversed()).isEqualTo(expected);
     }
 
-    @Test
-    @DisplayName("Method isReversed returns false if start is before end")
-    void isNotReversedOnBefore() {
-        LocalDate start = LocalDate.of(2000, Month.JANUARY, 1);
-        LocalDate end = LocalDate.of(2000, Month.FEBRUARY, 1);
-        LocalDateInterval dateRange = new LocalDateInterval(start, end);
-
-        assertThat(dateRange.isReversed()).isFalse();
+    Stream<Arguments> provideIsReversedExpectations() {
+        return Stream.of(
+                arguments(JAN_1, JAN_14, false),
+                arguments(JAN_14, JAN_1, true),
+                arguments(JAN_1, JAN_1, false)
+        );
     }
 
-    @Test
-    @DisplayName("Method isReversed returns false if start is equal to end")
-    void isNotReversedOnEqual() {
-        LocalDate date = LocalDate.of(2000, Month.JANUARY, 1);
-        LocalDateInterval dateRange = new LocalDateInterval(date, date);
+    @ParameterizedTest
+    @MethodSource("providePeriods")
+    @DisplayName("toPeriod returns the expected value for a given interval")
+    void expectedPeriodEqualsActual(LocalDate start, LocalDate end, Period expected) {
+        LocalDateInterval interval = new LocalDateInterval(start, end);
 
-        assertThat(dateRange.isReversed()).isFalse();
+        // LocalDateInterval is inclusive on both ends
+        assertThat(interval.toPeriod()).isEqualTo(expected);
+    }
+
+    Stream<Arguments> providePeriods() {
+        return Stream.of(
+                arguments(JAN_1, JAN_14, Period.ofDays(14)),
+                arguments(JAN_14, JAN_1, Period.ofDays(-14)),
+                arguments(JAN_1, JAN_1, Period.ZERO)
+        );
     }
 }
