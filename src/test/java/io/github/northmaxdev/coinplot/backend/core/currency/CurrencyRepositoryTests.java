@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,23 +26,27 @@ class CurrencyRepositoryTests {
     }
 
     @Test
-    void repoEmpty() {
+    @DisplayName("isEmpty returns true on empty repository")
+    void empty() {
         assertThat(repository.isEmpty()).isTrue();
     }
 
     @Test
-    void repoNonEmpty() {
+    @DisplayName("isEmpty returns false on non-empty repository")
+    void notEmpty() {
         repository.save(FOO_DOLLAR);
 
         assertThat(repository.isEmpty()).isFalse();
     }
 
     @Test
+    @DisplayName("findAllAsSet returns empty Set on empty repository")
     void findAllAsSetOnEmpty() {
         assertThat(repository.findAllAsSet()).isEmpty();
     }
 
     @Test
+    @DisplayName("findAllAsSet returns non-empty Set on non-empty repository")
     void findAllAsSetOnNonEmpty() {
         repository.save(FOO_DOLLAR);
         repository.save(BAR_FRANC);
