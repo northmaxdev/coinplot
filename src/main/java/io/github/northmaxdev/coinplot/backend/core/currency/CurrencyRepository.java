@@ -12,6 +12,7 @@ import java.util.Set;
 @Repository
 public interface CurrencyRepository extends EnhancedJPARepository<Currency, String> {
 
+    @Override
     @Query("SELECT c FROM Currency c")
     @Nonnull Set<Currency> findAllAsSet();
 }
