@@ -17,19 +17,11 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
     private static final Map<String, String> MAGIC_TEST_METHOD_NAMES = Map.ofEntries(
             // Standard Java stuff
             entry("eq", "equals/hashCode contract"),
-
             // APIRequest stuff
             entry("reqURI", "APIRequest actual URI is contained in expected outcomes"),
             entry("reqHeaders", "APIRequest actual headers equal to expected"),
-
             // DTO stuff
-            entry("mapsDTO", "DTO maps to a model representation as expected"),
-
-            // Repository stuff
-            entry("repoEmpty", "isEmpty returns true on empty repository"),
-            entry("repoNonEmpty", "isEmpty returns false on non-empty repository"),
-            entry("findAllAsSetOnEmpty", "findAllAsSet returns empty Set on empty repository"),
-            entry("findAllAsSetOnNonEmpty", "findAllAsSet returns non-empty Set on non-empty repository")
+            entry("mapsDTO", "DTO maps to a model representation as expected")
     );
 
     @Override
