@@ -80,11 +80,11 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             D dto = parseResponseBody(response.body(), jsonParser);
             M model = dtoMapper.map(dto);
 
-            logger.info("Completed request: " + apiRequest);
+            logger.info("Completed request: {}", apiRequest);
             requestHistory.add(apiRequest);
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
-            logger.error("Failed request: " + apiRequest + " (reason: " + e + ')');
+            logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
             throw new FailedRemoteDataFetchException(e);
         }
     }
