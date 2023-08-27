@@ -76,7 +76,6 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
                 throw new FailedRemoteDataFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
             }
 
-            // NOTE: response::body might return null if redirections are in play, please keep that in mind
             D dto = parseResponseBody(response.body(), jsonParser);
             M model = dtoMapper.map(dto);
 
