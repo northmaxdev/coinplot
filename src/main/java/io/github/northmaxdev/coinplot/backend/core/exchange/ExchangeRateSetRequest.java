@@ -7,20 +7,14 @@ import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 
-import java.util.Optional;
 import java.util.Set;
 
 public interface ExchangeRateSetRequest extends APIRequest {
 
-    Optional<Currency> getBase();
+    @Nonnull Currency getBase();
 
+    // Must not be empty and must not contain nulls!
     @Nonnull Set<Currency> getTargets();
 
     @Nonnull LocalDateInterval getDateInterval();
-
-    default boolean isExplicitlyDefined() {
-        Optional<Currency> base = getBase();
-        Set<Currency> targets = getTargets();
-        return base.isPresent() && !targets.isEmpty();
-    }
 }
