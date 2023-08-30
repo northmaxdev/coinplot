@@ -8,36 +8,34 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetReque
 import io.github.northmaxdev.coinplot.lang.MoreCollections;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 public final class FixerExchangeRateSetRequest
         extends AbstractFixerAPIRequest
         implements ExchangeRateSetRequest {
 
-    private final @Nullable Currency base;
+    private final @Nonnull Currency base;
     private final @Nonnull Set<Currency> targets;
     private final @Nonnull LocalDateInterval dateInterval;
 
     public FixerExchangeRateSetRequest(
             @Nonnull String accessKeyValue,
-            @Nullable Currency base,
-            @Nullable Set<Currency> targets,
+            @Nonnull Currency base,
+            @Nonnull Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
         super(accessKeyValue);
-        this.base = base;
-        this.targets = MoreCollections.emptyIfNull(targets);
+        this.base = Objects.requireNonNull(base);
+        this.targets = MoreCollections.requireNonEmptyWithoutNulls(targets);
         this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
     @Override
-    public Optional<Currency> getBase() {
-        return Optional.ofNullable(base);
+    public @Nonnull Currency getBase() {
+        return base;
     }
 
     @Override

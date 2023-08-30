@@ -14,7 +14,6 @@ import org.apache.hc.core5.http.HttpHost;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 public final class FrankfurterExchangeRateSetRequest
@@ -23,31 +22,31 @@ public final class FrankfurterExchangeRateSetRequest
 
     private static final DateTimeFormatter ENDPOINT_DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
-    private final @Nullable Currency base;
+    private final @Nonnull Currency base;
     private final @Nonnull Set<Currency> targets;
     private final @Nonnull LocalDateInterval dateInterval;
 
     public FrankfurterExchangeRateSetRequest(
-            @Nullable Currency base,
-            @Nullable Set<Currency> targets,
+            @Nonnull Currency base,
+            @Nonnull Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
         this(null, base, targets, dateInterval);
     }
 
     public FrankfurterExchangeRateSetRequest(
             @Nullable HttpHost customHost,
-            @Nullable Currency base,
-            @Nullable Set<Currency> targets,
+            @Nonnull Currency base,
+            @Nonnull Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) {
         super(customHost);
-        this.base = base;
-        this.targets = MoreCollections.emptyIfNull(targets);
+        this.base = Objects.requireNonNull(base);
+        this.targets = MoreCollections.requireNonEmptyWithoutNulls(targets);
         this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
     @Override
-    public Optional<Currency> getBase() {
-        return Optional.ofNullable(base);
+    public @Nonnull Currency getBase() {
+        return base;
     }
 
     @Override
