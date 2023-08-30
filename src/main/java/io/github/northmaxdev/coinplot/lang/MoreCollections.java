@@ -30,6 +30,14 @@ public final class MoreCollections { // To avoid name collisions with java.util.
                 .noneMatch(Objects::isNull);
     }
 
+    public static <T, C extends Collection<T>> @Nonnull C requireNonEmptyWithoutNulls(C collection) { // Deliberately unannotated
+        boolean ok = isNotEmptyAndWithoutNulls(collection); // Implicit null-check
+        if (!ok) {
+            throw new IllegalArgumentException("Collection must be non-empty and without nulls");
+        }
+        return collection;
+    }
+
     public static <T> @Nonnull Set<T> emptyIfNull(@Nullable Set<T> set) {
         return Objects.requireNonNullElseGet(set, Set::of);
     }
