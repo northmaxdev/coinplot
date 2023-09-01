@@ -10,6 +10,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public interface ExchangeRateSetRequest extends APIRequest {
 
@@ -19,6 +20,14 @@ public interface ExchangeRateSetRequest extends APIRequest {
     @Nonnull Set<Currency> getTargets();
 
     @Nonnull LocalDateInterval getDateInterval();
+
+    default @Nonnull Stream<Exchange> toExchanges() {
+        return getDateInterval()
+                .dates()
+                .flatMap(date -> getTargets()
+                        .stream()
+                        .map(target -> new Exchange(getBase(), target, date)));
+    }
 
     // Constructs a "reduced" version of this request by removing the provided exchanges.
     // Calling this method with a null argument is permitted and is equivalent to an empty
