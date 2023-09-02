@@ -9,7 +9,6 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateReposito
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +36,8 @@ public final class FrankfurterExchangeRateService extends
 
     @Override
     protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(
-            @Nullable Currency base,
-            @Nullable Set<Currency> targets,
+            @Nonnull Currency base,
+            @Nonnull Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) throws CannotCreateAPIRequestException {
         return config.getCustomHost()
                 .map(host -> new FrankfurterExchangeRateSetRequest(host, base, targets, dateInterval))

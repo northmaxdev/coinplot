@@ -6,7 +6,6 @@ import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import java.util.Set;
 public interface ExchangeRateService {
 
     @Nonnull Set<ExchangeRate> getExchangeRates(
-            @Nullable Currency base,
-            @Nullable Set<Currency> targets,
+            @Nonnull Currency base,
+            @Nonnull Set<Currency> targets,
             @Nonnull LocalDateInterval dateInterval) throws FailedDataFetchException;
 }
