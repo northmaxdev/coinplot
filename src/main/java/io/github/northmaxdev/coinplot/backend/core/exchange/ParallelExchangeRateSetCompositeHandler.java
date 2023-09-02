@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +29,7 @@ final class ParallelExchangeRateSetCompositeHandler extends AbstractExchangeRate
 
     @Override
     public void handle(@Nonnull Set<ExchangeRate> dataset) {
+        Objects.requireNonNull(dataset);
         getChildren()
                 .stream()
                 .map(handler -> (Runnable) () -> ExchangeRateSetHandler.handleIfNotNull(handler, dataset))
