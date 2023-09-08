@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.lang;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -44,5 +45,11 @@ public final class MoreCollections { // To avoid name collisions with java.util.
 
     public static <T> @Nonnull List<T> emptyIfNull(@Nullable T[] array) {
         return array == null ? List.of() : List.of(array);
+    }
+
+    public static <T> @Nonnull List<T> deeplyDenullified(@Nullable T[] array) {
+        return array == null ? List.of() : Arrays.stream(array)
+                .filter(Objects::nonNull)
+                .toList();
     }
 }
