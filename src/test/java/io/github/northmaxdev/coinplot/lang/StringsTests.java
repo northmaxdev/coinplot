@@ -47,22 +47,4 @@ class StringsTests {
 
         assertThat(actual).contains("hi");
     }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    @DisplayName("emptyToOptional is empty on empty and null values")
-    void emptyToOptionalForEmptyArg(String s) {
-        Optional<String> actual = Strings.emptyToOptional(s);
-
-        assertThat(actual).isEmpty();
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {" ", "\t", "\n", "Korhal"})
-    @DisplayName("emptyToOptional returns a non-null, non-empty argument as-is")
-    void emptyToOptionalForNonEmptyArg(String s) {
-        Optional<String> actual = Strings.emptyToOptional(s);
-
-        assertThat(actual).contains(s);
-    }
 }
