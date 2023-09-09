@@ -2,50 +2,29 @@
 
 package io.github.northmaxdev.coinplot.backend.fixer;
 
-import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequests;
-import io.github.northmaxdev.coinplot.lang.MoreCollections;
-import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public final class FixerExchangeRateSetRequest
         extends AbstractFixerAPIRequest
         implements ExchangeRateSetRequest {
 
-    private final @Nonnull Currency base;
-    private final @Nonnull Set<Currency> targets;
-    private final @Nonnull LocalDateInterval dateInterval;
+    private final @Nonnull ExchangeBatch data;
 
-    public FixerExchangeRateSetRequest(
-            @Nonnull String accessKeyValue,
-            @Nonnull Currency base,
-            @Nonnull Set<Currency> targets,
-            @Nonnull LocalDateInterval dateInterval) {
+    public FixerExchangeRateSetRequest(@Nonnull String accessKeyValue, @Nonnull ExchangeBatch data) {
         super(accessKeyValue);
-        this.base = Objects.requireNonNull(base);
-        this.targets = MoreCollections.requireNonEmptyWithoutNulls(targets);
-        this.dateInterval = Objects.requireNonNull(dateInterval);
+        this.data = Objects.requireNonNull(data);
     }
 
     @Override
-    public @Nonnull Currency getBase() {
-        return base;
-    }
-
-    @Override
-    public @Nonnull Set<Currency> getTargets() {
-        return targets;
-    }
-
-    @Override
-    public @Nonnull LocalDateInterval getDateInterval() {
-        return dateInterval;
+    public @Nonnull ExchangeBatch getRequestData() {
+        return data;
     }
 
     @Override
@@ -68,11 +47,11 @@ public final class FixerExchangeRateSetRequest
     public boolean equals(Object obj) {
         return obj instanceof FixerExchangeRateSetRequest that
                 && super.equals(obj) // For superclass fields
-                && ExchangeRateSetRequests.commonPropertiesAreEqual(this, that);
+                && Objects.equals(this.data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() ^ ExchangeRateSetRequests.hashCommonProperties(this);
+        return data.hashCode();
     }
 }
