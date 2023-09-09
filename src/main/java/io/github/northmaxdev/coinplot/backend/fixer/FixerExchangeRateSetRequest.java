@@ -4,7 +4,6 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequest;
-import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateSetRequests;
 import jakarta.annotation.Nonnull;
 
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,7 @@ public final class FixerExchangeRateSetRequest
 
     @Override
     protected @Nonnull Map<String, String> getParameters() {
-        return new ExchangeRateSetRequests.ParametersBuilder(this)
+        return new ParametersBuilder(this)
                 .baseParameterName("base")
                 .targetsParameterName("symbols")
                 .startParameterName("start_date")
