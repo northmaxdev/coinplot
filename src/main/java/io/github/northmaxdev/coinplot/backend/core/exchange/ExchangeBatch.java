@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toUnmodifiableSet;
+
 // A "compressed" way to represent a bunch of exchanges. The following Exchange instances:
 //
 //     {FOO, BAR, 2000-01-01}
@@ -40,5 +42,9 @@ public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targe
                         buffer.accept(exchange);
                     }
                 });
+    }
+
+    public @Nonnull Set<Exchange> toSet() {
+        return stream().collect(toUnmodifiableSet());
     }
 }
