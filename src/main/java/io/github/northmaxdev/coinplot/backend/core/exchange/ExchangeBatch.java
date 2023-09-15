@@ -32,7 +32,7 @@ public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targe
         this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
-    public @Nonnull Stream<Exchange> toExchanges() {
+    public @Nonnull Stream<Exchange> stream() {
         return dateInterval.dates()
                 .mapMulti((date, buffer) -> {
                     for (Currency target : targets) {

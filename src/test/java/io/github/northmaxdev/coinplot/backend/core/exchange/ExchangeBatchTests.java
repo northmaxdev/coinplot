@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExchangeBatchTests {
 
     @Test
-    @DisplayName("toExchanges produces expected contents")
+    @DisplayName("stream produces expected contents")
     void toExchanges() {
         ExchangeBatch batch = new ExchangeBatch(
                 FOO_DOLLAR,
@@ -36,8 +36,8 @@ class ExchangeBatchTests {
                 new Exchange(FOO_DOLLAR, BAR_FRANC, LocalDate.of(2000, Month.JANUARY, 2)),
                 new Exchange(FOO_DOLLAR, BAZ_POUND, LocalDate.of(2000, Month.JANUARY, 2))
         );
-        Stream<Exchange> actual = batch.toExchanges();
+        Stream<Exchange> actual = batch.stream();
 
-        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected.toList());
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected.toList()); // toList because this is a ListAssertion
     }
 }
