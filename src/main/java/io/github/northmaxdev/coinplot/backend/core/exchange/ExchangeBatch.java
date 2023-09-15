@@ -26,10 +26,10 @@ import java.util.stream.Stream;
 // This is a general-purpose concept that is used by different parts of the codebase, such as the DB or web layers.
 public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
 
-    public ExchangeBatch {
-        Objects.requireNonNull(base);
-        MoreCollections.requireNonEmptyWithoutNulls(targets);
-        Objects.requireNonNull(dateInterval);
+    public ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
+        this.base = Objects.requireNonNull(base);
+        this.targets = MoreCollections.requireNonEmptyWithoutNulls(targets);
+        this.dateInterval = Objects.requireNonNull(dateInterval);
     }
 
     public @Nonnull Stream<Exchange> toExchanges() {
