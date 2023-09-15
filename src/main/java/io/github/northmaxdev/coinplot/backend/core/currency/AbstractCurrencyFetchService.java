@@ -33,13 +33,16 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
     @Override
     public final @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
         fetchIntoRepoIfEmpty();
-        return repository.findAllAsSet();
+        return repository.findAll();
     }
 
     @Override
     public final Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException {
         fetchIntoRepoIfEmpty();
-        return repository.findByIDNullSafely(code);
+
+        // TODO: This could be a general-purpose repository method
+        return Optional.ofNullable(code)
+                .flatMap(repository::findById);
     }
 
     protected abstract @Nonnull R createAPIRequest() throws CannotCreateAPIRequestException;
