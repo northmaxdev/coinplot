@@ -20,7 +20,7 @@ class ExchangeBatchTests {
 
     @Test
     @DisplayName("stream produces expected contents")
-    void toExchanges() {
+    void stream() {
         ExchangeBatch batch = new ExchangeBatch(
                 FOO_DOLLAR,
                 Set.of(BAR_FRANC, BAZ_POUND),
