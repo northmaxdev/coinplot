@@ -94,6 +94,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         }
     }
 
+    protected final @Nonnull Logger getLogger() {
+        return logger;
+    }
+
     protected abstract @Nonnull D parseResponseBody(
             @Nonnull byte[] responseBody,
             @Nonnull ObjectMapper jsonParser) throws IOException;
