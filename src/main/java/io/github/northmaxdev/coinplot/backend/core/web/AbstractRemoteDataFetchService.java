@@ -12,18 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.Map;
 import java.util.Objects;
 
 public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M> {
 
-    private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
+    private static final Duration HTTP_REQUEST_TIMEOUT_DURATION = Duration.ofSeconds(60);
     private static final int HTTP_OK = 200;
 
     private final @Nonnull HttpClient httpClient;
@@ -49,16 +47,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
     }
 
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
-        Objects.requireNonNull(apiRequest);
-
-        URI uri = apiRequest.getURI();
-        Map<String, String> headers = apiRequest.getHeaders();
-
-        HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder(uri);
-        headers.forEach(httpRequestBuilder::setHeader);
-
-        HttpRequest httpRequest = httpRequestBuilder.GET()
-                .timeout(TIMEOUT_DURATION)
+        HttpRequest httpRequest = Objects.requireNonNull(apiRequest)
+                .toHTTPRequestBuilder()
+                .timeout(HTTP_REQUEST_TIMEOUT_DURATION)
+                .GET()
                 .build();
 
         try {
