@@ -5,7 +5,6 @@ package io.github.northmaxdev.coinplot.backend.core.currency;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
-import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
@@ -34,32 +33,26 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
 
     @Override
     public final @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
-        fetchIntoRepoIfEmpty();
+        if (repository.isEmpty()) {
+            Set<Currency> currencies = fetch(this::createAPIRequest);
+            return repository.saveAll(currencies);
+        }
         return repository.findAll();
     }
 
     @Override
     public final Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException {
-        fetchIntoRepoIfEmpty();
+        // No need to query the repository in any way at all if the currency code is null
+        if (code == null) {
+            return Optional.empty();
+        }
 
-        // TODO: This could be a general-purpose repository method
-        return Optional.ofNullable(code)
-                .flatMap(repository::findById);
+        if (repository.isEmpty()) {
+            Set<Currency> currencies = fetch(this::createAPIRequest);
+            repository.saveAll(currencies);
+        }
+        return repository.findById(code);
     }
 
     protected abstract @Nonnull R createAPIRequest() throws CannotCreateAPIRequestException;
-
-    private void fetchIntoRepoIfEmpty() throws FailedRemoteDataFetchException {
-        if (repository.isNotEmpty()) {
-            return;
-        }
-
-        try {
-            R apiRequest = createAPIRequest();
-            Set<Currency> currencies = fetch(apiRequest);
-            repository.saveAll(currencies);
-        } catch (CannotCreateAPIRequestException e) {
-            throw new FailedRemoteDataFetchException(e);
-        }
-    }
 }
