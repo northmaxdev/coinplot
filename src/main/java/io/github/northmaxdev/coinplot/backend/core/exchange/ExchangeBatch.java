@@ -24,8 +24,12 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 //
 //     {base=FOO, targets={BAR,BAZ}, dateInterval=[2000-01-01, 2000-01-03)}
 //
-// An ExchangeBatch can be very easily converted to a collection of Exchange instances, but not the other way around.
+// An ExchangeBatch can be very easily converted to a sequence of Exchange instances, but not the other way around.
 // This is a general-purpose concept that is used by different parts of the codebase, such as the DB or web layers.
+//
+// The primary invariant of ExchangeBatch is that it cannot be empty: that is, 'targets' always contains at least one
+// non-null currency and 'dateInterval' always contains at least one date. Thus, methods like stream() and toSet()
+// likewise never return empty values.
 public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
 
     public ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
