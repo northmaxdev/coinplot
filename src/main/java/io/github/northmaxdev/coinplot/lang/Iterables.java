@@ -7,6 +7,8 @@ import jakarta.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public final class Iterables {
 
@@ -23,5 +25,17 @@ public final class Iterables {
 
     public static boolean isNullOrEmpty(@Nullable Iterable<?> iterable) {
         return iterable == null || isEmpty(iterable);
+    }
+
+    public static <T> @Nonnull Stream<T> stream(@Nullable Iterable<T> iterable) {
+        return stream(iterable, false);
+    }
+
+    public static <T> @Nonnull Stream<T> stream(@Nullable Iterable<T> iterable, boolean parallel) {
+        return iterable == null ? Stream.empty() : StreamSupport.stream(iterable.spliterator(), parallel);
+    }
+
+    public static <T> @Nonnull Stream<T> parallelStream(@Nullable Iterable<T> iterable) {
+        return stream(iterable, true);
     }
 }
