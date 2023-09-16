@@ -17,6 +17,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +49,9 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         requestHistory = new LinkedList<>(); // Rationale: most likely we'll have more writes than reads
     }
 
+    // Get an unmodifiable view that reflects changes to the request history
     public final @Nonnull List<R> getRequestHistory() {
-        return requestHistory;
+        return Collections.unmodifiableList(requestHistory);
     }
 
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
