@@ -44,6 +44,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         logger = LoggerFactory.getLogger(getClass());
     }
 
+    protected final @Nonnull Logger getLogger() {
+        return logger;
+    }
+
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
         Objects.requireNonNull(apiRequest);
 
@@ -77,9 +81,5 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
             throw new FailedRemoteDataFetchException(e);
         }
-    }
-
-    protected final @Nonnull Logger getLogger() {
-        return logger;
     }
 }
