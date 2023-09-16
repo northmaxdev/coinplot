@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +29,7 @@ public final class FrankfurterCurrencyService extends AbstractCurrencyFetchServi
             @Nonnull ObjectMapper jsonParser,
             @Nonnull CurrencyRepository repository,
             @Nonnull FrankfurterConfiguration config) {
-        super(httpClient, jsonParser, new FrankfurterCurrencySetDTOMapper(), repository);
+        super(httpClient, jsonParser, JSONMapper.forTypeReference(DTO_TYPE_REF), new FrankfurterCurrencySetDTOMapper(), repository);
         this.config = Objects.requireNonNull(config);
     }
 
@@ -39,12 +39,5 @@ public final class FrankfurterCurrencyService extends AbstractCurrencyFetchServi
         return config.getCustomHost()
                 .map(FrankfurterCurrencySetRequest::new)
                 .orElseGet(FrankfurterCurrencySetRequest::new);
-    }
-
-    @Override
-    protected @Nonnull Map<String, String> parseResponseBody(
-            @Nonnull byte[] responseBody,
-            @Nonnull ObjectMapper jsonParser) throws IOException {
-        return jsonParser.readValue(responseBody, DTO_TYPE_REF);
     }
 }
