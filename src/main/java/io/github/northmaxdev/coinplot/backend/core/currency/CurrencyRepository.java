@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface CurrencyRepository extends SetCrudRepository<Currency, String>, EmptinessQueryableRepository<Currency, String> {
+public interface CurrencyRepository extends
+        SetCrudRepository<Currency, String>,
+        EmptinessQueryableRepository<Currency, String> {
 
     // TODO: This override is meant for performance only. Profile whether this actually matters.
     @Override
