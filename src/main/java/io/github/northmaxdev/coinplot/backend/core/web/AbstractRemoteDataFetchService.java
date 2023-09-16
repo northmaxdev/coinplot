@@ -54,6 +54,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         return Collections.unmodifiableList(requestHistory);
     }
 
+    public final void clearRequestHistory() {
+        requestHistory.clear();
+    }
+
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
         Objects.requireNonNull(apiRequest);
 
