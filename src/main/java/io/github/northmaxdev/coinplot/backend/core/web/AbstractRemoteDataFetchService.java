@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +28,18 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
 
     private final @Nonnull HttpClient httpClient;
     private final @Nonnull ObjectMapper jsonParser;
+    private final @Nonnull JSONMapper<D> jsonMapper;
     private final @Nonnull DTOMapper<D, M> dtoMapper;
     private final @Nonnull Logger logger;
 
     protected AbstractRemoteDataFetchService(
             @Nonnull HttpClient httpClient,
             @Nonnull ObjectMapper jsonParser,
+            @Nonnull JSONMapper<D> jsonMapper,
             @Nonnull DTOMapper<D, M> dtoMapper) {
         this.httpClient = Objects.requireNonNull(httpClient);
         this.jsonParser = Objects.requireNonNull(jsonParser);
+        this.jsonMapper = Objects.requireNonNull(jsonMapper);
         this.dtoMapper = Objects.requireNonNull(dtoMapper);
         logger = LoggerFactory.getLogger(getClass());
     }
@@ -64,7 +68,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
                 throw new FailedRemoteDataFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
             }
 
-            D dto = parseResponseBody(response.body(), jsonParser);
+            D dto = jsonMapper.map(response.body(), jsonParser);
             M model = dtoMapper.map(dto);
 
             logger.info("Completed request: {}", apiRequest);
@@ -78,8 +82,4 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
     protected final @Nonnull Logger getLogger() {
         return logger;
     }
-
-    protected abstract @Nonnull D parseResponseBody(
-            @Nonnull byte[] responseBody,
-            @Nonnull ObjectMapper jsonParser) throws IOException;
 }
