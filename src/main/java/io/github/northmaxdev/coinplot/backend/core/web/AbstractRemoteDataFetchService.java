@@ -17,9 +17,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,14 +25,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
     private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(60);
     private static final int HTTP_OK = 200;
 
-    // External dependencies
     private final @Nonnull HttpClient httpClient;
     private final @Nonnull ObjectMapper jsonParser;
     private final @Nonnull DTOMapper<D, M> dtoMapper;
-
-    // Internal
     private final @Nonnull Logger logger;
-    private final @Nonnull List<R> requestHistory;
 
     protected AbstractRemoteDataFetchService(
             @Nonnull HttpClient httpClient,
@@ -44,18 +37,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         this.httpClient = Objects.requireNonNull(httpClient);
         this.jsonParser = Objects.requireNonNull(jsonParser);
         this.dtoMapper = Objects.requireNonNull(dtoMapper);
-
         logger = LoggerFactory.getLogger(getClass());
-        requestHistory = new LinkedList<>(); // Rationale: most likely we'll have more writes than reads
-    }
-
-    // Get an unmodifiable view that reflects changes to the request history
-    public final @Nonnull List<R> getRequestHistory() {
-        return Collections.unmodifiableList(requestHistory);
-    }
-
-    public final void clearRequestHistory() {
-        requestHistory.clear();
     }
 
     protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
@@ -86,7 +68,6 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             M model = dtoMapper.map(dto);
 
             logger.info("Completed request: {}", apiRequest);
-            requestHistory.add(apiRequest);
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
             logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
