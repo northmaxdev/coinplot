@@ -4,6 +4,8 @@ package io.github.northmaxdev.coinplot.backend.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
+import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequestFactory;
+import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
@@ -71,6 +73,18 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             return model;
         } catch (IOException | InterruptedException | DTOMappingException e) {
             logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
+            throw new FailedRemoteDataFetchException(e);
+        }
+    }
+
+    protected final @Nonnull M fetch(@Nonnull APIRequestFactory<R> apiRequestFactory) throws FailedRemoteDataFetchException {
+        Objects.requireNonNull(apiRequestFactory);
+        try {
+            R apiRequest = apiRequestFactory.create();
+            // We take the successful creation of an APIRequest for granted, so no logging for that.
+            return fetch(apiRequest);
+        } catch (CannotCreateAPIRequestException e) {
+            logger.error("Failed to form API request", e); // https://www.slf4j.org/faq.html#paramException
             throw new FailedRemoteDataFetchException(e);
         }
     }
