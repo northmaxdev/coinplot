@@ -10,6 +10,7 @@ import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -22,7 +23,6 @@ import java.util.Objects;
 public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M> {
 
     private static final Duration HTTP_REQUEST_TIMEOUT_DURATION = Duration.ofSeconds(60);
-    private static final int HTTP_OK = 200;
 
     private final @Nonnull HttpClient httpClient;
     private final @Nonnull ObjectMapper jsonParser;
@@ -57,11 +57,11 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             HttpResponse<byte[]> response = httpClient.send(httpRequest, BodyHandlers.ofByteArray());
 
             int statusCode = response.statusCode();
-            // While this might seem limited at first, every web service that follows industry conventions
-            // and norms returns 200 OK on a successful response, and in any other case we're going to be
-            // throwing an RFE anyway (even in the case of other 2XX codes), so might as well inline this here.
-            if (statusCode != HTTP_OK) {
-                throw new FailedRemoteDataFetchException("Expected HTTP 200 OK, instead got: " + statusCode);
+            if (!isStatusCodeAcceptable(statusCode)) {
+                // TODO:
+                //  Use a dedicated exception type for status code validation and add it to the catch clause.
+                //  This will ensure that this branch of failure will get logged like the rest.
+                throw new FailedRemoteDataFetchException("Received status code: " + statusCode);
             }
 
             D dto = jsonMapper.map(response.body(), jsonParser);
@@ -73,5 +73,10 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
             throw new FailedRemoteDataFetchException(e);
         }
+    }
+
+    // Non-final. Subclasses may override this method for custom status code validation logic.
+    protected boolean isStatusCodeAcceptable(int statusCode) {
+        return statusCode == HttpStatus.OK.value(); // This primitive implementation should generally suffice
     }
 }
