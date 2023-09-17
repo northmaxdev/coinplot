@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.fixer;
 
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import org.junit.jupiter.api.Test;
 
@@ -21,12 +22,8 @@ class FixerExchangeRateSetRequestTests {
     void reqURI() {
         LocalDate start = LocalDate.of(1975, Month.MAY, 31);
         LocalDate end = LocalDate.of(1975, Month.SEPTEMBER, 1);
-        FixerExchangeRateSetRequest request = new FixerExchangeRateSetRequest(
-                "6b1628b016dff46e6fa35684be6acc96",
-                FOO_DOLLAR,
-                Set.of(BAR_FRANC, BAZ_POUND),
-                new LocalDateInterval(start, end)
-        );
+        ExchangeBatch batch = new ExchangeBatch(FOO_DOLLAR, Set.of(BAR_FRANC, BAZ_POUND), new LocalDateInterval(start, end));
+        FixerExchangeRateSetRequest request = new FixerExchangeRateSetRequest("6b1628b016dff46e6fa35684be6acc96", batch);
 
         assertExpectedURIsContainActual(request,
                 // Order of targets: BAR (1st), BAZ (2nd)

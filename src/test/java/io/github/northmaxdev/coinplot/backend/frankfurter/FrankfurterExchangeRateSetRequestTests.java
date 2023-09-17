@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.frankfurter;
 
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import org.junit.jupiter.api.Test;
 
@@ -21,11 +22,8 @@ class FrankfurterExchangeRateSetRequestTests {
     void reqURI() {
         LocalDate start = LocalDate.of(2020, Month.JANUARY, 1);
         LocalDate end = LocalDate.of(2020, Month.JANUARY, 31);
-        FrankfurterExchangeRateSetRequest request = new FrankfurterExchangeRateSetRequest(
-                FOO_DOLLAR,
-                Set.of(BAR_FRANC, BAZ_POUND),
-                new LocalDateInterval(start, end)
-        );
+        ExchangeBatch batch = new ExchangeBatch(FOO_DOLLAR, Set.of(BAR_FRANC, BAZ_POUND), new LocalDateInterval(start, end));
+        FrankfurterExchangeRateSetRequest request = new FrankfurterExchangeRateSetRequest(batch);
 
         assertExpectedURIsContainActual(request,
                 // Order of targets: BAR (1st), BAZ (2nd)
