@@ -7,11 +7,11 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.AbstractExchangeRate
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.Objects;
 
@@ -28,21 +28,22 @@ public final class FrankfurterExchangeRateService extends
             @Nonnull FrankfurterCurrencyService currencyService,
             @Nonnull ExchangeRateRepository repository,
             @Nonnull FrankfurterConfiguration config) {
-        super(httpClient, jsonParser, new FrankfurterExchangeRateSetDTOMapper(currencyService), repository);
+        super(
+                httpClient,
+                jsonParser,
+                JSONMapper.forClass(FrankfurterExchangeRateSetDTO.class),
+                new FrankfurterExchangeRateSetDTOMapper(currencyService),
+                repository
+        );
         this.config = Objects.requireNonNull(config);
     }
 
     @Override
-    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges) throws CannotCreateAPIRequestException {
+    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges)
+            throws CannotCreateAPIRequestException {
+        // No need to null-check 'exchanges'
         return config.getCustomHost()
                 .map(host -> new FrankfurterExchangeRateSetRequest(host, exchanges))
                 .orElseGet(() -> new FrankfurterExchangeRateSetRequest(exchanges));
-    }
-
-    @Override
-    protected @Nonnull FrankfurterExchangeRateSetDTO parseResponseBody(
-            @Nonnull byte[] responseBody,
-            @Nonnull ObjectMapper jsonParser) throws IOException {
-        return jsonParser.readValue(responseBody, FrankfurterExchangeRateSetDTO.class);
     }
 }
