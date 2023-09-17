@@ -21,24 +21,22 @@ public final class I18NUtilities {
         throw new UnsupportedOperationException();
     }
 
-    // locale and propertyKey are not annotated due to getTranslation's ambiguity regarding the same parameters
-
     ///////////
     // Label //
     ///////////
 
     public static <C extends Component & HasLabel> void setLabel(
             @Nonnull C component,
-            Locale locale,
-            String propertyKey) {
-        set(component, locale, propertyKey, C::setLabel);
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(component, locale, key, C::setLabel);
     }
 
     public static <C extends Component & HasLabel> void setLabel(
             @Nonnull C component,
-            @Nonnull LocaleChangeEvent localeChangeEvent,
-            String propertyKey) {
-        setLabel(component, localeChangeEvent.getLocale(), propertyKey);
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setLabel(component, event.getLocale(), key);
     }
 
     //////////
@@ -47,16 +45,16 @@ public final class I18NUtilities {
 
     public static <C extends Component & HasText> void setText(
             @Nonnull C component,
-            Locale locale,
-            String propertyKey) {
-        set(component, locale, propertyKey, C::setText);
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(component, locale, key, C::setText);
     }
 
     public static <C extends Component & HasText> void setText(
             @Nonnull C component,
-            LocaleChangeEvent localeChangeEvent,
-            String propertyKey) {
-        setText(component, localeChangeEvent.getLocale(), propertyKey);
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setText(component, event.getLocale(), key);
     }
 
     /////////////////
@@ -65,16 +63,16 @@ public final class I18NUtilities {
 
     public static <C extends Component & HasHelper> void setHelperText(
             @Nonnull C component,
-            Locale locale,
-            String propertyKey) {
-        set(component, locale, propertyKey, C::setHelperText);
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(component, locale, key, C::setHelperText);
     }
 
     public static <C extends Component & HasHelper> void setHelperText(
             @Nonnull C component,
-            @Nonnull LocaleChangeEvent localeChangeEvent,
-            String propertyKey) {
-        setHelperText(component, localeChangeEvent.getLocale(), propertyKey);
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setHelperText(component, event.getLocale(), key);
     }
 
     ///////////////////
@@ -83,28 +81,29 @@ public final class I18NUtilities {
 
     public static <C extends Component & HasValidation> void setErrorMessage(
             @Nonnull C component,
-            Locale locale,
-            String propertyKey) {
-        set(component, locale, propertyKey, C::setErrorMessage);
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(component, locale, key, C::setErrorMessage);
     }
 
     public static <C extends Component & HasValidation> void setErrorMessage(
             @Nonnull C component,
-            @Nonnull LocaleChangeEvent localeChangeEvent,
-            String propertyKey) {
-        setErrorMessage(component, localeChangeEvent.getLocale(), propertyKey);
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setErrorMessage(component, event.getLocale(), key);
     }
 
-    //////////
-    // Impl //
-    //////////
+    ////////////////////////////
+    // Implementation details //
+    ////////////////////////////
 
     private static <C extends Component> void set(
             @Nonnull C component,
-            Locale locale,
-            String propertyKey,
-            BiConsumer<C, String> componentTypeSetterReference) {
-        String s = component.getTranslation(locale, propertyKey);
-        componentTypeSetterReference.accept(component, s);
+            @Nonnull Locale locale,
+            @Nonnull String key,
+            @Nonnull BiConsumer<C, String> componentSetter) {
+        // Explicit null-checks are omitted for brevity
+        String s = component.getTranslation(locale, key);
+        componentSetter.accept(component, s);
     }
 }
