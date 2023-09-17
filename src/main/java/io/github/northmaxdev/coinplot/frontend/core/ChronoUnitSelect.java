@@ -7,38 +7,40 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 
 public final class ChronoUnitSelect extends Select<ChronoUnit> implements LocaleChangeObserver {
 
-    public static @Nonnull ChronoUnitSelect with(@Nonnull ChronoUnit... units) {
-        Objects.requireNonNull(units, "units (varargs) is null");
-        Set<ChronoUnit> s = Set.of(units);
-        return new ChronoUnitSelect(s);
+    public ChronoUnitSelect(@Nonnull ChronoUnit... units) {
+        this(Set.of(units)); // Implicit null-check(s)
     }
 
-    private ChronoUnitSelect(Collection<ChronoUnit> units) {
-        ListDataProvider<ChronoUnit> dataProvider = new ListDataProvider<>(units);
+    public ChronoUnitSelect(@Nonnull Set<ChronoUnit> units) {
+        Set<ChronoUnit> copiedItems = Set.copyOf(units); // Implicit null-check(s)
+
+        ListDataProvider<ChronoUnit> dataProvider = new ListDataProvider<>(copiedItems);
         dataProvider.setSortComparator(Enum::compareTo);
         setItems(dataProvider);
 
         setEmptySelectionAllowed(false);
     }
 
-    // This also gets triggered on component init
     @Override
-    public void localeChange(LocaleChangeEvent event) {
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
         setItemLabelGenerator(unit -> getTranslatedUnitLabel(unit, event.getLocale()));
     }
 
-    private String getTranslatedUnitLabel(ChronoUnit unit, Locale locale) {
-        // Annotate "unit" as @Nullable and add a null case to switch if supporting an empty selection
-        String propertyKey = switch (unit) {
+    private @Nonnull String getTranslatedUnitLabel(@Nullable ChronoUnit unit, @Nonnull Locale locale) {
+        // No need to null-check locale
+        if (unit == null) {
+            return "";
+        }
+
+        String i18nKey = switch (unit) {
             case NANOS -> "chrono-unit-select.item-label.nanos";
             case MICROS -> "chrono-unit-select.item-label.micros";
             case MILLIS -> "chrono-unit-select.item-label.millis";
@@ -57,6 +59,6 @@ public final class ChronoUnitSelect extends Select<ChronoUnit> implements Locale
             case FOREVER -> "chrono-unit-select.item-label.forever";
         };
 
-        return getTranslation(locale, propertyKey);
+        return getTranslation(locale, i18nKey);
     }
 }

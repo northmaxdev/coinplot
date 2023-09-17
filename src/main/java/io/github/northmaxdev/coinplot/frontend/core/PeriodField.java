@@ -39,7 +39,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     }
 
     public PeriodField(@Nullable Period initialValue) {
-        this.unitSelect = ChronoUnitSelect.with(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
+        this.unitSelect = new ChronoUnitSelect(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
 
         unitSelect.addValueChangeListener(event -> {
@@ -96,9 +96,8 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     // I18N //
     //////////
 
-    // This also gets triggered on component init
     @Override
-    public void localeChange(LocaleChangeEvent event) {
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
         unitSelect.localeChange(event);
         I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
     }
