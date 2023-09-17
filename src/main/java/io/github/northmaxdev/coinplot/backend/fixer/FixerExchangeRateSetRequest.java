@@ -22,7 +22,7 @@ public final class FixerExchangeRateSetRequest
     }
 
     @Override
-    public @Nonnull ExchangeBatch getRequestData() {
+    public @Nonnull ExchangeBatch getRequestedExchanges() {
         return data;
     }
 

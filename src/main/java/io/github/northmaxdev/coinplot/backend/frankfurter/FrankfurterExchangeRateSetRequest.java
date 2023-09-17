@@ -31,7 +31,7 @@ public final class FrankfurterExchangeRateSetRequest
     }
 
     @Override
-    public @Nonnull ExchangeBatch getRequestData() {
+    public @Nonnull ExchangeBatch getRequestedExchanges() {
         return data;
     }
 

@@ -66,7 +66,7 @@ public interface ExchangeRateSetRequest extends APIRequest {
         }
 
         public @Nonnull Map<String, String> build() {
-            ExchangeBatch requestData = request.getRequestData();
+            ExchangeBatch requestData = request.getRequestedExchanges();
             Map<String, String> parameters = new HashMap<>(4);
 
             if (baseParameterName != null) {
@@ -136,5 +136,5 @@ public interface ExchangeRateSetRequest extends APIRequest {
         }
     }
 
-    @Nonnull ExchangeBatch getRequestData();
+    @Nonnull ExchangeBatch getRequestedExchanges();
 }
