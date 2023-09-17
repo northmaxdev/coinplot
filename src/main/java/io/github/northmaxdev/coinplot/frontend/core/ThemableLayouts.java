@@ -34,11 +34,10 @@ public final class ThemableLayouts {
         throw new UnsupportedOperationException();
     }
 
-    public static @Nonnull HorizontalLayout createHorizontal(@Nonnull Spacing spacing, Component... children) {
-        Objects.requireNonNull(spacing, "spacing is null");
+    public static @Nonnull HorizontalLayout createHorizontal(@Nonnull Spacing spacing, @Nonnull Component... components) {
+        Objects.requireNonNull(spacing);
 
-        HorizontalLayout layout = new HorizontalLayout(children);
-
+        HorizontalLayout layout = new HorizontalLayout(components); // Implicit null-check for 'components'
         layout.setSpacing(false); // Remove default setting (the Vaadin component docs do this themselves)
         ThemeList themeList = layout.getThemeList();
         themeList.add(spacing.toString());
