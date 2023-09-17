@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
-import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -11,7 +10,7 @@ import java.util.Set;
 
 public interface CurrencyService {
 
-    @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException;
+    @Nonnull Set<Currency> getAvailableCurrencies();
 
-    Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException;
+    Optional<Currency> getCurrency(@Nullable String code);
 }
