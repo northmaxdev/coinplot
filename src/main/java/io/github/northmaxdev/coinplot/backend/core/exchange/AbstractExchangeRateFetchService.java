@@ -5,9 +5,10 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDataFetchService;
-import io.github.northmaxdev.coinplot.backend.core.web.FailedRemoteDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
+import org.slf4j.Logger;
 
 import java.net.http.HttpClient;
 import java.util.Objects;
@@ -22,9 +23,10 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
     protected AbstractExchangeRateFetchService(
             @Nonnull HttpClient httpClient,
             @Nonnull ObjectMapper jsonParser,
+            @Nonnull JSONMapper<D> jsonMapper,
             @Nonnull ExchangeRateSetDTOMapper<D> dtoMapper,
             @Nonnull ExchangeRateRepository repository) {
-        super(httpClient, jsonParser, dtoMapper);
+        super(httpClient, jsonParser, jsonMapper, dtoMapper);
         this.repository = Objects.requireNonNull(repository);
     }
 
@@ -36,20 +38,20 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
         //     The desired data is PARTIALLY available in the repo -> send a request as if the data is not available at all, populate repo
         // Needless to say, asking for data that is either fully present or fully absent is handled efficiently,
         // while asking for partially present data should lead to operational redundancies (and thus, performance hits).
+        Objects.requireNonNull(exchanges);
+        Logger logger = getLogger();
 
-        // 'exchanges' is implicitly null-checked
         if (repository.existAllById(exchanges)) {
-            return repository.findAllById(exchanges);
+            Set<ExchangeRate> cachedExchangeRates = repository.findAllById(exchanges);
+            logger.info("Loaded {} exchange rates from cache (no API requests were sent)", cachedExchangeRates.size());
+            return cachedExchangeRates;
         }
 
-        try {
-            R request = createAPIRequest(exchanges);
-            Set<ExchangeRate> exchangeRates = fetch(request);
-            return repository.saveAll(exchangeRates);
-        } catch (CannotCreateAPIRequestException e) {
-            throw new FailedRemoteDataFetchException(e);
-        }
+        // Use fetch(APIRequestFactory) as it handles CannotCreateAPIRequestException for us
+        Set<ExchangeRate> fetchedExchangeRates = fetch(() -> createAPIRequest(exchanges));
+        return repository.saveAll(fetchedExchangeRates);
     }
 
+    // No need for implementors to null-check 'exchanges'
     protected abstract @Nonnull R createAPIRequest(@Nonnull ExchangeBatch exchanges) throws CannotCreateAPIRequestException;
 }
