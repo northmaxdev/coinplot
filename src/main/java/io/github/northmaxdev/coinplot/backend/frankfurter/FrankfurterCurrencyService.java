@@ -5,8 +5,8 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
+import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ public final class FrankfurterCurrencyService extends AbstractCurrencyFetchServi
             @Nonnull ObjectMapper jsonParser,
             @Nonnull CurrencyRepository repository,
             @Nonnull FrankfurterConfiguration config) {
-        super(httpClient, jsonParser, JSONMapper.forTypeReference(DTO_TYPE_REF), new FrankfurterCurrencySetDTOMapper(), repository);
+        super(httpClient, jsonParser, JSONMapper.forTypeReference(DTO_TYPE_REF), Currency::createSet, repository);
         this.config = Objects.requireNonNull(config);
     }
 
     @Override
-    protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() throws CannotCreateAPIRequestException {
+    protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() {
         // Instead of throwing an exception, just fall back to the public instance
         return config.getCustomHost()
                 .map(FrankfurterCurrencySetRequest::new)
