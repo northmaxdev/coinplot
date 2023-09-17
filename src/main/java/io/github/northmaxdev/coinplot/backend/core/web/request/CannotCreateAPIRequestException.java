@@ -5,7 +5,7 @@ package io.github.northmaxdev.coinplot.backend.core.web.request;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-public class CannotCreateAPIRequestException extends IllegalStateException { // Non-final
+public class CannotCreateAPIRequestException extends Exception { // Non-final
 
     private static final String NO_ACCESS_KEY_MESSAGE = "No access key";
 
