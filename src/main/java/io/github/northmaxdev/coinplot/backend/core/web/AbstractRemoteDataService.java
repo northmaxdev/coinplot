@@ -7,8 +7,8 @@ import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequestFactory;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
-import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
-import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
+import io.github.northmaxdev.coinplot.backend.core.web.response.UnacceptableStatusCodeException;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,24 +22,24 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Objects;
 
-public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M> {
+public abstract class AbstractRemoteDataService<T, R extends APIRequest, D> {
 
     private static final Duration HTTP_REQUEST_TIMEOUT_DURATION = Duration.ofSeconds(60);
 
     private final @Nonnull HttpClient httpClient;
     private final @Nonnull ObjectMapper jsonParser;
-    private final @Nonnull JSONMapper<D> jsonMapper;
-    private final @Nonnull DTOMapper<D, M> dtoMapper;
+    private final @Nonnull JSONParsingStrategy<D> jsonParsingStrategy;
+    private final @Nonnull DTOMapper<D, T> dtoMapper;
     private final @Nonnull Logger logger;
 
-    protected AbstractRemoteDataFetchService(
+    protected AbstractRemoteDataService(
             @Nonnull HttpClient httpClient,
             @Nonnull ObjectMapper jsonParser,
-            @Nonnull JSONMapper<D> jsonMapper,
-            @Nonnull DTOMapper<D, M> dtoMapper) {
+            @Nonnull JSONParsingStrategy<D> jsonParsingStrategy,
+            @Nonnull DTOMapper<D, T> dtoMapper) {
         this.httpClient = Objects.requireNonNull(httpClient);
         this.jsonParser = Objects.requireNonNull(jsonParser);
-        this.jsonMapper = Objects.requireNonNull(jsonMapper);
+        this.jsonParsingStrategy = Objects.requireNonNull(jsonParsingStrategy);
         this.dtoMapper = Objects.requireNonNull(dtoMapper);
         logger = LoggerFactory.getLogger(getClass());
     }
@@ -48,7 +48,7 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
         return logger;
     }
 
-    protected final @Nonnull M fetch(@Nonnull R apiRequest) throws FailedRemoteDataFetchException {
+    protected final @Nonnull T fetch(@Nonnull R apiRequest) {
         HttpRequest httpRequest = Objects.requireNonNull(apiRequest)
                 .toHTTPRequestBuilder()
                 .timeout(HTTP_REQUEST_TIMEOUT_DURATION)
@@ -60,24 +60,21 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
 
             int statusCode = response.statusCode();
             if (!isStatusCodeAcceptable(statusCode)) {
-                // TODO:
-                //  Use a dedicated exception type for status code validation and add it to the catch clause.
-                //  This will ensure that this branch of failure will get logged like the rest.
-                throw new FailedRemoteDataFetchException("Received status code: " + statusCode);
+                throw new UnacceptableStatusCodeException(statusCode);
             }
 
-            D dto = jsonMapper.map(response.body(), jsonParser);
-            M model = dtoMapper.map(dto);
+            D dto = jsonParsingStrategy.apply(response.body(), jsonParser);
+            T data = dtoMapper.map(dto);
 
             logger.info("Completed request: {}", apiRequest);
-            return model;
-        } catch (IOException | InterruptedException | DTOMappingException e) {
+            return data;
+        } catch (IOException | InterruptedException | UnacceptableStatusCodeException e) {
             logger.error("Failed request: {}", apiRequest, e); // https://www.slf4j.org/faq.html#paramException
-            throw new FailedRemoteDataFetchException(e);
+            return fallbackData();
         }
     }
 
-    protected final @Nonnull M fetch(@Nonnull APIRequestFactory<R> apiRequestFactory) throws FailedRemoteDataFetchException {
+    protected final @Nonnull T fetch(@Nonnull APIRequestFactory<R> apiRequestFactory) {
         Objects.requireNonNull(apiRequestFactory);
         try {
             R apiRequest = apiRequestFactory.create();
@@ -85,12 +82,19 @@ public abstract class AbstractRemoteDataFetchService<R extends APIRequest, D, M>
             return fetch(apiRequest);
         } catch (CannotCreateAPIRequestException e) {
             logger.error("Failed to form API request", e); // https://www.slf4j.org/faq.html#paramException
-            throw new FailedRemoteDataFetchException(e);
+            return fallbackData();
         }
     }
 
-    // Non-final. Subclasses may override this method for custom status code validation logic.
+    /////////////////////////////////////
+    // Subclass Behavior Customization //
+    /////////////////////////////////////
+
+    protected abstract @Nonnull T fallbackData();
+
+    // Non-final. The primitive implementation below should generally suffice.
+    // Override for custom HTTP status code validation logic.
     protected boolean isStatusCodeAcceptable(int statusCode) {
-        return statusCode == HttpStatus.OK.value(); // This primitive implementation should generally suffice
+        return statusCode == HttpStatus.OK.value();
     }
 }
