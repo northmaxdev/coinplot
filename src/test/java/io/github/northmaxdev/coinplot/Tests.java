@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot;
 
-import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
@@ -39,12 +38,12 @@ public final class Tests {
     public static final Currency BAZ_POUND = new Currency("BAZ", "Baz Pound");
     public static final CurrencyService CURRENCY_SERVICE_MOCK = new CurrencyService() {
         @Override
-        public @Nonnull Set<Currency> getAvailableCurrencies() throws FailedDataFetchException {
+        public @Nonnull Set<Currency> getAvailableCurrencies() {
             return Set.of(FOO_DOLLAR, BAR_FRANC, BAZ_POUND);
         }
 
         @Override
-        public Optional<Currency> getCurrency(@Nullable String code) throws FailedDataFetchException {
+        public Optional<Currency> getCurrency(@Nullable String code) {
             return switch (code) {
                 case "FOO" -> Optional.of(FOO_DOLLAR);
                 case "BAR" -> Optional.of(BAR_FRANC);
