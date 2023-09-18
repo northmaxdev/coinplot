@@ -38,7 +38,7 @@ public class Currency implements Serializable { // Required by the JPA spec to b
         return new Currency(mapEntry.getKey(), mapEntry.getValue());
     }
 
-    public static @Nonnull Set<Currency> createSet(@Nonnull Map<String, String> map) {
+    public static @Nonnull Set<Currency> setFrom(@Nonnull Map<String, String> map) {
         return Objects.requireNonNull(map)
                 .entrySet()
                 .stream()

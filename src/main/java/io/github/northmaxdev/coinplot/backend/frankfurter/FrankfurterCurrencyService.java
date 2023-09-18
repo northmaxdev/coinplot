@@ -33,7 +33,7 @@ public final class FrankfurterCurrencyService extends AbstractCurrencyFetchServi
                 httpClient,
                 jsonParser,
                 JSONParsingStrategy.usingTypeReference(DTO_TYPE_REFERENCE),
-                Currency::createSet,
+                Currency::setFrom,
                 repository
         );
         this.config = Objects.requireNonNull(config);
