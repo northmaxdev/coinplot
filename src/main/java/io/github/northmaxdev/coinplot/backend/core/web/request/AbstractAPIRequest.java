@@ -9,6 +9,7 @@ import org.apache.hc.core5.net.URIBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,10 +161,10 @@ public abstract class AbstractAPIRequest implements APIRequest {
         if (accessKey != null && accessKey.isSpecifiedAsHeader()) {
             Map<String, String> headersWithKey = new HashMap<>(headersWithoutKey);
             headersWithKey.put(accessKey.name(), accessKey.value());
-            return headersWithKey;
+            return Collections.unmodifiableMap(headersWithKey);
         }
 
-        return headersWithoutKey;
+        return Collections.unmodifiableMap(headersWithoutKey);
     }
 
     //////////////////////////////////
