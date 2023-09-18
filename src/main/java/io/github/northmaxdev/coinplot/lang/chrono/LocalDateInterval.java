@@ -4,7 +4,6 @@ package io.github.northmaxdev.coinplot.lang.chrono;
 
 import jakarta.annotation.Nonnull;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -24,8 +23,7 @@ public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end
         }
     }
 
-    public static @Nonnull LocalDateInterval calculate(@Nonnull LocalDate start, @Nonnull Period periodToAdd)
-            throws DateTimeException, ArithmeticException {
+    public static @Nonnull LocalDateInterval calculate(@Nonnull LocalDate start, @Nonnull Period periodToAdd) {
         Objects.requireNonNull(start);
         Objects.requireNonNull(periodToAdd);
 
