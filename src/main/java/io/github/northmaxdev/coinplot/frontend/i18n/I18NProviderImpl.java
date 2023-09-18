@@ -23,12 +23,12 @@ public final class I18NProviderImpl implements I18NProvider {
     );
 
     @Override
-    public List<Locale> getProvidedLocales() {
+    public @Nonnull List<Locale> getProvidedLocales() {
         return SUPPORTED_LOCALES;
     }
 
     @Override
-    public String getTranslation(@Nonnull String key, @Nonnull Locale locale, @Nonnull Object... params) {
+    public @Nonnull String getTranslation(@Nonnull String key, @Nonnull Locale locale, @Nonnull Object... params) {
         // Explicit null-checks are omitted for performance
         try {
             ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PREFIX, locale);
