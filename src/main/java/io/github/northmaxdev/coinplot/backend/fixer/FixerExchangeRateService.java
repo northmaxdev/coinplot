@@ -4,10 +4,12 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.AbstractExchangeRateFetchService;
+import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSetDTO;
+import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSetDTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateRepository;
 import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
-import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import java.util.Objects;
 
 @Service
 public final class FixerExchangeRateService extends
-        AbstractExchangeRateFetchService<FixerExchangeRateSetRequest, FixerExchangeRateSetDTO> {
+        AbstractExchangeRateFetchService<FixerExchangeRateSetRequest, CommonExchangeRateSetDTO> {
 
     private final @Nonnull FixerConfiguration config;
 
@@ -31,8 +33,8 @@ public final class FixerExchangeRateService extends
         super(
                 httpClient,
                 jsonParser,
-                JSONMapper.forClass(FixerExchangeRateSetDTO.class),
-                new FixerExchangeRateSetDTOMapper(currencyService),
+                JSONParsingStrategy.usingClass(CommonExchangeRateSetDTO.class),
+                new CommonExchangeRateSetDTOMapper(currencyService),
                 repository
         );
         this.config = Objects.requireNonNull(config);

@@ -4,10 +4,11 @@ package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.AbstractExchangeRateFetchService;
+import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSetDTO;
+import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSetDTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
-import io.github.northmaxdev.coinplot.backend.core.web.response.JSONMapper;
+import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 @Service
 public final class FrankfurterExchangeRateService extends
-        AbstractExchangeRateFetchService<FrankfurterExchangeRateSetRequest, FrankfurterExchangeRateSetDTO> {
+        AbstractExchangeRateFetchService<FrankfurterExchangeRateSetRequest, CommonExchangeRateSetDTO> {
 
     private final @Nonnull FrankfurterConfiguration config;
 
@@ -31,16 +32,15 @@ public final class FrankfurterExchangeRateService extends
         super(
                 httpClient,
                 jsonParser,
-                JSONMapper.forClass(FrankfurterExchangeRateSetDTO.class),
-                new FrankfurterExchangeRateSetDTOMapper(currencyService),
+                JSONParsingStrategy.usingClass(CommonExchangeRateSetDTO.class),
+                new CommonExchangeRateSetDTOMapper(currencyService),
                 repository
         );
         this.config = Objects.requireNonNull(config);
     }
 
     @Override
-    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges)
-            throws CannotCreateAPIRequestException {
+    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges) {
         // No need to null-check 'exchanges'
         return config.getCustomHost()
                 .map(host -> new FrankfurterExchangeRateSetRequest(host, exchanges))
