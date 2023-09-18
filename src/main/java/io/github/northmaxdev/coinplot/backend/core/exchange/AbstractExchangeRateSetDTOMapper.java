@@ -2,14 +2,13 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.backend.core.FailedDataFetchException;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
-import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMappingException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class AbstractExchangeRateSetDTOMapper<D> implements ExchangeRateSetDTOMapper<D> {
 
@@ -19,13 +18,7 @@ public abstract class AbstractExchangeRateSetDTOMapper<D> implements ExchangeRat
         this.currencyDataSource = Objects.requireNonNull(currencyDataSource);
     }
 
-    // Utility method for subclasses. @Nullable on parameter is to merely mirror CurrencyService::getCurrency signature.
-    protected final @Nonnull Currency tryGetCurrency(@Nullable String code) throws DTOMappingException {
-        try {
-            return currencyDataSource.getCurrency(code)
-                    .orElseThrow(() -> new DTOMappingException("Unknown currency: " + code));
-        } catch (FailedDataFetchException e) {
-            throw new DTOMappingException("Failed to fetch currency data", e);
-        }
+    protected final Optional<Currency> getCurrency(@Nullable String code) {
+        return currencyDataSource.getCurrency(code);
     }
 }
