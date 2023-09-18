@@ -42,6 +42,7 @@ public final class FrankfurterExchangeRateService extends
     @Override
     protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges) {
         // No need to null-check 'exchanges'
+        // Instead of throwing an exception, just fall back to the public instance
         return config.getCustomHost()
                 .map(host -> new FrankfurterExchangeRateSetRequest(host, exchanges))
                 .orElseGet(() -> new FrankfurterExchangeRateSetRequest(exchanges));
