@@ -10,6 +10,7 @@ import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -96,7 +97,7 @@ public interface ExchangeRateSetRequest extends APIRequest {
                 parameters.put(endParameterName, dateFormatter.format(end));
             }
 
-            return parameters;
+            return Collections.unmodifiableMap(parameters);
         }
 
         @Override
