@@ -46,7 +46,8 @@ public final class CommonExchangeRateSetDTOMapper extends AbstractExchangeRateSe
                         target.ifPresentOrElse(t -> {
                             ExchangeRate exchangeRate = new ExchangeRate(base.get(), t, exchangeDate, rateValue);
                             buffer.accept(exchangeRate);
-                            // FIXME: This warning occurs every single time we hit an unknown target, which floods the log
+                            // NOTE: This logs a warning on EVERY single missing target,
+                            // which may (but realistically usually won't) flood the log.
                         }, () -> LOG.warn("Unknown target \"{}\", skipping", targetCode));
                     });
                 })
