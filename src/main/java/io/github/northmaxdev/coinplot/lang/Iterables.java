@@ -32,7 +32,11 @@ public final class Iterables {
     }
 
     public static <T> @Nonnull Stream<T> stream(@Nullable Iterable<T> iterable, boolean parallel) {
-        return iterable == null ? Stream.empty() : StreamSupport.stream(iterable.spliterator(), parallel);
+        return switch (iterable) {
+            case null -> Stream.empty();
+            case Collection<T> collection -> parallel ? collection.parallelStream() : collection.stream();
+            default -> StreamSupport.stream(iterable.spliterator(), parallel);
+        };
     }
 
     public static <T> @Nonnull Stream<T> parallelStream(@Nullable Iterable<T> iterable) {
