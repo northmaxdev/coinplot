@@ -34,8 +34,10 @@ public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targe
 
     public ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
         this.base = Objects.requireNonNull(base);
-        this.targets = MoreCollections.requireNonEmptyWithoutNulls(targets);
         this.dateInterval = Objects.requireNonNull(dateInterval);
+
+        MoreCollections.requireNonEmptyWithoutNulls(targets);
+        this.targets = Set.copyOf(targets);
     }
 
     public @Nonnull Stream<Exchange> stream() {
