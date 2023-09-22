@@ -19,19 +19,18 @@ public final class CurrencyComboBox extends ComboBox<Currency> implements Locale
     private final CurrencyService dataSource;
 
     public CurrencyComboBox(@Nonnull CurrencyService dataSource) {
-        this.dataSource = Objects.requireNonNull(dataSource, "dataSource is null");
-        CurrencyComboBoxes.setBasicConfiguration(this);
+        this.dataSource = Objects.requireNonNull(dataSource);
+        CurrencyComboBoxes.configure(this);
 
-        fetchItems();
+        loadAvailableCurrencies();
     }
 
-    public void fetchItems() {
-        CurrencyComboBoxes.fetchItemsInto(this, dataSource);
+    public void loadAvailableCurrencies() {
+        CurrencyComboBoxes.loadItems(this, dataSource);
     }
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
         I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
-        I18NUtilities.setErrorMessage(this, event, CurrencyComboBoxes.FAILED_FETCH_ERROR_MESSAGE_KEY);
     }
 }
