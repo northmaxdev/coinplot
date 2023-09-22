@@ -10,6 +10,7 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.frontend.core.ThemableLayouts.Spacing;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.Period;
@@ -43,9 +44,12 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
 
     @Override
     protected @Nullable LocalDateInterval generateModelValue() {
-        Period periodToAdd = periodField.getValue();
+        // FIXME:
+        //  startDate + Period.ZERO is theoretically a common scenario,
+        //  but it violates LocalDateInterval's invariant and leads to IAE
+        @Nonnull Period periodToAdd = periodField.getValue();
         return startPicker.getOptionalValue()
-                .map(start -> LocalDateInterval.ofAddition(start, periodToAdd))
+                .map(startDate -> LocalDateInterval.calculate(startDate, periodToAdd))
                 .orElse(null);
     }
 
@@ -64,9 +68,8 @@ public final class LocalDateIntervalField extends CustomField<LocalDateInterval>
     // I18N //
     //////////
 
-    // This also gets triggered on component init
     @Override
-    public void localeChange(LocaleChangeEvent event) {
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
         startPicker.setLocale(event.getLocale());
         I18NUtilities.setLabel(startPicker, event, START_PICKER_LABEL_KEY);
 
