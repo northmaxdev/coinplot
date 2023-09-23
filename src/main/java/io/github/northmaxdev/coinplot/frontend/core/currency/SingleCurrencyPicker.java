@@ -12,13 +12,13 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
-public final class CurrencyComboBox extends ComboBox<Currency> implements LocaleChangeObserver {
+public final class SingleCurrencyPicker extends ComboBox<Currency> implements LocaleChangeObserver {
 
-    private static final String HELPER_TEXT_KEY = "currency-combo-box.helper-text";
+    private static final String HELPER_TEXT_KEY = "single-currency-picker.helper-text";
 
     private final CurrencyService dataSource;
 
-    public CurrencyComboBox(@Nonnull CurrencyService dataSource) {
+    public SingleCurrencyPicker(@Nonnull CurrencyService dataSource) {
         this.dataSource = Objects.requireNonNull(dataSource);
         CurrencyComboBoxes.configure(this);
 
