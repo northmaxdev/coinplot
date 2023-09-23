@@ -27,7 +27,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
 
     private static final String HELPER_TEXT_KEY = "period-field.helper-text";
 
-    private final ChronoUnitSelect unitSelect;
+    private final ChronoUnitPicker unitPicker;
     private final IntegerField unitAmountField;
 
     private int days = 0;
@@ -39,24 +39,24 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
     }
 
     public PeriodField(@Nullable Period initialValue) {
-        this.unitSelect = new ChronoUnitSelect(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
+        this.unitPicker = new ChronoUnitPicker(ChronoUnit.DAYS, ChronoUnit.MONTHS, ChronoUnit.YEARS);
         this.unitAmountField = new IntegerField();
 
-        unitSelect.addValueChangeListener(event -> {
+        unitPicker.addValueChangeListener(event -> {
             @Nullable ChronoUnit newUnitSelection = event.getValue();
             updateAmountFieldForUnit(newUnitSelection);
         });
 
         unitAmountField.addValueChangeListener(event -> {
             if (event.isFromClient()) {
-                Optional<ChronoUnit> selectedUnit = unitSelect.getOptionalValue();
+                Optional<ChronoUnit> selectedUnit = unitPicker.getOptionalValue();
                 int newAmount = Ints.zeroIfNull(event.getValue());
                 selectedUnit.ifPresent(unit -> setSavedUnitAmount(unit, newAmount));
             }
         });
 
         unitAmountField.setStepButtonsVisible(true);
-        HorizontalLayout layout = ThemableLayouts.createHorizontal(Spacing.EXTRA_SMALL, unitSelect, unitAmountField);
+        HorizontalLayout layout = ThemableLayouts.createHorizontal(Spacing.EXTRA_SMALL, unitPicker, unitAmountField);
         add(layout);
 
         setValue(Periods.zeroIfNull(initialValue));
@@ -83,7 +83,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
         months = period.getMonths();
         years = period.getYears();
 
-        @Nullable ChronoUnit currentlySelectedUnit = unitSelect.getValue();
+        @Nullable ChronoUnit currentlySelectedUnit = unitPicker.getValue();
         updateAmountFieldForUnit(currentlySelectedUnit);
     }
 
@@ -98,7 +98,7 @@ public final class PeriodField extends CustomField<Period> implements LocaleChan
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
-        unitSelect.localeChange(event);
+        unitPicker.localeChange(event);
         I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
     }
 
