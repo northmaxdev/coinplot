@@ -20,13 +20,13 @@ public final class SingleCurrencyPicker extends ComboBox<Currency> implements Lo
 
     public SingleCurrencyPicker(@Nonnull CurrencyService dataSource) {
         this.dataSource = Objects.requireNonNull(dataSource);
-        CurrencyComboBoxes.configure(this);
+        CurrencyPickers.configure(this);
 
         loadAvailableCurrencies();
     }
 
     public void loadAvailableCurrencies() {
-        CurrencyComboBoxes.loadItems(this, dataSource);
+        CurrencyPickers.loadItems(this, dataSource);
     }
 
     @Override

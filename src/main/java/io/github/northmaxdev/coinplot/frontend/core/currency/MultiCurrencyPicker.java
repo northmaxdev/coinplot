@@ -20,13 +20,13 @@ public final class MultiCurrencyPicker extends MultiSelectComboBox<Currency> imp
 
     public MultiCurrencyPicker(@Nonnull CurrencyService dataSource) {
         this.dataSource = Objects.requireNonNull(dataSource);
-        CurrencyComboBoxes.configure(this);
+        CurrencyPickers.configure(this);
 
         loadAvailableCurrencies();
     }
 
     public void loadAvailableCurrencies() {
-        CurrencyComboBoxes.loadItems(this, dataSource);
+        CurrencyPickers.loadItems(this, dataSource);
     }
 
     @Override

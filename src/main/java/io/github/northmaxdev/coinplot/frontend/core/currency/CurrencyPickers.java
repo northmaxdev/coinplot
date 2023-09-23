@@ -13,15 +13,14 @@ import jakarta.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.Set;
 
-final class CurrencyComboBoxes { // Package-private
+final class CurrencyPickers { // Package-private
 
     private static final ItemLabelGenerator<Currency> ITEM_LABEL_GENERATOR = Currency::getName;
     // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
     // See SerializableComparator class JavaDoc for more information
-    private static final SerializableComparator<Currency> COMPARATOR =
-            Comparator.comparing(Currency::getCode)::compare;
+    private static final SerializableComparator<Currency> COMPARATOR = Comparator.comparing(Currency::getCode)::compare;
 
-    private CurrencyComboBoxes() {
+    private CurrencyPickers() {
         throw new UnsupportedOperationException();
     }
 
