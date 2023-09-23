@@ -2,11 +2,10 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.lang.MoreCollections;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,16 +14,16 @@ public final class ExchangeRateSetCompositeHandler implements ExchangeRateSetHan
     private final @Nonnull Collection<ExchangeRateSetHandler> children;
     private final boolean parallel;
 
-    public static @Nonnull ExchangeRateSetCompositeHandler singleThreadedOf(@Nullable ExchangeRateSetHandler... handlers) {
+    public static @Nonnull ExchangeRateSetCompositeHandler singleThreadedOf(@Nonnull ExchangeRateSetHandler... handlers) {
         return new ExchangeRateSetCompositeHandler(false, handlers);
     }
 
-    public static @Nonnull ExchangeRateSetCompositeHandler parallelOf(@Nullable ExchangeRateSetHandler... handlers) {
+    public static @Nonnull ExchangeRateSetCompositeHandler parallelOf(@Nonnull ExchangeRateSetHandler... handlers) {
         return new ExchangeRateSetCompositeHandler(true, handlers);
     }
 
-    private ExchangeRateSetCompositeHandler(boolean parallel, @Nullable ExchangeRateSetHandler... children) {
-        this.children = MoreCollections.deeplyDenullified(children);
+    private ExchangeRateSetCompositeHandler(boolean parallel, @Nonnull ExchangeRateSetHandler... children) {
+        this.children = List.of(children); // Implicit deep null-check(s)
         this.parallel = parallel;
     }
 
