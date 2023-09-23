@@ -36,7 +36,7 @@ public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end
         return Period.between(start, end);
     }
 
-    public @Nonnull Stream<LocalDate> dates() {
+    public @Nonnull Stream<LocalDate> stream() {
         return start.datesUntil(end);
     }
 
