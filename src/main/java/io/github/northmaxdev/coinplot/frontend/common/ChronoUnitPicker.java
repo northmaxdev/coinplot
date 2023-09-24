@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.frontend.common;
 
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import jakarta.annotation.Nonnull;
@@ -11,12 +12,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.Locale;
 
-public final class ChronoUnitPicker extends StrictSelect<ChronoUnit> implements LocaleChangeObserver {
+public final class ChronoUnitPicker extends Select<ChronoUnit> implements LocaleChangeObserver {
+
+    private static final Comparator<ChronoUnit> SORT_COMPARATOR = Comparator.naturalOrder();
 
     public ChronoUnitPicker(@Nonnull ChronoUnit... units) {
-        // ChronoUnit::toString is a "throwaway" ItemLabelGenerator that we pass only
-        // because we cannot reference 'this' before supertype constructor is called.
-        super(ChronoUnit::toString, Comparator.naturalOrder(), units);
+        setItems(ListDataProviders.create(SORT_COMPARATOR, units));
         setItemLabelGenerator(this::getTranslatedUnitLabel);
         setEmptySelectionAllowed(false);
     }
