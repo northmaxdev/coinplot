@@ -3,10 +3,10 @@
 package io.github.northmaxdev.coinplot.frontend.common;
 
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import jakarta.annotation.Nonnull;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.Comparator;
 
 // A RadioButtonGroup with extra instantiation-time requirements to ensure more optimal UI/UX.
 // Type T must have well-defined equals/hashCode implementations.
@@ -15,15 +15,12 @@ public class StrictRadioButtonGroup<T> extends RadioButtonGroup<T> { // Open (no
     private static final int MIN_OPTIONS = 2;
 
     @SafeVarargs
-    public StrictRadioButtonGroup(@Nonnull T... options) {
+    public StrictRadioButtonGroup(@Nonnull Comparator<T> sortComparator, @Nonnull T... options) {
         if (options.length < MIN_OPTIONS) { // Implicit null-check on the array itself
             throw new IllegalArgumentException("Must have at least " + MIN_OPTIONS + " options");
         }
 
-        // Explicitly use an immutable Collection (i.e., do not rely on Vaadin implementation details).
-        // Since RadioButtonGroup is intended for mutually exclusive options, we use a Set.
-        // This also implicitly null-checks the array's elements.
-        Collection<T> backingCollection = Set.of(options);
-        setItems(backingCollection);
+        ListDataProvider<T> dataProvider = ListDataProviders.create(sortComparator, options);
+        setItems(dataProvider);
     }
 }
