@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.frontend.domain.currency;
 
-import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.function.SerializableComparator;
@@ -15,10 +14,9 @@ import java.util.Set;
 
 final class CurrencyPickers { // Package-private
 
-    private static final ItemLabelGenerator<Currency> ITEM_LABEL_GENERATOR = Currency::getName;
-    // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
     // See SerializableComparator class JavaDoc for more information
     private static final SerializableComparator<Currency> COMPARATOR = Comparator.comparing(Currency::getCode)::compare;
+    // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
 
     private CurrencyPickers() {
         throw new UnsupportedOperationException();
@@ -26,7 +24,7 @@ final class CurrencyPickers { // Package-private
 
     static <C extends ComboBoxBase<C, Currency, ?>> void configure(@Nonnull C component) {
         // Don't null-check: this is a package-private class
-        component.setItemLabelGenerator(ITEM_LABEL_GENERATOR);
+        component.setItemLabelGenerator(Currency::getName);
         component.setAllowCustomValue(false);
     }
 
