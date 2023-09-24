@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.frontend.core;
+package io.github.northmaxdev.coinplot.frontend.common;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -34,10 +34,10 @@ public final class ThemableLayouts {
         throw new UnsupportedOperationException();
     }
 
-    public static @Nonnull HorizontalLayout createHorizontal(@Nonnull Spacing spacing, @Nonnull Component... components) {
+    public static @Nonnull HorizontalLayout horizontal(@Nonnull Spacing spacing, @Nonnull Component... components) {
         Objects.requireNonNull(spacing);
-
         HorizontalLayout layout = new HorizontalLayout(components); // Implicit null-check for 'components'
+
         layout.setSpacing(false); // Remove default setting (the Vaadin component docs do this themselves)
         ThemeList themeList = layout.getThemeList();
         themeList.add(spacing.toString());
