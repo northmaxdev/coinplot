@@ -9,7 +9,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
-// A RadioButtonGroup with extra instantiation-time requirements to ensure more optimal UI/UX.
+// A Vaadin RadioButtonGroup with extra instantiation-time requirements to ensure more optimal UI/UX.
 // Type T must have well-defined equals/hashCode implementations.
 public class StrictRadioButtonGroup<T> extends RadioButtonGroup<T> { // Open (non-final)
 
