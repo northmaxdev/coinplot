@@ -19,9 +19,7 @@ public class StrictRadioButtonGroup<T> extends RadioButtonGroup<T> { // Open (no
     public StrictRadioButtonGroup(@Nonnull ItemLabelGenerator<T> labelGenerator,
                                   @Nonnull Comparator<T> sortComparator,
                                   @Nonnull T... options) {
-        if (options.length < MIN_OPTIONS) { // Implicit null-check on the array itself
-            throw new IllegalArgumentException("Must have at least " + MIN_OPTIONS + " options");
-        }
+        StrictComponents.checkOptionCount(MIN_OPTIONS, options);
 
         ListDataProvider<T> dataProvider = ListDataProviders.create(sortComparator, options);
         setItems(dataProvider);
