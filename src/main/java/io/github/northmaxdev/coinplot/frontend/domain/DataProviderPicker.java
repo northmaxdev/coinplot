@@ -9,13 +9,16 @@ import io.github.northmaxdev.coinplot.frontend.common.StrictRadioButtonGroup;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 
+import java.util.Comparator;
+
 // TODO: Well-defined equals/hashCode for DataProvider implementations (see StrictRadioButtonGroup comments)
 public final class DataProviderPicker extends StrictRadioButtonGroup<DataProvider> implements LocaleChangeObserver {
 
     private static final String HELPER_TEXT_KEY = "data-provider-picker.helper-text";
+    private static final Comparator<DataProvider> SORT_COMPARATOR = Comparator.comparing(DataProvider::getDisplayName);
 
-    public DataProviderPicker(@Nonnull DataProvider... items) {
-        super(items);
+    public DataProviderPicker(@Nonnull DataProvider... dataProviders) {
+        super(SORT_COMPARATOR, dataProviders);
         setItemLabelGenerator(DataProvider::getDisplayName);
     }
 
