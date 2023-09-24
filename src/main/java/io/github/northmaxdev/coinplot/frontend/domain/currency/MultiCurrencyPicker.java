@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.frontend.core.currency;
+package io.github.northmaxdev.coinplot.frontend.domain.currency;
 
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
