@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.Objects;
 
 // A Vaadin Select with extra instantiation-time requirements to ensure more optimal UI/UX.
-// Type T must have well-defined equals/hashCode implementations (see ListDataProviders, which is used by this class).
 public class StrictSelect<T> extends Select<T> { // Open (non-final)
 
     private static final int MIN_OPTIONS = 3;

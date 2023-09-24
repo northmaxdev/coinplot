@@ -7,8 +7,8 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public final class ListDataProviders {
 
@@ -16,13 +16,9 @@ public final class ListDataProviders {
         throw new UnsupportedOperationException();
     }
 
-    // The methods below use java.util.Set as the backing collection because in most cases,
-    // the related component wants its items to be unique. Needless to say, type T must have
-    // well-defined equals/hashCode implementations.
-
     @SafeVarargs
     public static <T> @Nonnull ListDataProvider<T> create(@Nonnull T... items) {
-        Collection<T> backingCollection = Set.of(items); // Implicit null-checks on both the array itself and its elements
+        Collection<T> backingCollection = List.of(items); // Implicit null-checks on both the array itself and its elements
         return new ListDataProvider<>(backingCollection);
     }
 
@@ -35,7 +31,7 @@ public final class ListDataProviders {
     }
 
     public static <T> @Nonnull ListDataProvider<T> create(@Nonnull Collection<T> items) {
-        Collection<T> backingCollection = Set.copyOf(items); // Implicit null-checks on both the array itself and its elements
+        Collection<T> backingCollection = List.copyOf(items); // Implicit null-checks on both the array itself and its elements
         return new ListDataProvider<>(backingCollection);
     }
 

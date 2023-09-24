@@ -10,7 +10,6 @@ import jakarta.annotation.Nonnull;
 import java.util.Comparator;
 
 // A Vaadin RadioButtonGroup with extra instantiation-time requirements to ensure more optimal UI/UX.
-// Type T must have well-defined equals/hashCode implementations (see ListDataProviders, which is used by this class).
 public class StrictRadioButtonGroup<T> extends RadioButtonGroup<T> { // Open (non-final)
 
     private static final int MIN_OPTIONS = 2;

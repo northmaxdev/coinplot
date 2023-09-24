@@ -11,7 +11,6 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
-// TODO: Well-defined equals/hashCode for DataProvider implementations (see StrictRadioButtonGroup comments)
 public final class DataProviderPicker extends StrictRadioButtonGroup<DataProvider> implements LocaleChangeObserver {
 
     private static final String HELPER_TEXT_KEY = "data-provider-picker.helper-text";
