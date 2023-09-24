@@ -33,4 +33,16 @@ public final class ListDataProviders {
         dataProvider.setSortComparator(sortComparator::compare); // See SerializableComparator JavaDoc for potentially important info
         return dataProvider;
     }
+
+    public static <T> @Nonnull ListDataProvider<T> create(@Nonnull Collection<T> items) {
+        Collection<T> backingCollection = Set.copyOf(items); // Implicit null-checks on both the array itself and its elements
+        return new ListDataProvider<>(backingCollection);
+    }
+
+    public static <T> @Nonnull ListDataProvider<T> create(@Nonnull Comparator<T> sortComparator, @Nonnull Collection<T> items) {
+        Objects.requireNonNull(sortComparator);
+        ListDataProvider<T> dataProvider = create(items);
+        dataProvider.setSortComparator(sortComparator::compare); // See SerializableComparator JavaDoc for potentially important info
+        return dataProvider;
+    }
 }
