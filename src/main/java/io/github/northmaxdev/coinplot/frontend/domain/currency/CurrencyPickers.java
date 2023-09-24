@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.frontend.domain.currency;
 
 import com.vaadin.flow.component.combobox.ComboBoxBase;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.frontend.common.ListDataProviders;
@@ -32,9 +31,7 @@ final class CurrencyPickers { // Package-private
     static <C extends ComboBoxBase<C, Currency, ?>> boolean loadItems(@Nonnull C component, @Nonnull CurrencyService dataSource) {
         // Don't null-check: this is a package-private class
         Set<Currency> availableCurrencies = dataSource.getAvailableCurrencies();
-
-        ListDataProvider<Currency> dataProvider = ListDataProviders.create(SORT_COMPARATOR, availableCurrencies);
-        component.setItems(dataProvider);
+        component.setItems(ListDataProviders.create(SORT_COMPARATOR, availableCurrencies));
 
         // Return 'true' if we loaded at least one item and 'false' if none at all.
         // This can help components adapt their visual appearance for "no data" cases.
