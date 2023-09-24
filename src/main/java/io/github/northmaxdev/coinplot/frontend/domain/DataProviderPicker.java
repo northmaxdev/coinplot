@@ -9,6 +9,7 @@ import io.github.northmaxdev.coinplot.frontend.common.StrictRadioButtonGroup;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 
+// TODO: Well-defined equals/hashCode for DataProvider implementations (see StrictRadioButtonGroup comments)
 public final class DataProviderPicker extends StrictRadioButtonGroup<DataProvider> implements LocaleChangeObserver {
 
     private static final String HELPER_TEXT_KEY = "data-provider-picker.helper-text";
