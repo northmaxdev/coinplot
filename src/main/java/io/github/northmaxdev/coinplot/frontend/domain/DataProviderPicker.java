@@ -18,8 +18,7 @@ public final class DataProviderPicker extends StrictRadioButtonGroup<DataProvide
     private static final Comparator<DataProvider> SORT_COMPARATOR = Comparator.comparing(DataProvider::getDisplayName);
 
     public DataProviderPicker(@Nonnull DataProvider... dataProviders) {
-        super(SORT_COMPARATOR, dataProviders);
-        setItemLabelGenerator(DataProvider::getDisplayName);
+        super(DataProvider::getDisplayName, SORT_COMPARATOR, dataProviders);
     }
 
     @Override
