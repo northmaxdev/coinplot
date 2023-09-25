@@ -10,7 +10,7 @@ public final class Ints {
         throw new UnsupportedOperationException();
     }
 
-    public static int zeroIfNull(@Nullable Integer i) {
+    public static int nullToZero(@Nullable Integer i) {
         return i == null ? 0 : i;
     }
 }

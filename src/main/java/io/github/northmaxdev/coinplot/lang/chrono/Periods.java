@@ -14,7 +14,7 @@ public final class Periods {
         throw new UnsupportedOperationException();
     }
 
-    public static @Nonnull Period zeroIfNull(@Nullable Period p) {
+    public static @Nonnull Period nullToZero(@Nullable Period p) {
         return Objects.requireNonNullElse(p, Period.ZERO);
     }
 }
