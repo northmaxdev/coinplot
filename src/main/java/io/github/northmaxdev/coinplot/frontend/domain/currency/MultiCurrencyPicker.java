@@ -22,10 +22,10 @@ public final class MultiCurrencyPicker extends MultiSelectComboBox<Currency> imp
         this.dataSource = Objects.requireNonNull(dataSource);
         CurrencyPickers.configure(this);
 
-        loadAvailableCurrencies();
+        reloadAvailableCurrencies(); // Initial load
     }
 
-    public void loadAvailableCurrencies() {
+    public void reloadAvailableCurrencies() {
         CurrencyPickers.loadItems(this, dataSource);
     }
 
