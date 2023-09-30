@@ -32,7 +32,7 @@ public final class ExchangeRateSetCompositeHandler implements ExchangeRateSetHan
         Objects.requireNonNull(dataset);
 
         if (parallel) {
-            // TODO: Implement
+            // FIXME (Implementation)
             throw new UnsupportedOperationException();
         } else {
             children.forEach(child -> child.handle(dataset));

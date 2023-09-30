@@ -115,7 +115,7 @@ public final class Tests {
     public static <R extends APIRequest> void verifyAPIRequestEquals(@Nonnull Class<R> requestClass) {
         Objects.requireNonNull(requestClass);
         EqualsVerifier.forClass(requestClass)
-                // FIXME:
+                // FIXME (Implementation):
                 //  The class hierarchy of APIRequest implementations mixes between subclasses that add state and
                 //  subclasses that merely add behavior. Running an EqualsVerifier with standard configuration leads to
                 //  "subclass does not equal superclass" errors. Configuring withRedefinedSuperclass() leads to "subclass

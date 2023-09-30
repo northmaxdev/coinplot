@@ -19,7 +19,7 @@ public class FrankfurterConfiguration implements CustomHostSupplier {
 
     @Override
     public Optional<HttpHost> getCustomHost() {
-        // FIXME: Come up with a better solution because this might be a potential bottleneck
+        // FIXME (Implementation): Come up with a better solution because this might be a potential bottleneck
         return Optional.ofNullable(customHostLiteral)
                 .map(s -> {
                     try {
