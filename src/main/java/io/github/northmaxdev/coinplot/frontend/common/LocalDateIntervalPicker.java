@@ -38,11 +38,6 @@ public final class LocalDateIntervalPicker extends CustomField<LocalDateInterval
         add(layout);
     }
 
-    public LocalDateIntervalPicker(@Nullable LocalDateInterval initialValue) {
-        this();
-        setValue(initialValue);
-    }
-
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
         Locale newLocale = event.getLocale();
