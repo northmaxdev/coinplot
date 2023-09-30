@@ -14,7 +14,7 @@ import java.util.Set;
 final class CurrencyPickers { // Package-private
 
     private static final Comparator<Currency> SORT_COMPARATOR = Comparator.comparing(Currency::getCode);
-    // TODO: ItemFilter<Currency> that supports filtering by both the name OR the ISO code
+    // TODO (Feature): ItemFilter<Currency> that supports filtering by both the name OR the ISO code
 
     private CurrencyPickers() {
         throw new UnsupportedOperationException();
@@ -26,7 +26,7 @@ final class CurrencyPickers { // Package-private
         component.setAllowCustomValue(false);
     }
 
-    // TODO: How exactly do we want to react to "no data" cases? And do we really need this boolean return value for that?
+    // TODO (Refactor): How exactly do we want to react to "no data" cases? And do we really need this boolean return value for that?
     @SuppressWarnings("UnusedReturnValue") // Sometimes we may not care about the number of loaded items
     static <C extends ComboBoxBase<C, Currency, ?>> boolean loadItems(@Nonnull C component, @Nonnull CurrencyService dataSource) {
         // Don't null-check: this is a package-private class

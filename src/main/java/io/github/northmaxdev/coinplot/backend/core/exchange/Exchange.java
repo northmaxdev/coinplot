@@ -19,7 +19,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
 
-    // TODO: Play with FetchType configurations (eager vs lazy)
+    // TODO (Performance): Play with FetchType configurations (eager vs lazy)
 
     @ManyToOne(optional = false)
     private @Nonnull Currency base;

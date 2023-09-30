@@ -15,8 +15,7 @@ public interface CurrencyRepository extends
         SetCrudRepository<Currency, String>,
         EmptinessQueryableRepository<Currency, String> {
 
-    // TODO: This override is meant for performance only. Profile whether this actually matters.
-    @Override
+    @Override // This is for performance only
     @Query("SELECT c FROM Currency c")
     @Nonnull Set<Currency> findAll();
 }

@@ -16,9 +16,9 @@ public interface ExchangeRateRepository extends
         SetCrudRepository<ExchangeRate, Exchange>,
         EntityExistenceQueryableRepository<ExchangeRate, Exchange> {
 
-    // TODO:
-    //  Consider overriding existAllById(Iterable<Exchange>) with a JPQL query,
-    //  as it is a frequently-accessed method.
+    // TODO (Performance):
+    //  Consider overriding existAllById(Iterable<Exchange>) and findAllById(Iterable<Exchange>) with JPQL queries,
+    //  as they are frequently-accessed methods.
 
     default boolean existAllById(@Nonnull ExchangeBatch batch) {
         Objects.requireNonNull(batch);
@@ -29,10 +29,6 @@ public interface ExchangeRateRepository extends
         }
         return result;
     }
-
-    // TODO:
-    //  Consider overriding findAllById(Iterable<Exchange>) with a JPQL query,
-    //  as it is a frequently-accessed method.
 
     default @Nonnull Set<ExchangeRate> findAllById(@Nonnull ExchangeBatch batch) {
         Objects.requireNonNull(batch);
