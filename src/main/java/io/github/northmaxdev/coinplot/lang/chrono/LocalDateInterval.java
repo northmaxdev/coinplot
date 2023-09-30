@@ -23,15 +23,6 @@ public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end
         }
     }
 
-    public static @Nonnull LocalDateInterval calculate(@Nonnull LocalDate start, @Nonnull Period periodToAdd) {
-        Objects.requireNonNull(start);
-        Objects.requireNonNull(periodToAdd);
-
-        LocalDate end = start.plus(periodToAdd);
-        // No need to validate the period, the canonical constructor's bounds-check is enough
-        return new LocalDateInterval(start, end);
-    }
-
     public @Nonnull Period toPeriod() {
         return Period.between(start, end);
     }
