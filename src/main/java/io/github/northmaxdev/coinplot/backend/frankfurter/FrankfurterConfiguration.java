@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.frankfurter;
 
 import io.github.northmaxdev.coinplot.backend.core.web.request.CustomHostSupplier;
+import io.github.northmaxdev.coinplot.lang.Strings;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,7 @@ public class FrankfurterConfiguration implements CustomHostSupplier {
     @Override
     public Optional<HttpHost> getCustomHost() {
         // FIXME (Implementation): Come up with a better solution because this might be a potential bottleneck
-        return Optional.ofNullable(customHostLiteral)
+        return Strings.blankToOptional(customHostLiteral)
                 .map(s -> {
                     try {
                         return HttpHost.create(s);
