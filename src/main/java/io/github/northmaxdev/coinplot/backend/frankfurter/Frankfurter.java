@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class FrankfurterDataProvider extends AbstractDataProvider {
+public final class Frankfurter extends AbstractDataProvider {
 
     @Autowired
-    public FrankfurterDataProvider(
-            @Nonnull FrankfurterCurrencyService currencyService,
-            @Nonnull FrankfurterExchangeRateService exchangeRateService) {
+    public Frankfurter(@Nonnull FrankfurterCurrencyService currencyService, @Nonnull FrankfurterExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 
