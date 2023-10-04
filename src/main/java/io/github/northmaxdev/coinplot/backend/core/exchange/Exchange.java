@@ -52,6 +52,13 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
         return date;
     }
 
+    public @Nonnull DatelessExchange withoutDate() {
+        // TODO (Performance): This may be lazy-computed and cached
+        // DatelessExchange::of(Exchange) itself may or may not use Exchange::withoutDate as its implementation,
+        // so we use the canonical constructor to avoid funny stack overflows.
+        return new DatelessExchange(base, target);
+    }
+
     @Override
     public boolean equals(Object obj) {
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
