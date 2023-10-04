@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
+import io.github.northmaxdev.coinplot.lang.TextuallyDisplayable;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Entity
-public class Currency implements Serializable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.1)
+public class Currency implements Serializable, TextuallyDisplayable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.1)
 
     @Serial
     private static final long serialVersionUID = -1322860514883265661L;
@@ -55,6 +56,11 @@ public class Currency implements Serializable { // Required by the JPA spec to b
     }
 
     public @Nonnull String getName() {
+        return name;
+    }
+
+    @Override
+    public @Nonnull String getDisplayName() {
         return name;
     }
 
