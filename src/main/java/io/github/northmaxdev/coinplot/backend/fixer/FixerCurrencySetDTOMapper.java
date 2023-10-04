@@ -9,7 +9,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Set;
 
-public final class FixerCurrencySetDTOMapper implements CurrencySetDTOMapper<FixerCurrencySetDTO> {
+final class FixerCurrencySetDTOMapper implements CurrencySetDTOMapper<FixerCurrencySetDTO> { // Package-private
 
     @Override
     public @Nonnull Set<Currency> map(@Nonnull FixerCurrencySetDTO dto) {

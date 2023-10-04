@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Optional;
 
 @Configuration
-public class FixerConfiguration implements AccessKeySupplier {
+class FixerConfiguration implements AccessKeySupplier { // Package-private
 
     @Value("${fixer.access-key}")
     private @Nullable String accessKeyValue = null;

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public final class Fixer extends AbstractDataProvider {
 
+    // The class is public, but the constructor is package-private.
+    // This lets us inject, but not instantiate manually.
     @Autowired
-    public Fixer(@Nonnull FixerCurrencyService currencyService, @Nonnull FixerExchangeRateService exchangeRateService) {
+    Fixer(@Nonnull FixerCurrencyService currencyService, @Nonnull FixerExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 

@@ -18,7 +18,7 @@ import java.net.http.HttpClient;
 import java.util.Objects;
 
 @Service
-public final class FixerExchangeRateService extends
+final class FixerExchangeRateService extends // Package-private
         AbstractExchangeRateFetchService<FixerExchangeRateSetRequest, CommonExchangeRateSetDTO> {
 
     private final @Nonnull FixerConfiguration config;

@@ -15,7 +15,8 @@ import java.net.http.HttpClient;
 import java.util.Objects;
 
 @Service
-public final class FixerCurrencyService extends AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
+final class FixerCurrencyService extends // Package-private
+        AbstractCurrencyFetchService<FixerCurrencySetRequest, FixerCurrencySetDTO> {
 
     private final @Nonnull FixerConfiguration config;
 

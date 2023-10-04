@@ -7,7 +7,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
-public final class FixerCurrencySetRequest extends AbstractFixerAPIRequest implements CurrencySetRequest {
+final class FixerCurrencySetRequest extends AbstractFixerAPIRequest implements CurrencySetRequest { // Package-private
 
     public FixerCurrencySetRequest(@Nonnull String accessKeyValue) {
         super(accessKeyValue);

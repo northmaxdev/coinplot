@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
-public abstract class AbstractFixerAPIRequest extends AbstractAPIRequest {
+abstract class AbstractFixerAPIRequest extends AbstractAPIRequest { // Package-private
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "data.fixer.io");
 

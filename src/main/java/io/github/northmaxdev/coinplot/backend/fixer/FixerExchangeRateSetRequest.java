@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 
-public final class FixerExchangeRateSetRequest
+final class FixerExchangeRateSetRequest // Package-private
         extends AbstractFixerAPIRequest
         implements ExchangeRateSetRequest {
 
