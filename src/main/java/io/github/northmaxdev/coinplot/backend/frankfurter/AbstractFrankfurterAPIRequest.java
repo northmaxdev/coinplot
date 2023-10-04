@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
 
-public abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest {
+abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest { // Package-private
 
     private static final HttpHost PUBLIC_INSTANCE_HOST = new HttpHost(HTTPS.getId(), "api.frankfurter.app");
 

@@ -17,7 +17,7 @@ import java.net.http.HttpClient;
 import java.util.Objects;
 
 @Service
-public final class FrankfurterExchangeRateService extends
+final class FrankfurterExchangeRateService extends // Package-private
         AbstractExchangeRateFetchService<FrankfurterExchangeRateSetRequest, CommonExchangeRateSetDTO> {
 
     private final @Nonnull FrankfurterConfiguration config;

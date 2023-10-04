@@ -9,7 +9,7 @@ import org.apache.hc.core5.http.HttpHost;
 
 import java.util.Objects;
 
-public final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIRequest implements CurrencySetRequest {
+final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIRequest implements CurrencySetRequest { // Package-private
 
     public FrankfurterCurrencySetRequest() {
         super();

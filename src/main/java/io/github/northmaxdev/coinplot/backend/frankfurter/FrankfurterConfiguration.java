@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 @Configuration
-public class FrankfurterConfiguration implements CustomHostSupplier {
+class FrankfurterConfiguration implements CustomHostSupplier { // Package-private
 
     @Value("${frankfurter.custom-host}")
     private @Nullable String customHostLiteral = null;

@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 
-public final class FrankfurterExchangeRateSetRequest
+final class FrankfurterExchangeRateSetRequest // Package-private
         extends AbstractFrankfurterAPIRequest
         implements ExchangeRateSetRequest {
 

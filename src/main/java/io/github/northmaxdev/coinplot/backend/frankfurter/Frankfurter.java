@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public final class Frankfurter extends AbstractDataProvider {
 
+    // The class is public, but the constructor is package-private.
+    // This lets us inject, but not instantiate manually.
     @Autowired
-    public Frankfurter(@Nonnull FrankfurterCurrencyService currencyService, @Nonnull FrankfurterExchangeRateService exchangeRateService) {
+    Frankfurter(@Nonnull FrankfurterCurrencyService currencyService, @Nonnull FrankfurterExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 

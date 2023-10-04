@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
-public final class FrankfurterCurrencyService extends AbstractCurrencyFetchService<FrankfurterCurrencySetRequest, Map<String, String>> {
+final class FrankfurterCurrencyService extends // Package-private
+        AbstractCurrencyFetchService<FrankfurterCurrencySetRequest, Map<String, String>> {
 
     private static final TypeReference<Map<String, String>> DTO_TYPE_REFERENCE = new TypeReference<>() {};
 
