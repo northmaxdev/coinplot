@@ -14,7 +14,6 @@ import java.util.Set;
 final class CurrencyPickers { // Package-private
 
     private static final Comparator<Currency> SORT_COMPARATOR = Comparator.comparing(Currency::getCode);
-    // TODO (Feature): ItemFilter<Currency> that supports filtering by both the name OR the ISO code
 
     private CurrencyPickers() {
         throw new UnsupportedOperationException();
@@ -22,7 +21,8 @@ final class CurrencyPickers { // Package-private
 
     static <C extends ComboBoxBase<C, Currency, ?>> void configure(@Nonnull C component) {
         // Don't null-check: this is a package-private class
-        component.setItemLabelGenerator(Currency::getName);
+        // TODO (Feature): ItemFilter<Currency> that supports filtering by both the name OR the ISO code
+        component.setItemLabelGenerator(Currency::getDisplayName);
         component.setAllowCustomValue(false);
     }
 

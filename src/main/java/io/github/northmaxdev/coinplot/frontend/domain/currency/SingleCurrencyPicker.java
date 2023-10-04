@@ -31,6 +31,7 @@ public final class SingleCurrencyPicker extends ComboBox<Currency> implements Lo
 
     @Override
     public void localeChange(LocaleChangeEvent event) {
+        setItemLabelGenerator(currency -> currency.getDisplayName(event.getLocale()));
         I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
     }
 }
