@@ -19,7 +19,7 @@ public final class Fixer extends AbstractDataProvider {
 
     @Override
     public @Nonnull String getDisplayName() {
-        return "Fixer";
+        return "Fixer API";
     }
 
     @Override

@@ -19,7 +19,7 @@ public final class Frankfurter extends AbstractDataProvider {
 
     @Override
     public @Nonnull String getDisplayName() {
-        return "Frankfurter";
+        return "Frankfurter API";
     }
 
     @Override

@@ -19,4 +19,8 @@ public interface DataProvider {
     // An ID intended only for internal usage throughout this project (where relevant).
     // Example: "ecb"
     @Nonnull String getID();
+
+    // TODO (Feature):
+    //  1. Provider URI (getURI)
+    //  2. Provider author display name (getAuthorDisplayName or getDeveloperDisplayName)
 }
