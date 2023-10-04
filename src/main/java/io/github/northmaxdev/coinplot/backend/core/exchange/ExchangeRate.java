@@ -40,6 +40,10 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
         // JPA spec requires a public or protected no-arg constructor (JPA 3.1, section 2.1)
     }
 
+    public @Nonnull Exchange getExchange() {
+        return exchange;
+    }
+
     public @Nonnull Currency getBase() {
         return exchange.getBase();
     }
