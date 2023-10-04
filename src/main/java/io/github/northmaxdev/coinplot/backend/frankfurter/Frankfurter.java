@@ -21,4 +21,9 @@ public final class Frankfurter extends AbstractDataProvider {
     public @Nonnull String getDisplayName() {
         return "Frankfurter";
     }
+
+    @Override
+    public @Nonnull String getID() {
+        return "frankfurter";
+    }
 }

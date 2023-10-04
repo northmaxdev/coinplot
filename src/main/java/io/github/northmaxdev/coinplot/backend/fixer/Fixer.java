@@ -21,4 +21,9 @@ public final class Fixer extends AbstractDataProvider {
     public @Nonnull String getDisplayName() {
         return "Fixer";
     }
+
+    @Override
+    public @Nonnull String getID() {
+        return "fixer";
+    }
 }

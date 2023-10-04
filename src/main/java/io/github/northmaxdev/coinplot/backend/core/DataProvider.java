@@ -12,5 +12,11 @@ public interface DataProvider {
 
     @Nonnull ExchangeRateService getExchangeRateService();
 
+    // A "frontal" display name of this DataProvider (usually the full name of a brand, company or organization).
+    // Example: "European Central Bank"
     @Nonnull String getDisplayName();
+
+    // An ID intended only for internal usage throughout this project (where relevant).
+    // Example: "ecb"
+    @Nonnull String getID();
 }
