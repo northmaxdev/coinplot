@@ -3,9 +3,10 @@
 package io.github.northmaxdev.coinplot.frontend.domain.currency;
 
 import com.vaadin.flow.component.combobox.ComboBoxBase;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.function.SerializableComparator;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
-import io.github.northmaxdev.coinplot.frontend.common.ListDataProviders;
 import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
@@ -13,28 +14,31 @@ import java.util.Set;
 
 final class CurrencyPickers { // Package-private
 
-    private static final Comparator<Currency> SORT_COMPARATOR = Comparator.comparing(Currency::getCode);
+    // See SerializableComparator class JavaDoc for useful information
+    private static final SerializableComparator<Currency> SORT_COMPARATOR = Comparator.comparing(Currency::getCode)::compare;
 
     private CurrencyPickers() {
         throw new UnsupportedOperationException();
     }
 
     static <C extends ComboBoxBase<C, Currency, ?>> void configure(@Nonnull C component) {
-        // Don't null-check: this is a package-private class
-        // TODO (Feature): ItemFilter<Currency> that supports filtering by both the name OR the ISO code
+        // Explicit null-checks are omitted for an implementation helper method
         component.setItemLabelGenerator(Currency::getDisplayName);
         component.setAllowCustomValue(false);
     }
 
-    // TODO (Refactor): How exactly do we want to react to "no data" cases? And do we really need this boolean return value for that?
-    @SuppressWarnings("UnusedReturnValue") // Sometimes we may not care about the number of loaded items
-    static <C extends ComboBoxBase<C, Currency, ?>> boolean loadItems(@Nonnull C component, @Nonnull CurrencyService dataSource) {
-        // Don't null-check: this is a package-private class
+    static <C extends ComboBoxBase<C, Currency, ?>> void loadItems(@Nonnull C component, @Nonnull CurrencyService dataSource) {
+        // Explicit null-checks are omitted for an implementation helper method
         Set<Currency> availableCurrencies = dataSource.getAvailableCurrencies();
-        component.setItems(ListDataProviders.create(SORT_COMPARATOR, availableCurrencies));
+        Set<Currency> copiedItems = Set.copyOf(availableCurrencies); // Protective copy
 
-        // Return 'true' if we loaded at least one item and 'false' if none at all.
-        // This can help components adapt their visual appearance for "no data" cases.
-        return !availableCurrencies.isEmpty();
+        ListDataProvider<Currency> dataProvider = new ListDataProvider<>(copiedItems);
+        dataProvider.setSortComparator(SORT_COMPARATOR);
+        // TODO (Feature):
+        //  ItemFilter<Currency> that supports filtering by both the name or the ISO code.
+        //  See setItems(ItemFilter<T>, ListDataProvider<T>).
+        component.setItems(dataProvider);
+
+        component.setEnabled(!copiedItems.isEmpty());
     }
 }
