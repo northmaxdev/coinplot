@@ -23,7 +23,7 @@ final class CurrencyPickers { // Package-private
 
     static <C extends ComboBoxBase<C, Currency, ?>> void configure(@Nonnull C component) {
         // Explicit null-checks are omitted for an implementation helper method
-        component.setItemLabelGenerator(Currency::getDisplayName);
+        component.setItemLabelGenerator(Currency::getName);
         component.setAllowCustomValue(false);
     }
 

@@ -4,10 +4,9 @@ package io.github.northmaxdev.coinplot.backend.core;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateService;
-import io.github.northmaxdev.coinplot.lang.TextuallyDisplayable;
 import jakarta.annotation.Nonnull;
 
-public interface DataProvider extends TextuallyDisplayable {
+public interface DataProvider {
 
     @Nonnull CurrencyService getCurrencyService();
 
@@ -15,7 +14,6 @@ public interface DataProvider extends TextuallyDisplayable {
 
     // A "frontal" display name of this DataProvider (usually the full name of a brand, company or organization).
     // Example: "European Central Bank"
-    @Override
     @Nonnull String getDisplayName();
 
     // An ID intended only for internal usage throughout this project (where relevant).
