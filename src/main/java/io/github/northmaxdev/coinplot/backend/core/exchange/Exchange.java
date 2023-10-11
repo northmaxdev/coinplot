@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Embeddable
@@ -76,6 +77,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
 
     @Override
     public String toString() {
-        return "[%s --> %s, %s]".formatted(base, target, date);
+        DatelessExchange datelessExchange = withoutDate();
+        return datelessExchange + " " + date.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }

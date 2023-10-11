@@ -73,6 +73,6 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
 
     @Override
     public String toString() {
-        return exchange + " (" + value + ')';
+        return exchange + " " + value;
     }
 }
