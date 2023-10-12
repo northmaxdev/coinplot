@@ -23,10 +23,10 @@ import java.util.Set;
 
 public final class ExchangeBatchAssembler extends CustomField<ExchangeBatch> implements LocaleChangeObserver {
 
-    private static final String BASE_PICKER_LABEL_KEY = "exchange-batch-assembler.label.base-picker";
-    private static final String TARGET_PICKER_LABEL_KEY = "exchange-batch-assembler.label.target-picker";
-    private static final String START_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.label.start-date-picker";
-    private static final String END_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.label.end-date-picker";
+    private static final String BASE_PICKER_LABEL_KEY = "exchange-batch-assembler.base-picker.label";
+    private static final String TARGET_PICKER_LABEL_KEY = "exchange-batch-assembler.target-picker.label";
+    private static final String START_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.start-date-picker.label";
+    private static final String END_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.end-date-picker.label";
     private static final int CURRENCY_PICKER_COLSPAN = 2;
 
     private final SingleCurrencyPicker basePicker;
