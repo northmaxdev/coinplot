@@ -35,23 +35,28 @@ public final class ExchangeBatchControlPanel extends VerticalLayout implements L
         Objects.requireNonNull(currencyDataSource);
         assembler = new ExchangeBatchAssembler(currencyDataSource);
 
-        submitButton = new Button(LumoIcon.DOWNLOAD.create(), event -> submit());
+        submitButton = new Button(LumoIcon.CHECKMARK.create());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        submitButton.addClickListener(event -> submit());
 
-        clearButton = new Button(LumoIcon.CROSS.create(), event -> clear());
+        clearButton = new Button(LumoIcon.CROSS.create());
         clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        clearButton.addClickListener(event -> clear());
 
-        reloadButton = new Button(LumoIcon.RELOAD.create(), event -> reloadAvailableCurrencies());
+        reloadButton = new Button(LumoIcon.RELOAD.create());
         // Use the default variant for the reload button
+        reloadButton.addClickListener(event -> reloadAvailableCurrencies());
 
-        HorizontalLayout buttonBar = new HorizontalLayout(reloadButton, clearButton, submitButton);
-        buttonBar.setJustifyContentMode(JustifyContentMode.END);
+        HorizontalLayout buttonBar = new HorizontalLayout(submitButton, clearButton, reloadButton);
         add(assembler, buttonBar);
 
         this.onSubmit = Objects.requireNonNull(onSubmit);
     }
 
     public void submit() {
+        // TODO (Feature):
+        //  An indeterminate progress bar that activates during execution of onSubmit
+        //  and disables submitButton until finished
         @Nullable ExchangeBatch assembledBatch = assembler.getValue();
         onSubmit.accept(assembledBatch);
     }
