@@ -15,62 +15,62 @@ import java.util.Objects;
 
 public final class ExchangeRateStatisticsView extends HorizontalLayout implements LocaleChangeObserver {
 
-    private static final String MIN_FIELD_LABEL_KEY = "exchange-rate-statistic-view.min-field.label";
-    private static final String MAX_FIELD_LABEL_KEY = "exchange-rate-statistic-view.max-field.label";
-    private static final String AVERAGE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.average-field.label";
-    private static final String COUNT_FIELD_LABEL_KEY = "exchange-rate-statistic-view.count-field.label";
+    private static final String MIN_VALUE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.min-value-field.label";
+    private static final String MAX_VALUE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.max-value-field.label";
+    private static final String AVERAGE_VALUE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.average-value-field.label";
+    private static final String VALUE_COUNT_FIELD_LABEL_KEY = "exchange-rate-statistic-view.value-count-field.label";
 
-    private final BigDecimalField minField;
-    private final BigDecimalField maxField;
-    private final BigDecimalField averageField;
-    private final IntegerField countField;
+    private final BigDecimalField minValueField;
+    private final BigDecimalField maxValueField;
+    private final BigDecimalField averageValueField;
+    private final IntegerField valueCountField;
 
     public ExchangeRateStatisticsView() {
-        minField = new BigDecimalField();
-        maxField = new BigDecimalField();
-        averageField = new BigDecimalField();
-        countField = new IntegerField();
+        minValueField = new BigDecimalField();
+        maxValueField = new BigDecimalField();
+        averageValueField = new BigDecimalField();
+        valueCountField = new IntegerField();
 
-        minField.setReadOnly(true);
-        maxField.setReadOnly(true);
-        averageField.setReadOnly(true);
-        countField.setReadOnly(true);
+        minValueField.setReadOnly(true);
+        maxValueField.setReadOnly(true);
+        averageValueField.setReadOnly(true);
+        valueCountField.setReadOnly(true);
 
-        add(minField, maxField, averageField, countField);
+        add(minValueField, maxValueField, averageValueField, valueCountField);
     }
 
     public void visualize(@Nonnull ExchangeRateStatistics statistics) {
         Objects.requireNonNull(statistics);
 
-        statistics.getMin()
-                .ifPresentOrElse(minField::setValue, minField::clear);
+        statistics.getMinValue()
+                .ifPresentOrElse(minValueField::setValue, minValueField::clear);
 
-        statistics.getMax()
-                .ifPresentOrElse(maxField::setValue, maxField::clear);
+        statistics.getMaxValue()
+                .ifPresentOrElse(maxValueField::setValue, maxValueField::clear);
 
-        averageField.setValue(statistics.getAverage());
-        countField.setValue(statistics.getCount());
+        averageValueField.setValue(statistics.getAverageValue());
+        valueCountField.setValue(statistics.getValueCount());
     }
 
     public void clear() {
-        minField.clear();
-        maxField.clear();
-        averageField.clear();
-        countField.clear();
+        minValueField.clear();
+        maxValueField.clear();
+        averageValueField.clear();
+        valueCountField.clear();
     }
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
-        minField.setLocale(event.getLocale());
-        I18NUtilities.setLabel(minField, event, MIN_FIELD_LABEL_KEY);
+        minValueField.setLocale(event.getLocale());
+        I18NUtilities.setLabel(minValueField, event, MIN_VALUE_FIELD_LABEL_KEY);
 
-        maxField.setLocale(event.getLocale());
-        I18NUtilities.setLabel(maxField, event, MAX_FIELD_LABEL_KEY);
+        maxValueField.setLocale(event.getLocale());
+        I18NUtilities.setLabel(maxValueField, event, MAX_VALUE_FIELD_LABEL_KEY);
 
-        averageField.setLocale(event.getLocale());
-        I18NUtilities.setLabel(averageField, event, AVERAGE_FIELD_LABEL_KEY);
+        averageValueField.setLocale(event.getLocale());
+        I18NUtilities.setLabel(averageValueField, event, AVERAGE_VALUE_FIELD_LABEL_KEY);
 
         // IntegerField does not have locale settings
-        I18NUtilities.setLabel(countField, event, COUNT_FIELD_LABEL_KEY);
+        I18NUtilities.setLabel(valueCountField, event, VALUE_COUNT_FIELD_LABEL_KEY);
     }
 }
