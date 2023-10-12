@@ -64,6 +64,14 @@ public final class ExchangeRateStatistics {
         return BigDecimal.ZERO; // FIXME (Implementation)
     }
 
+    public Optional<BigDecimal> getEarliest() {
+        return Optional.empty(); // FIXME (Implementation)
+    }
+
+    public Optional<BigDecimal> getLatest() {
+        return Optional.empty(); // FIXME (Implementation)
+    }
+
     public int getCount() {
         return rateValueChronology.size();
     }
