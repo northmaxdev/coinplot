@@ -18,11 +18,11 @@ import jakarta.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public final class ExchangeBatchControlPanel extends VerticalLayout implements LocaleChangeObserver {
+public final class ExchangeBatchAssemblyControlPanel extends VerticalLayout implements LocaleChangeObserver {
 
-    private static final String SUBMIT_BUTTON_TEXT_KEY = "exchange-batch-control-panel.submit-button.text";
-    private static final String CLEAR_BUTTON_TEXT_KEY = "exchange-batch-control-panel.clear-button.text";
-    private static final String RELOAD_BUTTON_TEXT_KEY = "exchange-batch-control-panel.reload-button.text";
+    private static final String SUBMIT_BUTTON_TEXT_KEY = "exchange-batch-assembly-control-panel.submit-button.text";
+    private static final String CLEAR_BUTTON_TEXT_KEY = "exchange-batch-assembly-control-panel.clear-button.text";
+    private static final String RELOAD_BUTTON_TEXT_KEY = "exchange-batch-assembly-control-panel.reload-button.text";
 
     private final ExchangeBatchAssembler assembler;
     private final Button submitButton;
@@ -30,8 +30,8 @@ public final class ExchangeBatchControlPanel extends VerticalLayout implements L
     private final Button reloadButton;
     private final Consumer<ExchangeBatch> onSubmit;
 
-    public ExchangeBatchControlPanel(@Nonnull CurrencyService currencyDataSource,
-                                     @Nonnull Consumer<ExchangeBatch> onSubmit) { // Must handle null inputs
+    public ExchangeBatchAssemblyControlPanel(@Nonnull CurrencyService currencyDataSource,
+                                             @Nonnull Consumer<ExchangeBatch> onSubmit) { // Must handle null inputs
         Objects.requireNonNull(currencyDataSource);
         assembler = new ExchangeBatchAssembler(currencyDataSource);
 
