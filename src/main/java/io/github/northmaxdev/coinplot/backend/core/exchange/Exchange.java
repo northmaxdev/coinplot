@@ -28,13 +28,15 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     @ManyToOne(optional = false)
     private @Nonnull Currency target;
 
+    // Using the name "date" leads to SQL execution errors.
+    // This probably means that "date" is a reserved keyword.
     @Column(nullable = false)
-    private @Nonnull LocalDate date;
+    private @Nonnull LocalDate exchangeDate;
 
     public Exchange(@Nonnull Currency base, @Nonnull Currency target, @Nonnull LocalDate date) {
         this.base = Objects.requireNonNull(base, "Exchange base currency cannot be null");
         this.target = Objects.requireNonNull(target, "Exchange target currency cannot be null");
-        this.date = Objects.requireNonNull(date, "Exchange date cannot be null");
+        this.exchangeDate = Objects.requireNonNull(date, "Exchange date cannot be null");
     }
 
     protected Exchange() {
@@ -50,7 +52,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     public @Nonnull LocalDate getDate() {
-        return date;
+        return exchangeDate;
     }
 
     public @Nonnull DatelessExchange withoutDate() {
@@ -66,18 +68,18 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
         return obj instanceof Exchange that
                 && Objects.equals(this.getBase(), that.getBase())
                 && Objects.equals(this.getTarget(), that.getTarget())
-                && Objects.equals(this.date, that.date);
+                && Objects.equals(this.exchangeDate, that.exchangeDate);
     }
 
     @Override
     public int hashCode() {
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
-        return Objects.hash(getBase(), getTarget(), date);
+        return Objects.hash(getBase(), getTarget(), exchangeDate);
     }
 
     @Override
     public String toString() {
         DatelessExchange datelessExchange = withoutDate();
-        return datelessExchange + " " + date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return datelessExchange + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
