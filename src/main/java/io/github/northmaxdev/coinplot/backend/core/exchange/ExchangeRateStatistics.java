@@ -52,27 +52,27 @@ public final class ExchangeRateStatistics {
         return rateValueChronology;
     }
 
-    public Optional<BigDecimal> getMin() {
+    public Optional<BigDecimal> getMinValue() {
         return Optional.empty(); // FIXME (Implementation)
     }
 
-    public Optional<BigDecimal> getMax() {
+    public Optional<BigDecimal> getMaxValue() {
         return Optional.empty(); // FIXME (Implementation)
     }
 
-    public @Nonnull BigDecimal getAverage() {
+    public @Nonnull BigDecimal getAverageValue() {
         return BigDecimal.ZERO; // FIXME (Implementation)
     }
 
-    public Optional<BigDecimal> getEarliest() {
+    public Optional<BigDecimal> getEarliestValue() {
         return Optional.empty(); // FIXME (Implementation)
     }
 
-    public Optional<BigDecimal> getLatest() {
+    public Optional<BigDecimal> getLatestValue() {
         return Optional.empty(); // FIXME (Implementation)
     }
 
-    public int getCount() {
+    public int getValueCount() {
         return rateValueChronology.size();
     }
 }
