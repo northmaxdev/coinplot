@@ -24,8 +24,10 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
     @Column(nullable = false)
     private @Nonnull Exchange exchange;
 
+    // Using the name "value" leads to SQL execution errors.
+    // This probably means that "value" is a reserved keyword.
     @Column(nullable = false)
-    private @Nonnull BigDecimal value;
+    private @Nonnull BigDecimal rateValue;
 
     public ExchangeRate(
             @Nonnull Currency base,
@@ -33,7 +35,7 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
             @Nonnull LocalDate date,
             @Nonnull BigDecimal value) {
         exchange = new Exchange(base, target, date);
-        this.value = Objects.requireNonNull(value, "Exchange rate value cannot be null");
+        this.rateValue = Objects.requireNonNull(value, "Exchange rate value cannot be null");
     }
 
     protected ExchangeRate() {
@@ -57,7 +59,7 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
     }
 
     public @Nonnull BigDecimal getValue() {
-        return value;
+        return rateValue;
     }
 
     @Override
@@ -73,6 +75,6 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
 
     @Override
     public String toString() {
-        return exchange + " " + value;
+        return exchange + " " + rateValue;
     }
 }
