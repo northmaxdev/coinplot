@@ -15,10 +15,10 @@ import java.util.Objects;
 
 public final class ExchangeRateStatisticsView extends HorizontalLayout implements LocaleChangeObserver {
 
-    private static final String MIN_FIELD_LABEL_KEY = "exchange-rate-statistic-view.label.min-field";
-    private static final String MAX_FIELD_LABEL_KEY = "exchange-rate-statistic-view.label.max-field";
-    private static final String AVERAGE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.label.average-field";
-    private static final String COUNT_FIELD_LABEL_KEY = "exchange-rate-statistic-view.label.count-field";
+    private static final String MIN_FIELD_LABEL_KEY = "exchange-rate-statistic-view.min-field.label";
+    private static final String MAX_FIELD_LABEL_KEY = "exchange-rate-statistic-view.max-field.label";
+    private static final String AVERAGE_FIELD_LABEL_KEY = "exchange-rate-statistic-view.average-field.label";
+    private static final String COUNT_FIELD_LABEL_KEY = "exchange-rate-statistic-view.count-field.label";
 
     private final BigDecimalField minField;
     private final BigDecimalField maxField;
