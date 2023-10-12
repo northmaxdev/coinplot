@@ -27,6 +27,7 @@ public final class ExchangeBatchAssembler extends CustomField<ExchangeBatch> imp
     private static final String TARGET_PICKER_LABEL_KEY = "exchange-batch-assembler.label.target-picker";
     private static final String START_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.label.start-date-picker";
     private static final String END_DATE_PICKER_LABEL_KEY = "exchange-batch-assembler.label.end-date-picker";
+    private static final int CURRENCY_PICKER_COLSPAN = 2;
 
     private final SingleCurrencyPicker basePicker;
     private final MultiCurrencyPicker targetPicker;
@@ -51,13 +52,18 @@ public final class ExchangeBatchAssembler extends CustomField<ExchangeBatch> imp
         endDatePicker.setRequired(true);
 
         FormLayout layout = new FormLayout(basePicker, targetPicker, startDatePicker, endDatePicker);
-        layout.setColspan(basePicker, 2);
-        layout.setColspan(targetPicker, 2);
+        layout.setColspan(basePicker, CURRENCY_PICKER_COLSPAN);
+        layout.setColspan(targetPicker, CURRENCY_PICKER_COLSPAN);
         add(layout);
     }
 
+    public void reloadAvailableCurrencies() {
+        basePicker.reloadAvailableCurrencies();
+        targetPicker.reloadAvailableCurrencies();
+    }
+
     @Override
-    public void localeChange(LocaleChangeEvent event) {
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
         basePicker.localeChange(event);
         I18NUtilities.setLabel(basePicker, event, BASE_PICKER_LABEL_KEY);
 
@@ -69,11 +75,6 @@ public final class ExchangeBatchAssembler extends CustomField<ExchangeBatch> imp
 
         endDatePicker.setLocale(event.getLocale());
         I18NUtilities.setLabel(endDatePicker, event, END_DATE_PICKER_LABEL_KEY);
-    }
-
-    public void reloadAvailableCurrencies() {
-        basePicker.reloadAvailableCurrencies();
-        targetPicker.reloadAvailableCurrencies();
     }
 
     //////////////////////////
