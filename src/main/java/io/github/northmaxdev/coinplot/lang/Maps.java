@@ -14,6 +14,8 @@ public final class Maps {
         throw new UnsupportedOperationException();
     }
 
+    // TODO (Refactor): Migrate from SortedMap to SequencedMap of Java 21
+
     public static <K, V> Optional<V> getFirstValue(@Nonnull SortedMap<K, V> sortedMap) {
         Objects.requireNonNull(sortedMap);
 
