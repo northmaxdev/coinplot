@@ -6,11 +6,11 @@ import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableSortedMap;
 import static java.util.stream.Collectors.groupingBy;
@@ -30,7 +30,7 @@ public final class ExchangeRateStatistics {
     // Public API //
     ////////////////
 
-    public static @Nonnull Collection<ExchangeRateStatistics> of(@Nonnull Set<ExchangeRate> dataset) {
+    public static @Nonnull Stream<ExchangeRateStatistics> streamOf(@Nonnull Set<ExchangeRate> dataset) {
         // TODO (Performance): Consider stream parallelization.
         //  Stream::collect JavaDoc even mentions that it is safe to use with mutable data structures (in this case - TreeMap).
         return dataset.stream() // Implicit null-check
@@ -41,8 +41,7 @@ public final class ExchangeRateStatistics {
                 .map(entry -> {
                     SortedMap<LocalDate, BigDecimal> unmodifiableChronologyView = unmodifiableSortedMap(entry.getValue());
                     return new ExchangeRateStatistics(entry.getKey(), unmodifiableChronologyView);
-                })
-                .toList();
+                });
     }
 
     public @Nonnull DatelessExchange getExchange() {
