@@ -9,16 +9,17 @@ import com.vaadin.flow.component.charts.model.DataSeries;
 import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.charts.model.Series;
 import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateStatistics;
 import io.github.northmaxdev.coinplot.lang.chrono.Instants;
 import jakarta.annotation.Nonnull;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-public final class ExchangeRatesChart extends Chart {
+public final class ExchangeRateChart extends Chart {
 
     // Basically just a regular DataSeries that keeps a reference to its data source (an ExchangeRateStatistics instance)
     public static final class ExchangeRateSeries extends DataSeries {
@@ -49,13 +50,12 @@ public final class ExchangeRatesChart extends Chart {
         }
     }
 
-    public ExchangeRatesChart() {
+    public ExchangeRateChart() {
         super(ChartType.LINE);
     }
 
-    public void visualize(@Nonnull Collection<ExchangeRateStatistics> statistics) {
-        // TODO (Performance): Consider stream parallelization
-        List<Series> series = statistics.stream() // Implicit null-check
+    public void visualize(@Nonnull Set<ExchangeRate> dataset) {
+        List<Series> series = ExchangeRateStatistics.streamOf(dataset) // Implicit null-check
                 .map(ExchangeRateSeries::new)
                 .map(Series.class::cast)
                 .toList();
