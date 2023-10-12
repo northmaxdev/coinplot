@@ -31,6 +31,7 @@ public final class ExchangeRateDataVisualizer extends VerticalLayout implements 
         // This is here (instead of in ExchangeRateStatisticsView) because only here we actually care about
         // this horizontal alignment to maintain visual proportions against ExchangeRateChart
         statisticsView.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
         add(chart, statisticsView);
     }
 
