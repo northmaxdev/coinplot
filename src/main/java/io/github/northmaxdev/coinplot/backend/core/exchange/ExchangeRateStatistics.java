@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
+import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
@@ -53,23 +54,32 @@ public final class ExchangeRateStatistics {
     }
 
     public Optional<BigDecimal> getMinValue() {
-        return Optional.empty(); // FIXME (Implementation)
+        // TODO (Performance): This can be lazily-computed and cached
+        return rateValueChronology.values()
+                .stream()
+                .min(BigDecimal::compareTo);
     }
 
     public Optional<BigDecimal> getMaxValue() {
-        return Optional.empty(); // FIXME (Implementation)
+        // TODO (Performance): This can be lazily-computed and cached
+        return rateValueChronology.values()
+                .stream()
+                .max(BigDecimal::compareTo);
     }
 
-    public @Nonnull BigDecimal getAverageValue() {
-        return BigDecimal.ZERO; // FIXME (Implementation)
+    public Optional<BigDecimal> getAverageValue() {
+        // TODO (Performance): This can be lazily-computed and cached
+        return rateValueChronology.values()
+                .stream()
+                .reduce(BigDecimal::add);
     }
 
     public Optional<BigDecimal> getEarliestValue() {
-        return Optional.empty(); // FIXME (Implementation)
+        return Maps.getFirstValue(rateValueChronology);
     }
 
     public Optional<BigDecimal> getLatestValue() {
-        return Optional.empty(); // FIXME (Implementation)
+        return Maps.getLastValue(rateValueChronology);
     }
 
     public int getValueCount() {

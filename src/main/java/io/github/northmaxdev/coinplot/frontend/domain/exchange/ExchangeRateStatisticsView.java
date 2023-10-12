@@ -54,7 +54,8 @@ public final class ExchangeRateStatisticsView extends HorizontalLayout implement
                 .ifPresentOrElse(minValueField::setValue, minValueField::clear);
         statistics.getMaxValue()
                 .ifPresentOrElse(maxValueField::setValue, maxValueField::clear);
-        averageValueField.setValue(statistics.getAverageValue());
+        statistics.getAverageValue()
+                .ifPresentOrElse(averageValueField::setValue, averageValueField::clear);
         statistics.getEarliestValue()
                 .ifPresentOrElse(earliestValueField::setValue, earliestValueField::clear);
         statistics.getLatestValue()
