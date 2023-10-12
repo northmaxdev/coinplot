@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
@@ -71,7 +72,12 @@ public final class ExchangeRateStatistics {
         // TODO (Performance): This can be lazily-computed and cached
         return rateValueChronology.values()
                 .stream()
-                .reduce(BigDecimal::add);
+                .reduce(BigDecimal::add)
+                .map(sum -> {
+                    // If this lambda expression gets executed at all, that means count is not zero
+                    BigDecimal count = BigDecimal.valueOf(rateValueChronology.size());
+                    return sum.divide(count, RoundingMode.HALF_EVEN); // Docs say this is called "Banker's rounding", sounds appropriate! :)
+                });
     }
 
     public Optional<BigDecimal> getEarliestValue() {
