@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.lang.Maps;
 import io.github.northmaxdev.coinplot.lang.math.BigDecimalExtremesPair;
 import jakarta.annotation.Nonnull;
 
@@ -67,17 +66,5 @@ public final class ExchangeRateStatistics {
                     BigDecimal count = BigDecimal.valueOf(rateValueChronology.size());
                     return sum.divide(count, RoundingMode.HALF_EVEN); // Docs say this is called "Banker's rounding", sounds appropriate! :)
                 });
-    }
-
-    public Optional<BigDecimal> getEarliestValue() {
-        return Maps.getFirstValue(rateValueChronology);
-    }
-
-    public Optional<BigDecimal> getLatestValue() {
-        return Maps.getLastValue(rateValueChronology);
-    }
-
-    public int getValueCount() {
-        return rateValueChronology.size();
     }
 }
