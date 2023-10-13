@@ -8,13 +8,13 @@ import jakarta.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import static java.util.Collections.unmodifiableSortedMap;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
@@ -40,10 +40,7 @@ public final class ExchangeRateStatistics {
                 .collect(groupingBy(DatelessExchange::of, toMap(ExchangeRate::getDate, ExchangeRate::getValue, (a, b) -> a, TreeMap::new)))
                 .entrySet()
                 .stream()
-                .map(entry -> {
-                    SortedMap<LocalDate, BigDecimal> unmodifiableChronologyView = unmodifiableSortedMap(entry.getValue());
-                    return new ExchangeRateStatistics(entry.getKey(), unmodifiableChronologyView);
-                });
+                .map(entry -> new ExchangeRateStatistics(entry.getKey(), entry.getValue()));
     }
 
     public @Nonnull DatelessExchange getExchange() {
@@ -51,7 +48,7 @@ public final class ExchangeRateStatistics {
     }
 
     public @Nonnull SortedMap<LocalDate, BigDecimal> getRateValueChronology() {
-        return rateValueChronology;
+        return Collections.unmodifiableSortedMap(rateValueChronology);
     }
 
     public Optional<BigDecimal> getMinValue() {
