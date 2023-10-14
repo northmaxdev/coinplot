@@ -68,7 +68,7 @@ public interface ExchangeRateSetRequest extends APIRequest {
 
         public @Nonnull Map<String, String> build() {
             ExchangeBatch requestData = request.getRequestedExchanges();
-            Map<String, String> parameters = new HashMap<>(4);
+            Map<String, String> parameters = HashMap.newHashMap(4);
 
             if (baseParameterName != null) {
                 Currency base = requestData.base();
