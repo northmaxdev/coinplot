@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
@@ -14,6 +15,10 @@ import java.util.Locale;
 public record Percentage(double value) implements Comparable<Percentage> {
 
     private static final double DECIMAL_MULTIPLIER = 100.0;
+
+    public Percentage(double value) {
+        this.value = Doubles.requireFinite(value, "Percentage value must be a finite number");
+    }
 
     public static @Nonnull Percentage fromDecimalValue(double decimalValue) {
         return new Percentage(decimalValue * DECIMAL_MULTIPLIER);
