@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 // This class deals with percentage values, NOT decimal ones. This means a value of 75.5 represents 75.5%.
 // It should be noted that most Java APIs, such as HashMap's load factor or NumberFormat::getPercentInstance,
@@ -68,15 +69,40 @@ public record Percentage(double value) implements Comparable<Percentage> {
         // _, 0 --> calculate % (should be 100% or -100%)
         // _, _ (unequal) --> calculate %
 
-        // Credit: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
+        // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
         double calculatedDecimalValue = (after - before) / Math.abs(before);
 
         // At this point in time, possible result options are:
-        // 0, _ --> +Inf or -Inf (since in this case it's division by 0) --> eventual IAE by the canonical constructor
+        // 0, _ --> +Inf or -Inf (since in this case it's division by 0) --> eventual IAE by the canonical constructor (not fail-fast)
         // _, 0 --> OK calculation
         // _, _ (unequal) --> OK calculation
 
         return fromDecimalValue(calculatedDecimalValue);
+    }
+
+    public static @Nonnull Percentage ofChange(long before, long after) {
+        if (before == after) {
+            return ZERO;
+        }
+
+        // At this point in time, equal arguments have been filtered out:
+        // 0, _ --> must be rejected (throw IAE)
+        // _, 0 --> calculate % (should be 100% or -100%)
+        // _, _ (unequal) --> calculate %
+
+        if (before == 0L) {
+            throw new IllegalArgumentException("Cannot calculate change from zero unless both operands are zero");
+        }
+
+        // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
+        double calculatedDecimalValue = (double) (after - before) / Math.abs(before);
+        return fromDecimalValue(calculatedDecimalValue);
+    }
+
+    public static @Nonnull Percentage ofChange(@Nonnull Number before, @Nonnull Number after) {
+        Objects.requireNonNull(before);
+        Objects.requireNonNull(after);
+        return ofChange(before.doubleValue(), after.doubleValue());
     }
 
     public double decimalValue() {
