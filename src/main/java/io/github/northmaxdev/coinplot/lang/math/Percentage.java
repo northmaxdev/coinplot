@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
-import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
@@ -14,18 +13,74 @@ import java.util.Locale;
 // The decimalValue() and fromDecimalValue(double) methods may be used for compatibility.
 public record Percentage(double value) implements Comparable<Percentage> {
 
-    private static final double DECIMAL_MULTIPLIER = 100.0;
+    // More constants for common values may be added in the future
+    public static final Percentage ZERO = new Percentage(0);
 
-    public Percentage(double value) {
-        this.value = Doubles.requireFinite(value, "Percentage value must be a finite number");
+    private static final double DECIMAL_VALUE_MULTIPLIER = 100;
+
+    public Percentage {
+        if (!Double.isFinite(value)) { // Unlike isInfinite, isFinite explicitly documents NaN cases (which it rejects)
+            throw new IllegalArgumentException("Percentage value must be a finite number");
+        }
     }
 
     public static @Nonnull Percentage fromDecimalValue(double decimalValue) {
-        return new Percentage(decimalValue * DECIMAL_MULTIPLIER);
+        return new Percentage(decimalValue * DECIMAL_VALUE_MULTIPLIER);
+    }
+
+    // +--------+-------+----------+------------------------------------------+
+    // | Before | After | Change % | Case description                         |
+    // +--------+-------+----------+------------------------------------------+
+    // |  2.5   |  3    |  20%     | An increase between two positives        |
+    // |  4     |  3.5  | -12.5%   | A decrease between two positives         |
+    // |  5.96  |  5.96 |  0%      | No change between two positives          |
+    // |  0.5   | -0.25 | -150%    | A decrease from positive to negative     |
+    // |  2758  |  0    | -100%    | A decrease from positive to zero         |
+    // | -5     |  2.5  |  150%    | An increase from negative to positive    |
+    // | -1     | -0.75 |  25%     | An increase between two negatives        |
+    // | -0.375 | -0.45 | -20%     | A decrease between two negatives         |
+    // | -0.17  | -0.17 |  0%      | No change between two negatives          |
+    // | -99999 |  0    |  100%    | An increase from negative to zero        |
+    // |  0     |  0    |  0%      | No change between two zeroes (edge case) |
+    // +--------+-------+----------+------------------------------------------+
+    // It is not allowed for the 'before' value to be zero, with the only
+    // exception being a specific edge case of both values being zero, in which
+    // case the method returns 0% - just like in any other scenario where both
+    // values are equal. NaN and infinities are not allowed.
+    public static @Nonnull Percentage ofChange(double before, double after) {
+        if (!Double.isFinite(before) || !Double.isFinite(after)) {
+            throw new IllegalArgumentException("Values must be finite numbers");
+        }
+
+        // At this point in time, NaNs and infinities have been filtered out, but zeros are still possible:
+        // 0, 0 --> 0%
+        // 0, _ --> must be rejected (throw IAE)
+        // _, 0 --> calculate % (should be 100% or -100%)
+        // _, _ (equal) --> 0%
+        // _, _ (unequal) --> calculate %
+
+        if (Double.compare(before, after) == 0) {
+            return ZERO;
+        }
+
+        // At this point in time, equal arguments have been filtered out:
+        // 0, _ --> must be rejected (throw IAE)
+        // _, 0 --> calculate % (should be 100% or -100%)
+        // _, _ (unequal) --> calculate %
+
+        // Credit: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
+        double calculatedDecimalValue = (after - before) / Math.abs(before);
+
+        // At this point in time, possible result options are:
+        // 0, _ --> +Inf or -Inf (since in this case it's division by 0) --> eventual IAE by the canonical constructor
+        // _, 0 --> OK calculation
+        // _, _ (unequal) --> OK calculation
+
+        return fromDecimalValue(calculatedDecimalValue);
     }
 
     public double decimalValue() {
-        return value / DECIMAL_MULTIPLIER;
+        return value / DECIMAL_VALUE_MULTIPLIER;
     }
 
     public @Nonnull String format() {
