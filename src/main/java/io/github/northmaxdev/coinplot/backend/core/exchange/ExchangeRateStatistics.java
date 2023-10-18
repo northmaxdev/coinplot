@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -21,9 +21,9 @@ import static java.util.stream.Collectors.toMap;
 public final class ExchangeRateStatistics {
 
     private final @Nonnull DatelessExchange exchange;
-    private final @Nonnull SortedMap<LocalDate, BigDecimal> rateValueChronology;
+    private final @Nonnull NavigableMap<LocalDate, BigDecimal> rateValueChronology;
 
-    private ExchangeRateStatistics(@Nonnull DatelessExchange exchange, @Nonnull SortedMap<LocalDate, BigDecimal> rateValueChronology) {
+    private ExchangeRateStatistics(@Nonnull DatelessExchange exchange, @Nonnull NavigableMap<LocalDate, BigDecimal> rateValueChronology) {
         this.exchange = exchange;
         this.rateValueChronology = rateValueChronology;
     }
@@ -47,8 +47,8 @@ public final class ExchangeRateStatistics {
         return exchange;
     }
 
-    public @Nonnull SortedMap<LocalDate, BigDecimal> getRateValueChronology() {
-        return Collections.unmodifiableSortedMap(rateValueChronology);
+    public @Nonnull NavigableMap<LocalDate, BigDecimal> getRateValueChronology() {
+        return Collections.unmodifiableNavigableMap(rateValueChronology);
     }
 
     public Optional<BigDecimalExtremesPair> getRateValueExtremes() {
