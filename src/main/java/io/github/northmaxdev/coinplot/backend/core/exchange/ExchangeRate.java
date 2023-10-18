@@ -74,7 +74,7 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         return exchange + " " + rateValue;
     }
 }

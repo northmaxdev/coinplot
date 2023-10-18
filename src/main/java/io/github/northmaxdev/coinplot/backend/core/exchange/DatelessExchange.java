@@ -26,7 +26,7 @@ public record DatelessExchange(@Nonnull Currency base, @Nonnull Currency target)
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         return base.getCode() + " → " + target.getCode();
     }
 }

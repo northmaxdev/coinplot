@@ -20,7 +20,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
 
-    // TODO (Performance): Play with FetchType configurations (eager vs lazy)
+    // TODO: Play with FetchType configurations (eager vs lazy)
 
     @ManyToOne(optional = false)
     private @Nonnull Currency base;
@@ -56,10 +56,9 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     public @Nonnull DatelessExchange withoutDate() {
-        // TODO (Performance): This may be lazy-computed and cached
-        // DatelessExchange::of(Exchange) itself may or may not use Exchange::withoutDate as its implementation,
-        // so we use the canonical constructor to avoid funny stack overflows.
-        return new DatelessExchange(base, target);
+        // TODO: Consider lazy-computing and caching this
+        // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
+        return new DatelessExchange(getBase(), getTarget());
     }
 
     @Override
@@ -78,7 +77,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         DatelessExchange datelessExchange = withoutDate();
         return datelessExchange + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }

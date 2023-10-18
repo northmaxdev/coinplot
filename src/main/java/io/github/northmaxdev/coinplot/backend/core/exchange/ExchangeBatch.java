@@ -54,4 +54,8 @@ public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targe
     public @Nonnull Set<Exchange> toSet() {
         return stream().collect(toUnmodifiableSet());
     }
+
+    public int size() {
+        return targets.size() * dateInterval.length();
+    }
 }
