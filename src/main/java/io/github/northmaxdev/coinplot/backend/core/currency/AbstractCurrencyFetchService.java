@@ -4,7 +4,6 @@ package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDatasetService;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -33,7 +32,8 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
     @Override
     public final @Nonnull Set<Currency> getAvailableCurrencies() {
         if (repository.isEmpty()) {
-            Set<Currency> currencies = fetch(this::createAPIRequest);
+            R request = createAPIRequest();
+            Set<Currency> currencies = fetch(request);
             return repository.saveAll(currencies);
         }
         return repository.findAll();
@@ -46,11 +46,12 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
         }
 
         if (repository.isEmpty()) {
-            Set<Currency> currencies = fetch(this::createAPIRequest);
+            R request = createAPIRequest();
+            Set<Currency> currencies = fetch(request);
             repository.saveAll(currencies);
         }
         return repository.findById(code);
     }
 
-    protected abstract @Nonnull R createAPIRequest() throws CannotCreateAPIRequestException;
+    protected abstract @Nonnull R createAPIRequest();
 }

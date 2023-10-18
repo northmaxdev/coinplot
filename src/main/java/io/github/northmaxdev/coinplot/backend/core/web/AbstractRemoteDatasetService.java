@@ -11,6 +11,7 @@ import jakarta.annotation.Nonnull;
 import java.net.http.HttpClient;
 import java.util.Set;
 
+// 'T' must have well-defined equals/hashCode semantics
 public abstract class AbstractRemoteDatasetService<T, R extends APIRequest, D>
         extends AbstractRemoteDataService<Set<T>, R, D> {
 

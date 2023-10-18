@@ -4,12 +4,8 @@ package io.github.northmaxdev.coinplot.backend.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequest;
-import io.github.northmaxdev.coinplot.backend.core.web.request.APIRequestFactory;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.DTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
-import io.github.northmaxdev.coinplot.backend.core.web.response.UnacceptableStatusCodeException;
-import io.github.northmaxdev.coinplot.lang.Throwables;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +57,8 @@ public abstract class AbstractRemoteDataService<T, R extends APIRequest, D> {
 
             int statusCode = response.statusCode();
             if (!isStatusCodeAcceptable(statusCode)) {
-                throw new UnacceptableStatusCodeException(statusCode);
+                logger.error("Unacceptable status code: {}, aborting request", statusCode);
+                return fallbackData();
             }
 
             D dto = jsonParsingStrategy.apply(response.body(), jsonParser);
@@ -69,20 +66,13 @@ public abstract class AbstractRemoteDataService<T, R extends APIRequest, D> {
 
             logger.info("Completed request: {}", apiRequest);
             return data;
-        } catch (IOException | InterruptedException | UnacceptableStatusCodeException e) {
-            logger.error("Failed request: {}, exception message: {}", apiRequest, Throwables.getMessage(e));
+        } catch (IOException e) {
+            // See the following page for more info on why toString() is explicitly called on the exception:
+            // https://www.slf4j.org/faq.html#paramException
+            logger.error("Request I/O failure: {}", e.toString());
             return fallbackData();
-        }
-    }
-
-    protected final @Nonnull T fetch(@Nonnull APIRequestFactory<R> apiRequestFactory) {
-        Objects.requireNonNull(apiRequestFactory);
-        try {
-            R apiRequest = apiRequestFactory.create();
-            // We take the successful creation of an APIRequest for granted, so no logging for that.
-            return fetch(apiRequest);
-        } catch (CannotCreateAPIRequestException e) {
-            logger.error("Failed to form API request: {}", Throwables.getMessage(e));
+        } catch (InterruptedException e) {
+            logger.error("Request interrupted");
             return fallbackData();
         }
     }
