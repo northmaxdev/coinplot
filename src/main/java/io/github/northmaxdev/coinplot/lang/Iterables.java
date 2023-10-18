@@ -6,7 +6,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -16,15 +15,13 @@ public final class Iterables {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean isEmpty(@Nonnull Iterable<?> iterable) {
-        Objects.requireNonNull(iterable);
-        return iterable instanceof Collection<?> collection
-                ? collection.isEmpty()
-                : iterable.iterator().hasNext(); // Keep in mind that one can only query whether an iterator has any elements *remaining*
-    }
-
     public static boolean isNullOrEmpty(@Nullable Iterable<?> iterable) {
-        return iterable == null || isEmpty(iterable);
+        return switch (iterable) {
+            case null -> true;
+            case Collection<?> collection -> collection.isEmpty();
+            // FIXME: Keep in mind that one can only query whether an iterator has any elements *remaining*
+            default -> iterable.iterator().hasNext();
+        };
     }
 
     public static <T> @Nonnull Stream<T> stream(@Nullable Iterable<T> iterable) {
