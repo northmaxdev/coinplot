@@ -78,20 +78,21 @@ public final class ExchangeRateStatistics {
         return Optional.of(p);
     }
 
-    public Optional<BigDecimalExtremesPair> getRateValueExtremes() {
-        // FIXME (Implementation)
-        throw new UnsupportedOperationException();
-    }
+    // Change % of the lowest value to the highest.
+    // If neither the lowest nor the highest values are available,
+    // or the lowest value is zero (and thus it's impossible to calculate the percentage),
+    // an empty Optional is returned.
+    // The method's name is based on the following definition:
+    // https://www.statista.com/statistics-glossary/definition/204/extreme_value/
+    public Optional<Percentage> getExtremesChangePercentage() {
+        Optional<BigDecimal> min = getLowestValue();
+        Optional<BigDecimal> max = getHighestValue();
 
-    public Optional<BigDecimal> getAverageValue() {
-        // TODO (Performance): This can be lazily-computed and cached
-        return rateValueChronology.values()
-                .stream()
-                .reduce(BigDecimal::add)
-                .map(sum -> {
-                    // If this lambda expression gets executed at all, that means count is not zero
-                    BigDecimal count = BigDecimal.valueOf(rateValueChronology.size());
-                    return sum.divide(count, RoundingMode.HALF_EVEN); // Docs say this is called "Banker's rounding", sounds appropriate! :)
-                });
+        if (min.isEmpty() || max.isEmpty() || BigDecimal.ZERO.equals(min.get())) {
+            return Optional.empty();
+        }
+
+        Percentage p = Percentage.ofChange(min.get(), max.get());
+        return Optional.of(p);
     }
 }
