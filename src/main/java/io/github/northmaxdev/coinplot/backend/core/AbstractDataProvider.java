@@ -27,4 +27,9 @@ public abstract class AbstractDataProvider implements DataProvider {
     public final @Nonnull ExchangeRateService getExchangeRateService() {
         return exchangeRateService;
     }
+
+    @Override
+    public final @Nonnull String toString() {
+        return getDisplayName();
+    }
 }

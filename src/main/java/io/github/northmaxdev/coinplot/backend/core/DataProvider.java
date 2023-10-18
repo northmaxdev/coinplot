@@ -20,7 +20,5 @@ public interface DataProvider {
     // Example: "ecb"
     @Nonnull String getID();
 
-    // TODO (Feature):
-    //  1. Provider URI (getURI)
-    //  2. Provider author display name (getAuthorDisplayName or getDeveloperDisplayName)
+    // TODO: The provider's official website or source code repository (DataProvider::getURI)
 }
