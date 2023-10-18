@@ -2,7 +2,6 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,8 +9,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.offset;
+import static org.assertj.core.api.InstanceOfAssertFactories.DOUBLE;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class PercentageTests {
@@ -23,7 +24,7 @@ class PercentageTests {
         Percentage actual = Percentage.ofChange(before, after);
 
         assertThat(actual)
-                .extracting(Percentage::value, InstanceOfAssertFactories.DOUBLE)
+                .extracting(Percentage::value, as(DOUBLE))
                 .isEqualTo(expectedPercentageValue, offset(0.0001)); // This should be enough for percentages
     }
 
