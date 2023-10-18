@@ -2,11 +2,13 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 // This class deals with percentage values, NOT decimal ones. This means a value of 75.5 represents 75.5%.
 // It should be noted that most Java APIs, such as HashMap's load factor or NumberFormat::getPercentInstance,
@@ -103,6 +105,24 @@ public record Percentage(double value) implements Comparable<Percentage> {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
         return ofChange(before.doubleValue(), after.doubleValue());
+    }
+
+    public static <T> @Nonnull Percentage ofMatchingPredicate(@Nonnull Iterable<T> iterable, @Nonnull Predicate<T> predicate) {
+        Objects.requireNonNull(iterable);
+        Objects.requireNonNull(predicate);
+
+        // Consider somehow doing a protective copy against potential TOCTOU issues
+
+        if (Iterables.isEmpty(iterable)) {
+            return ZERO;
+        }
+
+        int totalCount = Iterables.size(iterable);
+        int predicateMatchCount = (int) Iterables.stream(iterable)
+                .filter(predicate)
+                .count();
+
+        return fromDecimalValue((double) predicateMatchCount / totalCount);
     }
 
     public double decimalValue() {
