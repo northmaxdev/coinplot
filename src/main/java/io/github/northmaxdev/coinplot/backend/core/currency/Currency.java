@@ -70,7 +70,7 @@ public class Currency implements Serializable { // Required by the JPA spec to b
     }
 
     @Override
-    public String toString() {
+    public @Nonnull String toString() {
         return code;
     }
 }

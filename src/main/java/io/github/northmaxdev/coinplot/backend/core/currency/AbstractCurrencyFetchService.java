@@ -41,8 +41,7 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
 
     @Override
     public final Optional<Currency> getCurrency(@Nullable String code) {
-        // No need to query the repository in any way at all if the currency code is null
-        if (code == null) {
+        if (code == null) { // No need to query the repo at all in this case
             return Optional.empty();
         }
 
