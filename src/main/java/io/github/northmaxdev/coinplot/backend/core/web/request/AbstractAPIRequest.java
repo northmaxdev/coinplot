@@ -18,26 +18,14 @@ import java.util.Optional;
 
 public abstract class AbstractAPIRequest implements APIRequest {
 
-    //////////////////////////////////////
-    // Inner types (AbstractAPIRequest) //
-    //////////////////////////////////////
-
     protected record AccessKey(@Nonnull String name,
                                @Nonnull String value,
                                @Nonnull SpecificationStrategy specificationStrategy) {
-
-        /////////////////////////////
-        // Inner types (AccessKey) //
-        /////////////////////////////
 
         public enum SpecificationStrategy {
             AS_QUERY_PARAMETER,
             AS_HEADER
         }
-
-        ///////////////////////////////
-        // Instantiation (AccessKey) //
-        ///////////////////////////////
 
         // Subclass must supply known-to-be-valid String values.
         public AccessKey {
@@ -54,10 +42,6 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return new AccessKey(name, value, SpecificationStrategy.AS_HEADER);
         }
 
-        /////////////////////////
-        // Getters (AccessKey) //
-        /////////////////////////
-
         public boolean isSpecifiedAsQueryParameter() {
             return specificationStrategy == SpecificationStrategy.AS_QUERY_PARAMETER;
         }
@@ -66,25 +50,17 @@ public abstract class AbstractAPIRequest implements APIRequest {
             return specificationStrategy == SpecificationStrategy.AS_HEADER;
         }
 
-        //////////////////////////////////////////
-        // equals/hashCode/toString (AccessKey) //
-        //////////////////////////////////////////
-
         @Override
-        public String toString() {
+        public @Nonnull String toString() {
             return value;
         }
     }
 
-    /////////////////////////////////
-    // Fields (AbstractAPIRequest) //
-    /////////////////////////////////
-
     private final @Nullable AccessKey accessKey;
 
-    ////////////////////////////////////////
-    // Instantiation (AbstractAPIRequest) //
-    ////////////////////////////////////////
+    ////////////////////////
+    // Subclass API block //
+    ////////////////////////
 
     protected AbstractAPIRequest() {
         this(null);
@@ -93,10 +69,6 @@ public abstract class AbstractAPIRequest implements APIRequest {
     protected AbstractAPIRequest(@Nullable AccessKey accessKey) {
         this.accessKey = accessKey;
     }
-
-    //////////////////////////////
-    // Class Hierarchy API: URI //
-    //////////////////////////////
 
     protected abstract @Nonnull HttpHost getHost();
 
@@ -114,6 +86,16 @@ public abstract class AbstractAPIRequest implements APIRequest {
     protected @Nonnull Map<String, String> getParameters() {
         return Map.of();
     }
+
+    // Deliberately non-final, merely a default implementation.
+    // Subclass must supply known-to-be-valid String values.
+    protected @Nonnull Map<String, String> getHeadersExcludingAccessKey() {
+        return Map.of();
+    }
+
+    ///////////////////////////////
+    // End of subclass API block //
+    ///////////////////////////////
 
     @Override
     public final @Nonnull URI getURI() {
@@ -144,16 +126,6 @@ public abstract class AbstractAPIRequest implements APIRequest {
         }
     }
 
-    //////////////////////////////////
-    // Class Hierarchy API: Headers //
-    //////////////////////////////////
-
-    // Deliberately non-final, merely a default implementation.
-    // Subclass must supply known-to-be-valid String values.
-    protected @Nonnull Map<String, String> getHeadersExcludingAccessKey() {
-        return Map.of();
-    }
-
     @Override
     public final @Nonnull Map<String, String> getHeaders() {
         Map<String, String> headersWithoutKey = getHeadersExcludingAccessKey();
@@ -167,32 +139,8 @@ public abstract class AbstractAPIRequest implements APIRequest {
         return Collections.unmodifiableMap(headersWithoutKey);
     }
 
-    //////////////////////////////////
-    // Getters (AbstractAPIRequest) //
-    //////////////////////////////////
-
-    // Needed primarily for subclass' equals/hashCode
-    protected final Optional<AccessKey> getAccessKey() {
-        return Optional.ofNullable(accessKey);
-    }
-
-    ///////////////////////////////////////////////////
-    // equals/hashCode/toString (AbstractAPIRequest) //
-    ///////////////////////////////////////////////////
-
     @Override
-    public boolean equals(Object obj) { // Non-final
-        return obj instanceof AbstractAPIRequest that
-                && Objects.equals(this.accessKey, that.accessKey);
-    }
-
-    @Override
-    public int hashCode() { // Non-final
-        return Objects.hashCode(accessKey);
-    }
-
-    @Override
-    public final String toString() {
+    public final @Nonnull String toString() {
         URI uri = getURI();
         Map<String, String> headers = getHeaders();
 
