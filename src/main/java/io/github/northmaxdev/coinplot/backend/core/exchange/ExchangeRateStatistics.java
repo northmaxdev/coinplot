@@ -3,12 +3,14 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.math.BigDecimalExtremesPair;
+import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.Set;
@@ -49,6 +51,31 @@ public final class ExchangeRateStatistics {
 
     public @Nonnull NavigableMap<LocalDate, BigDecimal> getRateValueChronology() {
         return Collections.unmodifiableNavigableMap(rateValueChronology);
+    }
+
+    // Change % of the last two values in the chronology.
+    // If there are less than two values available,
+    // or the before-last value is zero (and thus it's impossible to calculate the percentage),
+    // an empty Optional is returned.
+    public Optional<Percentage> getLatestChangePercentage() {
+        if (rateValueChronology.size() < 2) {
+            return Optional.empty();
+        }
+
+        // Even if the Map implementation of rateValueChronology is mutable, we do not expose it as such,
+        // so these should not return nulls considering the size-check above.
+        @Nonnull Map.Entry<LocalDate, BigDecimal> lastEntry = rateValueChronology.lastEntry();
+        @Nonnull Map.Entry<LocalDate, BigDecimal> beforeLastEntry = rateValueChronology.lowerEntry(lastEntry.getKey());
+
+        BigDecimal lastValue = lastEntry.getValue();
+        BigDecimal beforeLastValue = beforeLastEntry.getValue();
+
+        if (lastValue.equals(BigDecimal.ZERO)) {
+            return Optional.empty();
+        }
+
+        Percentage p = Percentage.ofChange(beforeLastValue, lastValue);
+        return Optional.of(p);
     }
 
     public Optional<BigDecimalExtremesPair> getRateValueExtremes() {
