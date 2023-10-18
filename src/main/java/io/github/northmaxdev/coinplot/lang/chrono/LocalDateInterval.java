@@ -26,7 +26,7 @@ public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end
     }
 
     public static @Nonnull Comparator<LocalDateInterval> comparingLength() {
-        return Comparator.comparingLong(LocalDateInterval::length);
+        return Comparator.comparingInt(LocalDateInterval::length);
     }
 
     public @Nonnull Period toPeriod() {
@@ -37,8 +37,8 @@ public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end
         return start.datesUntil(end);
     }
 
-    public long length() {
-        return stream().count(); // TODO: An O(1) implementation
+    public int length() {
+        return (int) stream().count(); // This may or may not be O(1)
     }
 
     @Override
