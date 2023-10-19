@@ -8,7 +8,6 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSe
 import io.github.northmaxdev.coinplot.backend.core.exchange.CommonExchangeRateSetDTOMapper;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +40,9 @@ final class FixerExchangeRateService extends // Package-private
     }
 
     @Override
-    protected @Nonnull FixerExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges)
-            throws CannotCreateAPIRequestException {
-        // No need to null-check 'exchanges'
-        return config.getAccessKey()
-                .map(accessKeyValue -> new FixerExchangeRateSetRequest(accessKeyValue, exchanges))
-                .orElseThrow(CannotCreateAPIRequestException::forNoAccessKey);
+    protected @Nonnull FixerExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchangeBatch) {
+        // No need to null-check 'exchangeBatch'
+        String accessKey = config.getAccessKey();
+        return new FixerExchangeRateSetRequest(accessKey, exchangeBatch);
     }
 }

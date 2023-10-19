@@ -5,7 +5,6 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.currency.AbstractCurrencyFetchService;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyRepository;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +36,8 @@ final class FixerCurrencyService extends // Package-private
     }
 
     @Override
-    protected @Nonnull FixerCurrencySetRequest createAPIRequest() throws CannotCreateAPIRequestException {
-        return config.getAccessKey()
-                .map(FixerCurrencySetRequest::new)
-                .orElseThrow(CannotCreateAPIRequestException::forNoAccessKey);
+    protected @Nonnull FixerCurrencySetRequest createAPIRequest() {
+        String accessKey = config.getAccessKey();
+        return new FixerCurrencySetRequest(accessKey);
     }
 }
