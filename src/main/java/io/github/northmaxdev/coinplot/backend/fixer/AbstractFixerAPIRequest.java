@@ -14,8 +14,8 @@ abstract class AbstractFixerAPIRequest extends AbstractAPIRequest { // Package-p
 
     private static final HttpHost HOST = new HttpHost(HTTPS.getId(), "data.fixer.io");
 
-    protected AbstractFixerAPIRequest(@Nonnull String accessKeyValue) {
-        super(AccessKey.asQueryParameter("access_key", accessKeyValue));
+    protected AbstractFixerAPIRequest(@Nonnull String accessKey) {
+        super(AccessKey.asQueryParameter("access_key", accessKey));
     }
 
     @Override

@@ -5,19 +5,20 @@ package io.github.northmaxdev.coinplot.backend.fixer;
 import io.github.northmaxdev.coinplot.lang.Strings;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Configuration
-class FixerConfiguration { // Package-private
+// Public access allows registration via @EnableConfigurationProperties
+@ConfigurationProperties(prefix = "fixer")
+public record FixerConfiguration(@Nullable String accessKey) {
 
-    @Value("${fixer.access-key}")
-    private @Nullable String accessKeyValue = null;
+    public FixerConfiguration(@Nullable String accessKey) {
+        this.accessKey = Strings.blankToNull(accessKey);
+    }
 
-    public @Nonnull String getAccessKey() {
-        if (Strings.isNullOrBlank(accessKeyValue)) {
+    public @Nonnull String forcefullyGetAccessKey() {
+        if (accessKey == null) {
             throw new IllegalStateException("No Fixer API key provided");
         }
-        return accessKeyValue;
+        return accessKey;
     }
 }

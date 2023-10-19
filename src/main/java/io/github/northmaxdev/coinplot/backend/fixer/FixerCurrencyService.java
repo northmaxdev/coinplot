@@ -37,7 +37,7 @@ final class FixerCurrencyService extends // Package-private
 
     @Override
     protected @Nonnull FixerCurrencySetRequest createAPIRequest() {
-        String accessKey = config.getAccessKey();
+        String accessKey = config.forcefullyGetAccessKey();
         return new FixerCurrencySetRequest(accessKey);
     }
 }

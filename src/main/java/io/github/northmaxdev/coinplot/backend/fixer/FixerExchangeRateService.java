@@ -41,8 +41,7 @@ final class FixerExchangeRateService extends // Package-private
 
     @Override
     protected @Nonnull FixerExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchangeBatch) {
-        // No need to null-check 'exchangeBatch'
-        String accessKey = config.getAccessKey();
+        String accessKey = config.forcefullyGetAccessKey();
         return new FixerExchangeRateSetRequest(accessKey, exchangeBatch);
     }
 }

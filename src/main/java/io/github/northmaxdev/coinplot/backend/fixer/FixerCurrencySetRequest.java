@@ -7,8 +7,8 @@ import jakarta.annotation.Nonnull;
 
 final class FixerCurrencySetRequest extends AbstractFixerAPIRequest implements CurrencySetRequest { // Package-private
 
-    public FixerCurrencySetRequest(@Nonnull String accessKeyValue) {
-        super(accessKeyValue);
+    public FixerCurrencySetRequest(@Nonnull String accessKey) {
+        super(accessKey);
     }
 
     @Override

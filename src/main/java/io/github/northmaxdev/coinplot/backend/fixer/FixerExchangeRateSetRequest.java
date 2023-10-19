@@ -16,8 +16,8 @@ final class FixerExchangeRateSetRequest // Package-private
 
     private final @Nonnull ExchangeBatch data;
 
-    public FixerExchangeRateSetRequest(@Nonnull String accessKeyValue, @Nonnull ExchangeBatch data) {
-        super(accessKeyValue);
+    public FixerExchangeRateSetRequest(@Nonnull String accessKey, @Nonnull ExchangeBatch data) {
+        super(accessKey);
         this.data = Objects.requireNonNull(data);
     }
 
