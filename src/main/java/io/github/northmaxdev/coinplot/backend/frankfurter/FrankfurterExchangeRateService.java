@@ -40,11 +40,8 @@ final class FrankfurterExchangeRateService extends // Package-private
     }
 
     @Override
-    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchanges) {
-        // No need to null-check 'exchanges'
-        // Instead of throwing an exception, just fall back to the public instance
-        return config.getCustomHost()
-                .map(host -> new FrankfurterExchangeRateSetRequest(host, exchanges))
-                .orElseGet(() -> new FrankfurterExchangeRateSetRequest(exchanges));
+    protected @Nonnull FrankfurterExchangeRateSetRequest createAPIRequest(@Nonnull ExchangeBatch exchangeBatch) {
+        // config.customHost() might return null, but this constructor explicitly handles a null custom host
+        return new FrankfurterExchangeRateSetRequest(config.customHost(), exchangeBatch);
     }
 }

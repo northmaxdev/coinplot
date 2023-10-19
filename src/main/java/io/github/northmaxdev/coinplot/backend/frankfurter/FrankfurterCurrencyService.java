@@ -42,9 +42,7 @@ final class FrankfurterCurrencyService extends // Package-private
 
     @Override
     protected @Nonnull FrankfurterCurrencySetRequest createAPIRequest() {
-        // Instead of throwing an exception, just fall back to the public instance
-        return config.getCustomHost()
-                .map(FrankfurterCurrencySetRequest::new)
-                .orElseGet(FrankfurterCurrencySetRequest::new);
+        // config.customHost() might return null, but this constructor explicitly handles a null custom host
+        return new FrankfurterCurrencySetRequest(config.customHost());
     }
 }
