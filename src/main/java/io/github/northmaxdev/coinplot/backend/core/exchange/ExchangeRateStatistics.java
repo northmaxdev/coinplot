@@ -8,13 +8,13 @@ import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
@@ -33,15 +33,17 @@ public final class ExchangeRateStatistics {
     // Public API //
     ////////////////
 
-    public static @Nonnull Stream<ExchangeRateStatistics> streamOf(@Nonnull Set<ExchangeRate> dataset) {
-        // TODO (Performance): Consider stream parallelization.
-        //  Stream::collect JavaDoc even mentions that it is safe to use with mutable data structures (in this case - TreeMap).
+    public static @Nonnull Collection<ExchangeRateStatistics> collectionOf(@Nonnull Set<ExchangeRate> dataset) {
+        // TODO:
+        //  Datasets may be big, consider stream parallelization: parallelStream or groupingByConcurrent
+        //  (safe to collect even with mutable data structures, see Stream::collect JavaDoc)
         return dataset.stream() // Implicit null-check
                 // We should never have duplicate dates for a given exchange, so just pass a dummy merge function
                 .collect(groupingBy(DatelessExchange::of, toMap(ExchangeRate::getDate, ExchangeRate::getValue, (a, b) -> a, TreeMap::new)))
                 .entrySet()
                 .stream()
-                .map(entry -> new ExchangeRateStatistics(entry.getKey(), entry.getValue()));
+                .map(entry -> new ExchangeRateStatistics(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
     public @Nonnull DatelessExchange getExchange() {
