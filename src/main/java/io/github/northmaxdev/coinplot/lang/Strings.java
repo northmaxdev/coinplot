@@ -42,4 +42,8 @@ public final class Strings {
         return Optional.ofNullable(s)
                 .filter(NOT_BLANK);
     }
+
+    public static boolean isNullOrBlank(@Nullable String s) {
+        return s == null || s.isBlank();
+    }
 }
