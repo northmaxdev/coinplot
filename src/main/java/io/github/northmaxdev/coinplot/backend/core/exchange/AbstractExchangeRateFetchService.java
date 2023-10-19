@@ -4,8 +4,8 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.northmaxdev.coinplot.backend.core.web.AbstractRemoteDatasetService;
-import io.github.northmaxdev.coinplot.backend.core.web.request.CannotCreateAPIRequestException;
 import io.github.northmaxdev.coinplot.backend.core.web.response.JSONParsingStrategy;
+import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 
@@ -16,6 +16,13 @@ import java.util.Set;
 public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSetRequest, D>
         extends AbstractRemoteDatasetService<ExchangeRate, R, D>
         implements ExchangeRateService {
+
+    // This is the threshold value that decides if we use cached data.
+    // Given a set of exchanges, we check how many of them exist in the repo,
+    // and if the % exceeds the threshold, we load from cache instead of API calls.
+    // Increasing the threshold value will result in fewer cache hits and denser data overall.
+    // Decreasing the threshold value will result in more cache hits and sparser data overall.
+    private static final Percentage CACHE_LOAD_THRESHOLD = new Percentage(80);
 
     private final @Nonnull ExchangeRateRepository repository;
 
@@ -30,27 +37,25 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
     }
 
     @Override
-    public final @Nonnull Set<ExchangeRate> getAvailableExchangeRates(@Nonnull ExchangeBatch exchanges) {
-        // Cases:
-        //     The desired data is FULLY available in the repo -> no requests sent, load from repo directly
-        //     The desired data is NOT available in the repo -> send a request, populate repo
-        //     The desired data is PARTIALLY available in the repo -> send a request as if the data is not available at all, populate repo
-        // Needless to say, asking for data that is either fully present or fully absent is handled efficiently,
-        // while asking for partially present data should lead to operational redundancies (and thus, potential performance hits).
-        Objects.requireNonNull(exchanges);
+    public final @Nonnull Set<ExchangeRate> getAvailableExchangeRates(@Nonnull ExchangeBatch exchangeBatch) {
+        Objects.requireNonNull(exchangeBatch);
         Logger logger = getLogger();
 
-        if (repository.existAllById(exchanges)) {
+        Set<Exchange> exchanges = exchangeBatch.toSet();
+        Percentage cachedExchangeRatesPercentage = repository.percentageOfExistingEntities(exchanges);
+        logger.info("{} of requested exchange rates are present in cache", cachedExchangeRatesPercentage);
+
+        if (cachedExchangeRatesPercentage.compareTo(CACHE_LOAD_THRESHOLD) > 0) {
             Set<ExchangeRate> cachedExchangeRates = repository.findAllById(exchanges);
             logger.info("Loaded {} exchange rates from cache (no API requests were sent)", cachedExchangeRates.size());
             return cachedExchangeRates;
+        } else {
+            R request = createAPIRequest(exchangeBatch);
+            Set<ExchangeRate> fetchedExchangeRates = fetch(request);
+            return repository.saveAll(fetchedExchangeRates);
         }
-
-        // Use fetch(APIRequestFactory) as it handles CannotCreateAPIRequestException for us
-        Set<ExchangeRate> fetchedExchangeRates = fetch(() -> createAPIRequest(exchanges));
-        return repository.saveAll(fetchedExchangeRates);
     }
 
-    // No need for implementors to null-check 'exchanges'
-    protected abstract @Nonnull R createAPIRequest(@Nonnull ExchangeBatch exchanges) throws CannotCreateAPIRequestException;
+    // No need for implementors to null-check 'exchangeBatch'
+    protected abstract @Nonnull R createAPIRequest(@Nonnull ExchangeBatch exchangeBatch);
 }
