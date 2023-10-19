@@ -36,7 +36,8 @@ public final class DataProviderService {
     }
 
     public Optional<DataProvider> getSelectedProvider() {
-        return Strings.blankToOptional(selectedProviderID)
+        return Optional.ofNullable(selectedProviderID)
+                .filter(Strings.NOT_BLANK)
                 .map(availableProviders::get);
     }
 
