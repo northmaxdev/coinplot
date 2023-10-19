@@ -8,12 +8,10 @@ import jakarta.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.Predicate;
 
 public final class Strings {
 
     private static final int INDEX_NOT_FOUND = -1;
-    private static final Predicate<String> NOT_BLANK = Predicate.not(String::isBlank);
 
     private Strings() {
         throw new UnsupportedOperationException();
@@ -36,11 +34,6 @@ public final class Strings {
 
         String substring = s.substring(0, delimiterIndex.getAsInt());
         return Optional.of(substring);
-    }
-
-    public static Optional<String> blankToOptional(@Nullable String s) {
-        return Optional.ofNullable(s)
-                .filter(NOT_BLANK);
     }
 
     public static boolean isNullOrBlank(@Nullable String s) {
