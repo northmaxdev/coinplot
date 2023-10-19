@@ -42,4 +42,12 @@ public final class Strings {
     public static boolean isNullOrBlank(@Nullable String s) {
         return s == null || s.isBlank();
     }
+
+    public static @Nullable String blankToNull(@Nullable String s) {
+        return switch (s) {
+            case null -> null;
+            case String b when b.isBlank() -> null;
+            default -> s;
+        };
+    }
 }
