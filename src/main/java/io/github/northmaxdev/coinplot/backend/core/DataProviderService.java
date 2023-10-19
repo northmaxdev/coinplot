@@ -24,8 +24,10 @@ public final class DataProviderService {
     private final @Nonnull Map<String, DataProvider> availableProviders;
     private final @Nonnull DataProvider defaultProvider;
 
+    // The class is public, but the constructor is package-private.
+    // This lets us inject, but not instantiate manually.
     @Autowired
-    public DataProviderService(@Nonnull Fixer fixer, @Nonnull Frankfurter frankfurter) {
+    DataProviderService(@Nonnull Fixer fixer, @Nonnull Frankfurter frankfurter) {
         availableProviders = Map.of(
                 fixer.getID(), fixer,
                 frankfurter.getID(), frankfurter
