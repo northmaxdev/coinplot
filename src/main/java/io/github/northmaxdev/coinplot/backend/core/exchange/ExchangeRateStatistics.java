@@ -2,12 +2,11 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.lang.math.BigDecimalExtremesPair;
 import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
@@ -53,6 +52,24 @@ public final class ExchangeRateStatistics {
         return Collections.unmodifiableNavigableMap(rateValueChronology);
     }
 
+    public Optional<BigDecimal> getLowestValue() {
+        return rateValueChronology.values()
+                .stream()
+                .min(BigDecimal::compareTo);
+    }
+
+    public Optional<BigDecimal> getHighestValue() {
+        return rateValueChronology.values()
+                .stream()
+                .max(BigDecimal::compareTo);
+    }
+
+    public Optional<BigDecimal> getLatestAvailableValue() {
+        @Nullable Map.Entry<LocalDate, BigDecimal> latestEntry = rateValueChronology.lastEntry();
+        return Optional.ofNullable(latestEntry)
+                .map(Map.Entry::getValue);
+    }
+
     // Change % of the last two values in the chronology.
     // If there are less than two values available,
     // or the before-last value is zero (and thus it's impossible to calculate the percentage),
@@ -94,5 +111,10 @@ public final class ExchangeRateStatistics {
 
         Percentage p = Percentage.ofChange(min.get(), max.get());
         return Optional.of(p);
+    }
+
+    @Override
+    public @Nonnull String toString() {
+        return "ExchangeRateStatistics[" + exchange + ']';
     }
 }
