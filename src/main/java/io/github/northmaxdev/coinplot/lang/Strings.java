@@ -8,8 +8,11 @@ import jakarta.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
 
 public final class Strings {
+
+    public static final Predicate<String> NOT_BLANK = Predicate.not(String::isBlank);
 
     private static final int INDEX_NOT_FOUND = -1;
 
