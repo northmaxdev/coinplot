@@ -6,7 +6,6 @@ import io.github.northmaxdev.coinplot.backend.core.web.request.AbstractAPIReques
 import jakarta.annotation.Nonnull;
 import org.apache.hc.core5.http.HttpHost;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.apache.hc.core5.http.URIScheme.HTTPS;
@@ -27,11 +26,5 @@ abstract class AbstractFixerAPIRequest extends AbstractAPIRequest { // Package-p
     @Override
     protected final Optional<String> getRootPathSegment() {
         return Optional.of("api");
-    }
-
-    @Override
-    public boolean equals(Object obj) { // Non-final
-        return obj instanceof AbstractFixerAPIRequest that
-                && Objects.equals(this.getAccessKey(), that.getAccessKey());
     }
 }

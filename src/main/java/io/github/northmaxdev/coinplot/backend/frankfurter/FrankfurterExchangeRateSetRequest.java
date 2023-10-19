@@ -22,7 +22,7 @@ final class FrankfurterExchangeRateSetRequest // Package-private
     private final @Nonnull ExchangeBatch data;
 
     public FrankfurterExchangeRateSetRequest(@Nonnull ExchangeBatch data) {
-        this(null, data);
+        this.data = Objects.requireNonNull(data);
     }
 
     public FrankfurterExchangeRateSetRequest(@Nullable HttpHost customHost, @Nonnull ExchangeBatch data) {
@@ -47,17 +47,5 @@ final class FrankfurterExchangeRateSetRequest // Package-private
                 .baseParameterName("from")
                 .targetsParameterName("to")
                 .build();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof FrankfurterExchangeRateSetRequest that
-                && super.equals(obj) // For superclass fields
-                && Objects.equals(this.data, that.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return data.hashCode();
     }
 }

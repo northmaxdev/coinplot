@@ -41,16 +41,4 @@ final class FixerExchangeRateSetRequest // Package-private
                 .dateFormatter(DateTimeFormatter.ISO_LOCAL_DATE)
                 .build();
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof FixerExchangeRateSetRequest that
-                && super.equals(obj) // For superclass fields
-                && Objects.equals(this.data, that.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return data.hashCode();
-    }
 }

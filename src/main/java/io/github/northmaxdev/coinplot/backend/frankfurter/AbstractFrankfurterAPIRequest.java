@@ -18,7 +18,7 @@ abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest { // Pac
     private final @Nonnull HttpHost host;
 
     protected AbstractFrankfurterAPIRequest() {
-        this(null);
+        host = PUBLIC_INSTANCE_HOST;
     }
 
     protected AbstractFrankfurterAPIRequest(@Nullable HttpHost customHost) {
@@ -28,17 +28,5 @@ abstract class AbstractFrankfurterAPIRequest extends AbstractAPIRequest { // Pac
     @Override
     protected final @Nonnull HttpHost getHost() {
         return host;
-    }
-
-    @Override
-    public boolean equals(Object obj) { // Non-final
-        return obj instanceof AbstractFrankfurterAPIRequest that
-                && Objects.equals(this.getAccessKey(), that.getAccessKey())
-                && Objects.equals(this.host, that.host);
-    }
-
-    @Override
-    public int hashCode() { // Non-final
-        return Objects.hash(getAccessKey(), host);
     }
 }

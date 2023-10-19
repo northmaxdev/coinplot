@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+// Does NOT implement equals/hashCode.
 public abstract class AbstractAPIRequest implements APIRequest {
 
     protected record AccessKey(@Nonnull String name,

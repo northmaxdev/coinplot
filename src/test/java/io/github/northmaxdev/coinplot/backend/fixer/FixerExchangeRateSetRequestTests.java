@@ -14,7 +14,6 @@ import static io.github.northmaxdev.coinplot.Tests.BAR_FRANC;
 import static io.github.northmaxdev.coinplot.Tests.BAZ_POUND;
 import static io.github.northmaxdev.coinplot.Tests.FOO_DOLLAR;
 import static io.github.northmaxdev.coinplot.Tests.assertExpectedURIsContainActual;
-import static io.github.northmaxdev.coinplot.Tests.verifyAPIRequestEquals;
 
 class FixerExchangeRateSetRequestTests {
 
@@ -270,10 +269,5 @@ class FixerExchangeRateSetRequestTests {
                 "https://data.fixer.io/api/timeseries?symbols=BAZ%2CBAR&base=FOO&start_date=1975-05-31&access_key=6b1628b016dff46e6fa35684be6acc96&end_date=1975-09-01",
                 "https://data.fixer.io/api/timeseries?symbols=BAZ%2CBAR&base=FOO&start_date=1975-05-31&end_date=1975-09-01&access_key=6b1628b016dff46e6fa35684be6acc96"
         );
-    }
-
-    @Test
-    void eq() {
-        verifyAPIRequestEquals(FixerExchangeRateSetRequest.class);
     }
 }

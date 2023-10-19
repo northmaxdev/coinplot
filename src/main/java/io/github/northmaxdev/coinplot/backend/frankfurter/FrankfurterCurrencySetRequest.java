@@ -7,8 +7,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.apache.hc.core5.http.HttpHost;
 
-import java.util.Objects;
-
 final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIRequest implements CurrencySetRequest { // Package-private
 
     public FrankfurterCurrencySetRequest() {
@@ -22,12 +20,5 @@ final class FrankfurterCurrencySetRequest extends AbstractFrankfurterAPIRequest 
     @Override
     protected @Nonnull String getEndpoint() {
         return "currencies";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof FrankfurterCurrencySetRequest that
-                && Objects.equals(this.getAccessKey(), that.getAccessKey())
-                && Objects.equals(this.getHost(), that.getHost());
     }
 }

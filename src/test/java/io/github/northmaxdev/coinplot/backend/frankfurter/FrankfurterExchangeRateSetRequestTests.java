@@ -14,7 +14,6 @@ import static io.github.northmaxdev.coinplot.Tests.BAR_FRANC;
 import static io.github.northmaxdev.coinplot.Tests.BAZ_POUND;
 import static io.github.northmaxdev.coinplot.Tests.FOO_DOLLAR;
 import static io.github.northmaxdev.coinplot.Tests.assertExpectedURIsContainActual;
-import static io.github.northmaxdev.coinplot.Tests.verifyAPIRequestEquals;
 
 class FrankfurterExchangeRateSetRequestTests {
 
@@ -33,10 +32,5 @@ class FrankfurterExchangeRateSetRequestTests {
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?from=FOO&to=BAZ%2CBAR",
                 "https://api.frankfurter.app/2020-01-01..2020-01-31?to=BAZ%2CBAR&from=FOO"
         );
-    }
-
-    @Test
-    void eq() {
-        verifyAPIRequestEquals(FrankfurterExchangeRateSetRequest.class);
     }
 }
