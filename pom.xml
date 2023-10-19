@@ -22,7 +22,7 @@
     <inceptionYear>2023</inceptionYear>
 
     <properties>
-        <java.version>20</java.version>
+        <java.version>21</java.version>
         <vaadin.version>24.1.4</vaadin.version>
         <equalsverifier.version>3.15.1</equalsverifier.version>
     </properties>
@@ -95,17 +95,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!-- TODO: Remove this block when preview features (e.g. switch pattern matching) get finalized -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
-            </plugin>
-            <!-- End of preview features block -->
         </plugins>
     </build>
 
