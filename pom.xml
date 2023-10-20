@@ -20,6 +20,7 @@
     <name>CoinPlot</name>
     <description>Exchange Rate History Visualizer</description>
     <inceptionYear>2023</inceptionYear>
+    <url>https://github.com/northmaxdev/coinplot</url>
 
     <properties>
         <java.version>21</java.version>
