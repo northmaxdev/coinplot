@@ -17,6 +17,7 @@ public final class HumanReadableDisplayNameGenerator implements DisplayNameGener
     private static final Map<String, String> MAGIC_TEST_METHOD_NAMES = Map.ofEntries(
             // Standard Java stuff
             entry("eq", "equals/hashCode contract"),
+            entry("stream", "stream produces expected contents"),
             // APIRequest stuff
             entry("reqURI", "APIRequest actual URI is contained in expected outcomes"),
             entry("reqHeaders", "APIRequest actual headers equal to expected"),

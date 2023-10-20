@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -19,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExchangeBatchTests {
 
     @Test
-    @DisplayName("stream produces expected contents")
     void stream() {
         ExchangeBatch batch = new ExchangeBatch(
                 FOO_DOLLAR,
