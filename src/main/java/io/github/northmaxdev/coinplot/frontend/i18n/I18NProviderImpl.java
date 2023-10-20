@@ -11,15 +11,20 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+// Using the "impl" suffix is normally against the project's naming conventions,
+// but in this case the exception is made to signal that this class is
+// "the" implementation for the given framework interface.
 @Component
-// Using the "impl" suffix is normally against the project's naming conventions, but in this case the exception is made
-// to signal that this class is "the" implementation for the given framework interface.
 public final class I18NProviderImpl implements I18NProvider {
 
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
     private static final List<Locale> SUPPORTED_LOCALES = List.of(
-            Locale.of("en"), // The first item in this list is the default option
-            Locale.of("ru")
+            // The first item in this list is the default option
+            Locale.US,
+
+            // There's no pre-declared constant for this.
+            // The JDK truly has everything - even politics!
+            Locale.of("ru", "RU")
     );
 
     @Override
