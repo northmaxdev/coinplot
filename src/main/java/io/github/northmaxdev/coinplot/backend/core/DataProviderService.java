@@ -2,48 +2,55 @@
 
 package io.github.northmaxdev.coinplot.backend.core;
 
-import io.github.northmaxdev.coinplot.backend.fixer.Fixer;
-import io.github.northmaxdev.coinplot.backend.frankfurter.Frankfurter;
-import io.github.northmaxdev.coinplot.lang.Strings;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.SequencedMap;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 @Service
 public final class DataProviderService {
 
-    @Value("${provider}")
-    private @Nullable String selectedProviderID = null;
+    private final @Nonnull DataProviderConfiguration config;
     private final @Nonnull Map<String, DataProvider> availableProviders;
-    private final @Nonnull DataProvider defaultProvider;
 
-    // The class is public, but the constructor is package-private.
-    // This lets us inject, but not instantiate manually.
     @Autowired
-    DataProviderService(@Nonnull Fixer fixer, @Nonnull Frankfurter frankfurter) {
-        availableProviders = Map.of(
-                fixer.getID(), fixer,
-                frankfurter.getID(), frankfurter
-        );
-        defaultProvider = frankfurter; // Subject to change
+    public DataProviderService(@Nonnull DataProviderConfiguration config, @Nonnull DataProvider... dataProviders) {
+        this.config = Objects.requireNonNull(config);
+        availableProviders = Stream.of(dataProviders)
+                .collect(toMap(DataProvider::getID, p -> p));
     }
 
     public Optional<DataProvider> getSelectedProvider() {
-        return Optional.ofNullable(selectedProviderID)
-                .filter(Strings.NOT_BLANK)
+        return config.safelyGetSelectedProviderID()
                 .map(availableProviders::get);
+    }
+
+    // There's no explicit definition of how a default provider is chosen,
+    // but it'll generally just be the first one on the list.
+    public @Nonnull DataProvider getDefaultProvider() {
+        if (availableProviders instanceof SequencedMap<String, DataProvider> seq) {
+            var firstEntry = seq.firstEntry();
+            return firstEntry.getValue();
+        }
+
+        return availableProviders.values()
+                .stream()
+                .findFirst()
+                .orElseThrow(); // Will never happen
     }
 
     public @Nonnull DataProvider getSelectedProviderOrDefault() {
         return getSelectedProvider()
-                .orElse(defaultProvider);
+                .orElseGet(this::getDefaultProvider);
     }
 
     public @Nonnull Collection<DataProvider> getAvailableProviders() {
