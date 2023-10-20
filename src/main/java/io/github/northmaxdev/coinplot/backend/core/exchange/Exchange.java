@@ -12,10 +12,13 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Objects;
 
 @Embeddable
 public class Exchange implements Serializable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.6)
+
+    public static final Comparator<Exchange> CHRONOLOGICAL_ORDER = Comparator.comparing(Exchange::getDate);
 
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
