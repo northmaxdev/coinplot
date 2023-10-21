@@ -24,6 +24,26 @@ public final class ExchangeRateDynamicsChart extends AbstractExchangeRateSetChar
         super(ChartType.LINE);
     }
 
+    public boolean isSmooth() {
+        ChartType chartType = getConfiguration()
+                .getChart()
+                .getType();
+
+        if (chartType.equals(ChartType.SPLINE)) return true;
+        if (chartType.equals(ChartType.LINE)) return false;
+        throw new IllegalStateException("ChartType is neither SPLINE nor LINE");
+    }
+
+    public void smoothen(boolean value) {
+        ChartType chartType = value ? ChartType.SPLINE : ChartType.LINE;
+
+        getConfiguration()
+                .getChart()
+                .setType(chartType);
+
+        drawChart();
+    }
+
     @Override
     protected @Nonnull List<Series> createSeriesFromDataset(@Nonnull Set<ExchangeRate> dataset) {
         Map<DatelessExchange, Set<ExchangeRate>> groupedExchangeRates = dataset.stream()
