@@ -6,6 +6,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
@@ -99,7 +101,13 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Layout configuration //
         //////////////////////////
 
-        add(baseCurrencyPicker, targetCurrencyPicker, startDatePicker, endDatePicker, submitButton, clearButton, currencyReloadButton);
+        // Official Vaadin guidelines regarding buttons in forms:
+        // https://vaadin.com/docs/latest/components/form-layout#button-placement
+        HorizontalLayout buttonBar = new HorizontalLayout(submitButton, clearButton, currencyReloadButton);
+        buttonBar.setPadding(false); // This is so it's horizontally in line with the rest of the form's components
+        buttonBar.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+
+        add(baseCurrencyPicker, targetCurrencyPicker, startDatePicker, endDatePicker, buttonBar);
         setColspan(baseCurrencyPicker, CURRENCY_PICKER_COLSPAN);
         setColspan(targetCurrencyPicker, CURRENCY_PICKER_COLSPAN);
     }
