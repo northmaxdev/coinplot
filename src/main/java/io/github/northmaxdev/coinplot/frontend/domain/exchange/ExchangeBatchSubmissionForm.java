@@ -76,6 +76,10 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Event listeners //
         /////////////////////
 
+        // TODO:
+        //  Add ValueChangeListener to baseCurrencyPicker that
+        //  disables that same currency in targetCurrencyPicker
+
         // TODO: Add some variety to button listeners (single clicks, double clicks, etc.)
         submitButton.addSingleClickListener(event -> submit());
         clearButton.addSingleClickListener(event -> clear());
