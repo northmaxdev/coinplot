@@ -74,7 +74,6 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Event listeners //
         /////////////////////
 
-        // FIXME: ValueChangeListener(s) for date validation
         // TODO: Add some variety to button listeners (single clicks, double clicks, etc.)
         submitButton.addSingleClickListener(event -> submit());
         clearButton.addSingleClickListener(event -> clear());
@@ -83,6 +82,10 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         ////////////////////
         // Visual markers //
         ////////////////////
+
+        // TODO:
+        //  Visual markers (helper text or error message)
+        //  regarding the dates' chronological validity
 
         baseCurrencyPicker.setRequired(true);
         targetCurrencyPicker.setRequired(true);
@@ -147,8 +150,7 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         @Nullable LocalDate startDate = startDatePicker.getValue();
         @Nullable LocalDate endDate = endDatePicker.getValue();
 
-        // TODO: Include a chronological order check on start and end dates in this expression
-        if (baseCurrency == null || targetCurrencies.isEmpty() || startDate == null || endDate == null) {
+        if (baseCurrency == null || targetCurrencies.isEmpty() || LocalDateInterval.areDatesInvalid(startDate, endDate)) {
             return null;
         }
 
