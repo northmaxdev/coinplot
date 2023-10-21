@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class AbstractExchangeRateSetChart extends Chart {
+public abstract class AbstractExchangeRateSetChart extends Chart implements ExchangeRateDataVisualizer {
 
     //////////////////////////////////
     // Protected API for subclasses //
@@ -29,6 +29,7 @@ public abstract class AbstractExchangeRateSetChart extends Chart {
     // Public API //
     ////////////////
 
+    @Override
     public final void visualize(@Nonnull Set<ExchangeRate> dataset) {
         Objects.requireNonNull(dataset);
         List<Series> series = createSeriesFromDataset(dataset);
