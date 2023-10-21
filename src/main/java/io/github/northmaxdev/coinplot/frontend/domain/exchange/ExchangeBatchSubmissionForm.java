@@ -42,15 +42,19 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     private final LocalizedButton submitButton;
     private final LocalizedButton clearButton;
     private final LocalizedButton currencyReloadButton;
-    // TODO:
-    //  onSubmit must handle both null and non-null values.
-    //  Consider splitting this into two separate callbacks:
-    //  Runnable for null cases and Consumer<ExchangeBatch> for non-null cases.
-    private final Consumer<ExchangeBatch> onSubmit;
+    // onPresentValueSubmission is used when the created ExchangeBatch is non-null.
+    // onAbsentValueSubmission is used when the created ExchangeBatch is null.
+    // The only reason for the created ExchangeBatch to be null is if the form was
+    // filled in incorrectly, if at all. This means that if onAbsentValueSubmission
+    // includes some kind of textual notification to the user, it's OK to tailor
+    // that message specifically for this scenario.
+    private final Consumer<ExchangeBatch> onPresentValueSubmission;
+    private final Runnable onAbsentValueSubmission;
 
     public ExchangeBatchSubmissionForm(
             @Nonnull CurrencyService currencyDataSource,
-            @Nonnull Consumer<ExchangeBatch> onSubmit) {
+            @Nonnull Consumer<ExchangeBatch> onPresentValueSubmission,
+            @Nonnull Runnable onAbsentValueSubmission) {
 
         //////////////////////////
         // Field initialization //
@@ -63,7 +67,8 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         submitButton = new LocalizedButton(SUBMIT_BUTTON_TEXT_KEY, VaadinIcon.CHECK);
         clearButton = new LocalizedButton(CLEAR_BUTTON_TEXT_KEY, VaadinIcon.CLOSE);
         currencyReloadButton = new LocalizedButton(CURRENCY_RELOAD_BUTTON_TEXT_KEY, VaadinIcon.DOWNLOAD_ALT);
-        this.onSubmit = Objects.requireNonNull(onSubmit);
+        this.onPresentValueSubmission = Objects.requireNonNull(onPresentValueSubmission);
+        this.onAbsentValueSubmission = Objects.requireNonNull(onAbsentValueSubmission);
 
         /////////////////////
         // Event listeners //
@@ -98,7 +103,11 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
 
     public void submit() {
         @Nullable ExchangeBatch exchangeBatch = createExchangeBatch();
-        onSubmit.accept(exchangeBatch);
+        if (exchangeBatch == null) {
+            onAbsentValueSubmission.run();
+        } else {
+            onPresentValueSubmission.accept(exchangeBatch);
+        }
     }
 
     public void clear() {
