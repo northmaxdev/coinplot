@@ -13,4 +13,9 @@ public record Pair<T>(@Nonnull T first, @Nonnull T second) {
         this.first = Objects.requireNonNull(first);
         this.second = Objects.requireNonNull(second);
     }
+
+    // Alias
+    public static <T> @Nonnull Pair<T> of(@Nonnull T first, @Nonnull T second) {
+        return new Pair<>(first, second);
+    }
 }
