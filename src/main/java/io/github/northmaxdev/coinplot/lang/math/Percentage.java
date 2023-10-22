@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.lang.math;
 
 import io.github.northmaxdev.coinplot.lang.Iterables;
+import io.github.northmaxdev.coinplot.lang.Pair;
 import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
@@ -107,6 +108,15 @@ public record Percentage(double value) implements Comparable<Percentage> {
         return ofChange(before.doubleValue(), after.doubleValue());
     }
 
+    public static @Nonnull Percentage ofChange(@Nonnull Pair<? extends Number> numberPair) {
+        Objects.requireNonNull(numberPair);
+
+        // Not delegating to ofChange(Number, Number) to avoid redundant null-checks
+        Number before = numberPair.first();
+        Number after = numberPair.second();
+        return ofChange(before.doubleValue(), after.doubleValue());
+    }
+
     public static <T> @Nonnull Percentage ofMatchingPredicate(@Nonnull Iterable<T> iterable, @Nonnull Predicate<T> predicate) {
         Objects.requireNonNull(iterable);
         Objects.requireNonNull(predicate);
@@ -128,6 +138,10 @@ public record Percentage(double value) implements Comparable<Percentage> {
     public double decimalValue() {
         return value / DECIMAL_VALUE_MULTIPLIER;
     }
+
+    // TODO:
+    //  For format() and format(Locale), explicitly specify a RoundingMode to
+    //  get more correct String representations (by default it rounds to integer)
 
     public @Nonnull String format() {
         return NumberFormat.getPercentInstance()
