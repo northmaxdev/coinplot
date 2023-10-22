@@ -18,4 +18,8 @@ public record Pair<T>(@Nonnull T first, @Nonnull T second) {
     public static <T> @Nonnull Pair<T> of(@Nonnull T first, @Nonnull T second) {
         return new Pair<>(first, second);
     }
+
+    public @Nonnull Pair<T> flipped() {
+        return new Pair<>(second, first);
+    }
 }
