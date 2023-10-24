@@ -54,4 +54,31 @@ public final class CollectionUtilities {
         Pair<T> result = Pair.of(nextToLastElement, lastElement);
         return Optional.of(result);
     }
+
+    // See comments of CollectionUtilities::lastTwoElements for info about method and/or interface
+    // contract stuff that is relevant to this method as well.
+    //
+    // Returns the first and the last elements (if present) of the collection.
+    // Visualization: [1, 3, 5, 6, 8] --> [1, 8]
+    //                 ^           ^
+    // If the collection contains exactly one element, it is used as both the first
+    // and the second values of the resulting Pair<T>.
+    //
+    // An empty Optional is returned if the collection is empty.
+    // This method does NOT take into account concurrent mutations of the collection.
+    public static <T> Optional<Pair<T>> endpoints(@Nonnull SequencedCollection<T> collection) {
+        Objects.requireNonNull(collection);
+        return switch (collection.size()) {
+            case 0 -> Optional.empty();
+            case 1 -> {
+                T singletonEndpoint = collection.getFirst();
+                Pair<T> p = Pair.of(singletonEndpoint, singletonEndpoint);
+                yield Optional.of(p);
+            }
+            default -> {
+                Pair<T> p = Pair.of(collection.getFirst(), collection.getLast());
+                yield Optional.of(p);
+            }
+        };
+    }
 }
