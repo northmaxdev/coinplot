@@ -9,6 +9,7 @@ import jakarta.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +26,8 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 // thus representing a more atomic subset of exchange rate data.
 public final class ExchangeRateBatch {
 
+    public static final Comparator<ExchangeRateBatch> SIZE_BASED_ORDER = Comparator.comparingInt(ExchangeRateBatch::size);
+
     private final @Nonnull DatelessExchange exchange;
     private final @Nonnull Map<LocalDate, BigDecimal> values;
 
@@ -32,10 +35,6 @@ public final class ExchangeRateBatch {
         this.exchange = Objects.requireNonNull(exchange);
         this.values = Objects.requireNonNull(values);
     }
-
-    ////////////////
-    // Public API //
-    ////////////////
 
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
         return dataset.stream()

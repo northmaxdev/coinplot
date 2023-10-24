@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -30,6 +31,8 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 //
 // This is a general-purpose domain concept.
 public record ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
+
+    public static final Comparator<ExchangeBatch> SIZE_BASED_ORDER = Comparator.comparingInt(ExchangeBatch::size);
 
     public ExchangeBatch(@Nonnull Currency base, @Nonnull Set<Currency> targets, @Nonnull LocalDateInterval dateInterval) {
         this.base = Objects.requireNonNull(base);
