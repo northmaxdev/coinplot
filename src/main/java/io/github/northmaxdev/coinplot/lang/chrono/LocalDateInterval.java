@@ -22,9 +22,7 @@ import static java.util.stream.Collectors.toCollection;
 // Mathematical notation: [start, end)
 public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end) {
 
-    public static @Nonnull Comparator<LocalDateInterval> comparingLength() {
-        return Comparator.comparingInt(LocalDateInterval::length);
-    }
+    public static final Comparator<LocalDateInterval> LENGTH_BASED_ORDER = Comparator.comparing(LocalDateInterval::length);
 
     // Utility methods areDatesValid and areDatesInvalid are useful for external,
     // pre-instantiation validation.
