@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 
 import java.net.http.HttpClient;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,11 +49,12 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
         if (cachedExchangeRatesPercentage.compareTo(CACHE_LOAD_THRESHOLD) > 0) {
             Set<ExchangeRate> cachedExchangeRates = repository.findAllById(exchanges);
             logger.info("Loaded {} exchange rates from cache (no API requests were sent)", cachedExchangeRates.size());
-            return cachedExchangeRates;
+            return Collections.unmodifiableSet(cachedExchangeRates);
         } else {
             R request = createAPIRequest(exchangeBatch);
             Set<ExchangeRate> fetchedExchangeRates = fetch(request);
-            return repository.saveAll(fetchedExchangeRates);
+            Set<ExchangeRate> savedExchangeRates = repository.saveAll(fetchedExchangeRates);
+            return Collections.unmodifiableSet(savedExchangeRates);
         }
     }
 

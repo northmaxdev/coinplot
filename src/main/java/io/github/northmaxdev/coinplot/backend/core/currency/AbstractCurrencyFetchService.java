@@ -9,6 +9,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.net.http.HttpClient;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -33,10 +34,13 @@ public abstract class AbstractCurrencyFetchService<R extends CurrencySetRequest,
     public final @Nonnull Set<Currency> getAvailableCurrencies() {
         if (repository.isEmpty()) {
             R request = createAPIRequest();
-            Set<Currency> currencies = fetch(request);
-            return repository.saveAll(currencies);
+            Set<Currency> fetchedCurrencies = fetch(request);
+            Set<Currency> savedCurrencies = repository.saveAll(fetchedCurrencies);
+            return Collections.unmodifiableSet(savedCurrencies);
         }
-        return repository.findAll();
+
+        Set<Currency> cachedCurrencies = repository.findAll();
+        return Collections.unmodifiableSet(cachedCurrencies);
     }
 
     @Override
