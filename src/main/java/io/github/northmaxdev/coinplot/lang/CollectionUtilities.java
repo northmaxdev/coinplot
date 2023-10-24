@@ -51,7 +51,7 @@ public final class CollectionUtilities {
             return Optional.empty();
         }
 
-        Pair<T> result = Pair.of(nextToLastElement, lastElement);
+        Pair<T> result = new Pair<>(nextToLastElement, lastElement);
         return Optional.of(result);
     }
 
@@ -71,12 +71,11 @@ public final class CollectionUtilities {
         return switch (collection.size()) {
             case 0 -> Optional.empty();
             case 1 -> {
-                T singletonEndpoint = collection.getFirst();
-                Pair<T> p = Pair.of(singletonEndpoint, singletonEndpoint);
+                Pair<T> p = Pair.ofSingleton(collection.getFirst());
                 yield Optional.of(p);
             }
             default -> {
-                Pair<T> p = Pair.of(collection.getFirst(), collection.getLast());
+                Pair<T> p = new Pair<>(collection.getFirst(), collection.getLast());
                 yield Optional.of(p);
             }
         };
