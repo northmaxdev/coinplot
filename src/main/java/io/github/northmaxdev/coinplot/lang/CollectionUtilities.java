@@ -25,9 +25,10 @@ public final class CollectionUtilities {
     //
     // The possibly resulting Pair<T> is mapped to the collection's last
     // two elements in the following way:
-    // The pair's first item --> the collection's last element
-    // The pair's second item --> the collection's next-to-last element
-    //
+    // The pair's first item --> the collection's next-to-last element
+    // The pair's second item --> the collection's last element
+    // Visualization: [1, 6, 2, 4, 9, 0, 4, 7] --> [4, 7]
+    //                                  ^~~~~~^
     // An empty Optional is returned if the collection has less than two elements.
     // This method does NOT take into account concurrent mutations of the collection.
     public static <T> Optional<Pair<T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
@@ -50,7 +51,7 @@ public final class CollectionUtilities {
             return Optional.empty();
         }
 
-        Pair<T> result = Pair.of(lastElement, nextToLastElement);
+        Pair<T> result = Pair.of(nextToLastElement, lastElement);
         return Optional.of(result);
     }
 }
