@@ -71,7 +71,7 @@ public final class CollectionUtilities {
         return switch (collection.size()) {
             case 0 -> Optional.empty();
             case 1 -> {
-                Pair<T> p = Pair.ofSingleton(collection.getFirst());
+                Pair<T> p = Pair.mirrored(collection.getFirst());
                 yield Optional.of(p);
             }
             default -> {
