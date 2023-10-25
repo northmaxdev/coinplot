@@ -67,6 +67,8 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1L);
 
+        // TODO: Explain what is going on here
+
         startDatePicker.setRequired(true);
         startDatePicker.setMax(yesterday);
         startDatePicker.addValueChangeListener(event -> {
@@ -116,8 +118,19 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     }
 
     public void submit() {
-        @Nullable ExchangeBatch exchangeBatch = createIfValidInput();
-        if (exchangeBatch != null) {
+        @Nullable Currency baseCurrency = baseCurrencyPicker.getValue();
+        @Nonnull Set<Currency> targetCurrencies = targetCurrencyPicker.getSelectedItems();
+        @Nullable LocalDate startDate = startDatePicker.getValue();
+        @Nullable LocalDate endDate = endDatePicker.getValue();
+
+        if (baseCurrency != null
+                && !targetCurrencies.isEmpty()
+                && startDate != null
+                && endDate != null) {
+            // The date pickers are responsible for ensuring the dates are always
+            // in a valid chronological order, as required by LocalDateInterval.
+            LocalDateInterval dateInterval = new LocalDateInterval(startDate, endDate);
+            ExchangeBatch exchangeBatch = new ExchangeBatch(baseCurrency, targetCurrencies, dateInterval);
             onSubmit.accept(exchangeBatch);
         }
     }
@@ -151,19 +164,5 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         submitButton.localeChange(event);
         clearButton.localeChange(event);
         currencyReloadButton.localeChange(event);
-    }
-
-    private @Nullable ExchangeBatch createIfValidInput() {
-        @Nullable Currency baseCurrency = baseCurrencyPicker.getValue();
-        @Nonnull Set<Currency> targetCurrencies = targetCurrencyPicker.getSelectedItems();
-        @Nullable LocalDate startDate = startDatePicker.getValue();
-        @Nullable LocalDate endDate = endDatePicker.getValue();
-
-        if (baseCurrency == null || targetCurrencies.isEmpty() || LocalDateInterval.areDatesInvalid(startDate, endDate)) {
-            return null;
-        } else {
-            LocalDateInterval dateInterval = new LocalDateInterval(startDate, endDate);
-            return new ExchangeBatch(baseCurrency, targetCurrencies, dateInterval);
-        }
     }
 }
