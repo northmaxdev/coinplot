@@ -39,67 +39,68 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
 
     private final SingleCurrencyPicker baseCurrencyPicker;
     private final MultiCurrencyPicker targetCurrencyPicker;
-    private final DatePicker startDatePicker;
-    private final DatePicker endDatePicker;
-    private final LocalizedButton submitButton;
-    private final LocalizedButton clearButton;
-    private final LocalizedButton currencyReloadButton;
-    // onPresentValueSubmission is used when the created ExchangeBatch is non-null.
-    // onAbsentValueSubmission is used when the created ExchangeBatch is null.
-    // The only reason for the created ExchangeBatch to be null is if the form was
-    // filled in incorrectly, if at all. This means that if onAbsentValueSubmission
-    // includes some kind of textual notification to the user, it's OK to tailor
-    // that message specifically for this scenario.
-    private final Consumer<ExchangeBatch> onPresentValueSubmission;
-    private final Runnable onAbsentValueSubmission;
+    private final DatePicker startDatePicker = new DatePicker();
+    private final DatePicker endDatePicker = new DatePicker();
+    private final LocalizedButton submitButton = new LocalizedButton(SUBMIT_BUTTON_TEXT_KEY, VaadinIcon.CHECK);
+    private final LocalizedButton clearButton = new LocalizedButton(CLEAR_BUTTON_TEXT_KEY, VaadinIcon.CLOSE);
+    private final LocalizedButton currencyReloadButton = new LocalizedButton(CURRENCY_RELOAD_BUTTON_TEXT_KEY, VaadinIcon.DOWNLOAD);
+    private final Consumer<ExchangeBatch> onSubmit;
 
-    public ExchangeBatchSubmissionForm(
-            @Nonnull CurrencyService currencyDataSource,
-            @Nonnull Consumer<ExchangeBatch> onPresentValueSubmission,
-            @Nonnull Runnable onAbsentValueSubmission) {
+    public ExchangeBatchSubmissionForm(@Nonnull CurrencyService currencyDataSource, @Nonnull Consumer<ExchangeBatch> onSubmit) {
 
-        //////////////////////////
-        // Field initialization //
-        //////////////////////////
+        /////////////////////////////////////
+        // Currency pickers' configuration //
+        /////////////////////////////////////
 
         baseCurrencyPicker = new SingleCurrencyPicker(currencyDataSource);
-        targetCurrencyPicker = new MultiCurrencyPicker(currencyDataSource);
-        startDatePicker = new DatePicker();
-        endDatePicker = new DatePicker();
-        submitButton = new LocalizedButton(SUBMIT_BUTTON_TEXT_KEY, VaadinIcon.CHECK);
-        clearButton = new LocalizedButton(CLEAR_BUTTON_TEXT_KEY, VaadinIcon.CLOSE);
-        currencyReloadButton = new LocalizedButton(CURRENCY_RELOAD_BUTTON_TEXT_KEY, VaadinIcon.DOWNLOAD_ALT);
-        this.onPresentValueSubmission = Objects.requireNonNull(onPresentValueSubmission);
-        this.onAbsentValueSubmission = Objects.requireNonNull(onAbsentValueSubmission);
-
-        /////////////////////
-        // Event listeners //
-        /////////////////////
-
-        // TODO:
-        //  Add ValueChangeListener to baseCurrencyPicker that
-        //  disables that same currency in targetCurrencyPicker
-
-        // TODO: Add some variety to button listeners (single clicks, double clicks, etc.)
-        submitButton.addSingleClickListener(event -> submit());
-        clearButton.addSingleClickListener(event -> clear());
-        currencyReloadButton.addSingleClickListener(event -> reloadAvailableCurrencies());
-
-        ////////////////////
-        // Visual markers //
-        ////////////////////
-
-        // TODO:
-        //  Visual markers (helper text or error message)
-        //  regarding the dates' chronological validity
-
         baseCurrencyPicker.setRequired(true);
+        setColspan(baseCurrencyPicker, CURRENCY_PICKER_COLSPAN);
+
+        targetCurrencyPicker = new MultiCurrencyPicker(currencyDataSource);
         targetCurrencyPicker.setRequired(true);
+        setColspan(targetCurrencyPicker, CURRENCY_PICKER_COLSPAN);
+
+        /////////////////////////////////
+        // Date pickers' configuration //
+        /////////////////////////////////
+
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1L);
+
         startDatePicker.setRequired(true);
+        startDatePicker.setMax(yesterday);
+        startDatePicker.addValueChangeListener(event -> {
+            @Nullable LocalDate start = event.getValue();
+            @Nullable LocalDate minEnd = start == null ? null : start.plusDays(1L);
+            endDatePicker.setMin(minEnd);
+        });
+
         endDatePicker.setRequired(true);
+        endDatePicker.setMax(today);
+        endDatePicker.addValueChangeListener(event -> {
+            @Nullable LocalDate end = event.getValue();
+            @Nonnull LocalDate maxStart = end == null ? yesterday : end.minusDays(1L);
+            startDatePicker.setMax(maxStart);
+        });
+
+        ////////////////////////////
+        // Buttons' configuration //
+        ////////////////////////////
+
+        submitButton.addSingleClickListener(event -> submit());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        clearButton.addSingleClickListener(event -> clear());
         clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+        currencyReloadButton.addSingleClickListener(event -> reloadAvailableCurrencies());
         // Use the default variant for the reload button
+
+        //////////////////////////////////////
+        // On-submit callback configuration //
+        //////////////////////////////////////
+
+        this.onSubmit = Objects.requireNonNull(onSubmit);
 
         //////////////////////////
         // Layout configuration //
@@ -112,16 +113,12 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         buttonBar.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
 
         add(baseCurrencyPicker, targetCurrencyPicker, startDatePicker, endDatePicker, buttonBar);
-        setColspan(baseCurrencyPicker, CURRENCY_PICKER_COLSPAN);
-        setColspan(targetCurrencyPicker, CURRENCY_PICKER_COLSPAN);
     }
 
     public void submit() {
-        @Nullable ExchangeBatch exchangeBatch = createExchangeBatch();
-        if (exchangeBatch == null) {
-            onAbsentValueSubmission.run();
-        } else {
-            onPresentValueSubmission.accept(exchangeBatch);
+        @Nullable ExchangeBatch exchangeBatch = createIfValidInput();
+        if (exchangeBatch != null) {
+            onSubmit.accept(exchangeBatch);
         }
     }
 
@@ -156,7 +153,7 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         currencyReloadButton.localeChange(event);
     }
 
-    private @Nullable ExchangeBatch createExchangeBatch() {
+    private @Nullable ExchangeBatch createIfValidInput() {
         @Nullable Currency baseCurrency = baseCurrencyPicker.getValue();
         @Nonnull Set<Currency> targetCurrencies = targetCurrencyPicker.getSelectedItems();
         @Nullable LocalDate startDate = startDatePicker.getValue();
@@ -164,9 +161,9 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
 
         if (baseCurrency == null || targetCurrencies.isEmpty() || LocalDateInterval.areDatesInvalid(startDate, endDate)) {
             return null;
+        } else {
+            LocalDateInterval dateInterval = new LocalDateInterval(startDate, endDate);
+            return new ExchangeBatch(baseCurrency, targetCurrencies, dateInterval);
         }
-
-        LocalDateInterval dateInterval = new LocalDateInterval(startDate, endDate);
-        return new ExchangeBatch(baseCurrency, targetCurrencies, dateInterval);
     }
 }
