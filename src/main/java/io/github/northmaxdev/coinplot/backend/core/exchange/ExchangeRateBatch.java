@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.CollectionUtilities;
+import io.github.northmaxdev.coinplot.lang.Maps;
 import io.github.northmaxdev.coinplot.lang.Pair;
 import jakarta.annotation.Nonnull;
 
@@ -20,7 +21,6 @@ import java.util.TreeMap;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toUnmodifiableMap;
-import static java.util.stream.Collectors.toUnmodifiableSet;
 
 // The ExchangeRate edition of ExchangeBatch (see the latter's source file for more info).
 // Unlike ExchangeBatch, this class spans over a single target currency only,
@@ -38,14 +38,12 @@ public final class ExchangeRateBatch {
     }
 
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
-        return dataset.stream()
+        Map<DatelessExchange, Map<LocalDate, BigDecimal>> groups = dataset.stream()
                 // Alternative downstream Collector: toMap(..., ..., (a, b) -> a, TreeMap::new)
                 // This may or may not give a performance boost if methods like getValueTimeline() are accessed frequently.
-                .collect(groupingBy(DatelessExchange::of, toUnmodifiableMap(ExchangeRate::getDate, ExchangeRate::getValue)))
-                .entrySet()
-                .stream()
-                .map(entry -> new ExchangeRateBatch(entry.getKey(), entry.getValue()))
-                .collect(toUnmodifiableSet());
+                .collect(groupingBy(DatelessExchange::of, toUnmodifiableMap(ExchangeRate::getDate, ExchangeRate::getValue)));
+
+        return Maps.mapToSet(groups, ExchangeRateBatch::new);
     }
 
     public @Nonnull DatelessExchange getExchange() {
