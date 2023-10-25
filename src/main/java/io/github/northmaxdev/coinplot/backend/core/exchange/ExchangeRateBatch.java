@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.CollectionUtilities;
 import io.github.northmaxdev.coinplot.lang.Pair;
+import io.github.northmaxdev.coinplot.lang.math.BigDecimals;
 import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;
 
@@ -64,9 +65,10 @@ public final class ExchangeRateBatch {
         return Collections.unmodifiableSortedMap(timeline);
     }
 
-    public @Nonnull Optional<Percentage> getLatestChangePercentage() {
+    public Optional<Percentage> getLatestChangePercentage() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
         return CollectionUtilities.lastTwoElements(timeline.sequencedValues())
+                .filter(twoLatestValues -> twoLatestValues.firstMatches(x -> BigDecimals.equalIgnoringScale(x, BigDecimal.ZERO)))
                 .map(Percentage::ofChange);
     }
 
