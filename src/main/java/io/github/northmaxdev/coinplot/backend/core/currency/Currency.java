@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.backend.core.currency;
 
+import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +13,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
-import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Entity
 public class Currency implements Serializable { // Required by the JPA spec to be non-final (JPA 3.1, section 2.1)
@@ -33,17 +32,8 @@ public class Currency implements Serializable { // Required by the JPA spec to b
         this.name = Objects.requireNonNull(name, "Currency name cannot be null");
     }
 
-    public static @Nonnull Currency ofMapEntry(@Nonnull Map.Entry<String, String> mapEntry) {
-        Objects.requireNonNull(mapEntry);
-        return new Currency(mapEntry.getKey(), mapEntry.getValue());
-    }
-
-    public static @Nonnull Set<Currency> setFrom(@Nonnull Map<String, String> map) {
-        return Objects.requireNonNull(map)
-                .entrySet()
-                .stream()
-                .map(Currency::ofMapEntry)
-                .collect(toUnmodifiableSet());
+    public static @Nonnull Set<Currency> setFromMap(@Nonnull Map<String, String> map) {
+        return Maps.mapToSet(map, Currency::new);
     }
 
     protected Currency() {

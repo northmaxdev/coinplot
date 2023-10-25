@@ -14,6 +14,6 @@ final class FixerCurrencySetDTOMapper implements CurrencySetDTOMapper<FixerCurre
     @Override
     public @Nonnull Set<Currency> map(@Nonnull FixerCurrencySetDTO dto) {
         Objects.requireNonNull(dto);
-        return Currency.setFrom(dto.symbols());
+        return Currency.setFromMap(dto.symbols());
     }
 }

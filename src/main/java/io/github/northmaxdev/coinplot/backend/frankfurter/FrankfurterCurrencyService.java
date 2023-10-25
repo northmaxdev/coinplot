@@ -34,7 +34,7 @@ final class FrankfurterCurrencyService extends // Package-private
                 httpClient,
                 jsonParser,
                 JSONParsingStrategy.usingTypeReference(DTO_TYPE_REFERENCE),
-                Currency::setFrom,
+                Currency::setFromMap,
                 repository
         );
         this.config = Objects.requireNonNull(config);
