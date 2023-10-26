@@ -2,15 +2,14 @@
 
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.board.Board;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
 import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
-public final class ExchangeRateDataVisualizer extends VerticalLayout {
+public final class ExchangeRateDataVisualizer extends Board {
 
     private final ExchangeRateDynamicsChart dynamicsChart;
     private final ExchangeRateLatestChangeChart latestChangeChart;
@@ -21,12 +20,8 @@ public final class ExchangeRateDataVisualizer extends VerticalLayout {
         latestChangeChart = new ExchangeRateLatestChangeChart();
         extremesChart = new ExchangeRateExtremesChart();
 
-        HorizontalLayout metadataVisualizationPanel = new HorizontalLayout(latestChangeChart, extremesChart);
-        metadataVisualizationPanel.setPadding(false); // This is so it's horizontally in line with dynamicsChart
-        add(dynamicsChart, metadataVisualizationPanel);
-
-        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
-        setJustifyContentMode(JustifyContentMode.BETWEEN);
+        addRow(dynamicsChart);
+        addRow(latestChangeChart, extremesChart);
     }
 
     public void visualize(@Nonnull Set<ExchangeRate> dataset) {
