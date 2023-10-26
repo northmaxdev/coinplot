@@ -5,6 +5,8 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 import io.github.northmaxdev.coinplot.lang.CollectionUtilities;
 import io.github.northmaxdev.coinplot.lang.Maps;
 import io.github.northmaxdev.coinplot.lang.Pair;
+import io.github.northmaxdev.coinplot.lang.math.BigDecimals;
+import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
@@ -64,6 +66,12 @@ public final class ExchangeRateBatch {
     public Optional<Pair<BigDecimal>> getLatestTwoValues() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
         return CollectionUtilities.lastTwoElements(timeline.sequencedValues());
+    }
+
+    public Optional<Percentage> getLatestChangePercentage() {
+        return getLatestTwoValues()
+                .filter(xy -> xy.firstMatches(x -> !BigDecimals.equalIgnoringScale(x, BigDecimal.ZERO)))
+                .map(Percentage::ofChange);
     }
 
     // The definition of "extremes" is taken from the following web resource:
