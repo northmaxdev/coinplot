@@ -67,8 +67,6 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1L);
 
-        // TODO: Explain what is going on here
-
         startDatePicker.setRequired(true);
         startDatePicker.setMax(yesterday);
         startDatePicker.addValueChangeListener(event -> {
@@ -111,8 +109,9 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Official Vaadin guidelines regarding buttons in forms:
         // https://vaadin.com/docs/latest/components/form-layout#button-placement
         HorizontalLayout buttonBar = new HorizontalLayout(submitButton, clearButton, currencyReloadButton);
-        buttonBar.setPadding(false); // This is so it's horizontally in line with the rest of the form's components
         buttonBar.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        buttonBar.setPadding(false); // This is so it's horizontally in line with the rest of the form's components
+        buttonBar.setMargin(true);
 
         add(baseCurrencyPicker, targetCurrencyPicker, startDatePicker, endDatePicker, buttonBar);
     }
