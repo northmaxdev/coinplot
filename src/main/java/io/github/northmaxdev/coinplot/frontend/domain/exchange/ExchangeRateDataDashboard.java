@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -11,7 +10,6 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.DataProvider;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
-import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateService;
 import jakarta.annotation.Nonnull;
 
@@ -20,11 +18,8 @@ import java.util.Set;
 
 public final class ExchangeRateDataDashboard extends SplitLayout implements LocaleChangeObserver {
 
-    private final ExchangeRateDynamicsChart dynamicsChart;
-    private final ExchangeRateLatestChangeChart latestChangeChart;
-    private final ExchangeRateExtremesChart extremesChart;
-
     private final ExchangeRateService service;
+    private final ExchangeRateDataVisualizer dataVisualizer;
     private final ExchangeBatchSubmissionForm requestAssemblyForm;
 
     public ExchangeRateDataDashboard(@Nonnull DataProvider dataProvider) {
@@ -34,28 +29,17 @@ public final class ExchangeRateDataDashboard extends SplitLayout implements Loca
     public ExchangeRateDataDashboard(@Nonnull CurrencyService currencyService, @Nonnull ExchangeRateService exchangeRateService) {
         super(Orientation.HORIZONTAL);
 
-        dynamicsChart = new ExchangeRateDynamicsChart();
-        latestChangeChart = new ExchangeRateLatestChangeChart();
-        extremesChart = new ExchangeRateExtremesChart();
-
         service = Objects.requireNonNull(exchangeRateService);
+        dataVisualizer = new ExchangeRateDataVisualizer();
         requestAssemblyForm = new ExchangeBatchSubmissionForm(currencyService, exchangeBatch -> {
             Set<ExchangeRate> dataset = service.getAvailableExchangeRates(exchangeBatch);
-            Set<ExchangeRateBatch> batches = ExchangeRateBatch.multipleFromDataset(dataset);
-
-            dynamicsChart.visualize(batches);
-            latestChangeChart.visualize(batches);
-            extremesChart.visualize(batches);
+            dataVisualizer.visualize(dataset);
         });
-
-        VerticalLayout visualizationPanel = new VerticalLayout(dynamicsChart, new HorizontalLayout(latestChangeChart, extremesChart));
-        visualizationPanel.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.STRETCH);
-        visualizationPanel.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        addToPrimary(visualizationPanel);
 
         VerticalLayout inputPanel = new VerticalLayout(requestAssemblyForm);
         inputPanel.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.STRETCH);
-        inputPanel.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
+        addToPrimary(dataVisualizer);
         addToSecondary(inputPanel);
     }
 
