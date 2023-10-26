@@ -49,6 +49,6 @@ public abstract class AbstractExchangeRateDataChart extends Chart {
         Configuration config = getConfiguration();
         config.setSeries(series);
 
-        drawChart(true); // FIXME: setSeries() JavaDoc says this needs to be called for redraws, check that later
+        drawChart(true); // See Configuration::setSeries JavaDoc for info
     }
 }
