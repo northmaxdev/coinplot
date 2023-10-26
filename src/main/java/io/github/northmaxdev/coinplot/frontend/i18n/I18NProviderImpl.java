@@ -20,11 +20,9 @@ public final class I18NProviderImpl implements I18NProvider {
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
     private static final List<Locale> SUPPORTED_LOCALES = List.of(
             // The first item in this list is the default option
-            Locale.US,
-
-            // There's no pre-declared constant for this.
-            // The JDK truly has everything - even politics!
-            Locale.of("ru", "RU")
+            Locale.of("en", "US"),
+            Locale.of("ru", "RU"),
+            Locale.of("he", "IL")
     );
 
     @Override
