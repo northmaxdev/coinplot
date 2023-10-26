@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -87,11 +88,15 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Buttons' configuration //
         ////////////////////////////
 
+        // TODO: Add tooltips that hint about click shortcuts
+
         submitButton.addSingleClickListener(event -> submit());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        submitButton.addClickShortcut(Key.ENTER);
 
         clearButton.addSingleClickListener(event -> clear());
         clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        clearButton.addClickShortcut(Key.DELETE);
 
         currencyReloadButton.addSingleClickListener(event -> reloadAvailableCurrencies());
         // Use the default variant for the reload button
