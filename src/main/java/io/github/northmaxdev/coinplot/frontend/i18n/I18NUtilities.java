@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import jakarta.annotation.Nonnull;
 
@@ -72,6 +73,24 @@ public final class I18NUtilities {
             @Nonnull LocaleChangeEvent event,
             @Nonnull String key) {
         setHelperText(component, event.getLocale(), key);
+    }
+
+    ////////////
+    // Charts //
+    ////////////
+
+    public static void setTitle(
+            @Nonnull Chart chart,
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(chart, locale, key, (c, s) -> c.getConfiguration().setTitle(s));
+    }
+
+    public static void setTitle(
+            @Nonnull Chart chart,
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setTitle(chart, event.getLocale(), key);
     }
 
     ////////////////////////////
