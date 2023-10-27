@@ -45,6 +45,7 @@ public final class ExchangeRateDataDashboard extends SplitLayout implements Loca
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
+        dataVisualizer.localeChange(event);
         requestAssemblyForm.localeChange(event);
     }
 }

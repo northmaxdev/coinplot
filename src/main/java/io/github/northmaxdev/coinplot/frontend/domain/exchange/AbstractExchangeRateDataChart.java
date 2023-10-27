@@ -6,15 +6,18 @@ import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.ChartType;
 import com.vaadin.flow.component.charts.model.Configuration;
 import com.vaadin.flow.component.charts.model.Series;
+import com.vaadin.flow.i18n.LocaleChangeEvent;
+import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
+import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class AbstractExchangeRateDataChart extends Chart {
+public abstract class AbstractExchangeRateDataChart extends Chart implements LocaleChangeObserver {
 
     //////////////////////////////////
     // Protected API for subclasses //
@@ -27,6 +30,8 @@ public abstract class AbstractExchangeRateDataChart extends Chart {
     // The "IgnoringName" part means that the series name is configured outside this method,
     // and therefore the implementing class should not care about it.
     protected abstract @Nonnull Series mapBatchToSeriesIgnoringName(@Nonnull ExchangeRateBatch batch);
+
+    protected abstract @Nonnull String getTitleI18NKey();
 
     ////////////////
     // Public API //
@@ -50,5 +55,10 @@ public abstract class AbstractExchangeRateDataChart extends Chart {
         config.setSeries(series);
 
         drawChart(true); // See Configuration::setSeries JavaDoc for info
+    }
+
+    @Override // Deliberately non-final, open for extension
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
+        I18NUtilities.setTitle(this, event, getTitleI18NKey());
     }
 }

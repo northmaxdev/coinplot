@@ -29,4 +29,9 @@ public final class ExchangeRateDynamicsChart extends AbstractExchangeRateDataCha
 
         return new DataSeries(seriesItems);
     }
+
+    @Override
+    protected @Nonnull String getTitleI18NKey() {
+        return "exchange-rate-dynamics-chart.title";
+    }
 }

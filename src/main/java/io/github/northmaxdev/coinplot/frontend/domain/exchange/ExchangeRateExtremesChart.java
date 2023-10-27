@@ -23,4 +23,9 @@ public final class ExchangeRateExtremesChart extends AbstractExchangeRateDataCha
                 })
                 .orElseGet(RangeSeries::new);
     }
+
+    @Override
+    protected @Nonnull String getTitleI18NKey() {
+        return "exchange-rate-extremes-chart.title";
+    }
 }

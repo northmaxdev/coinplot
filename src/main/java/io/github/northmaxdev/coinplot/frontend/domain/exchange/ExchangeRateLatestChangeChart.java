@@ -20,4 +20,9 @@ public final class ExchangeRateLatestChangeChart extends AbstractExchangeRateDat
                 .map(percentage -> new ListSeries(percentage.value()))
                 .orElseGet(ListSeries::new);
     }
+
+    @Override
+    protected @Nonnull String getTitleI18NKey() {
+        return "exchange-rate-latest-change-chart.title";
+    }
 }
