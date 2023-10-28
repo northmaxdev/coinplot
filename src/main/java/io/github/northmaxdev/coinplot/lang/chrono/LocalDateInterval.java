@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.lang.chrono;
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -22,24 +21,13 @@ import static java.util.stream.Collectors.toCollection;
 // Mathematical notation: [start, end)
 public record LocalDateInterval(@Nonnull LocalDate start, @Nonnull LocalDate end) {
 
-    public static final Comparator<LocalDateInterval> LENGTH_BASED_ORDER = Comparator.comparing(LocalDateInterval::length);
-
-    // Utility methods areDatesValid and areDatesInvalid are useful for external,
-    // pre-instantiation validation.
-
-    public static boolean areDatesValid(@Nullable LocalDate start, @Nullable LocalDate end) {
-        return start != null && end != null && start.isBefore(end);
-    }
-
-    public static boolean areDatesInvalid(@Nullable LocalDate start, @Nullable LocalDate end) {
-        return !areDatesValid(start, end);
-    }
+    public static final Comparator<LocalDateInterval> LENGTH_BASED_ORDER = Comparator.comparingInt(LocalDateInterval::length);
 
     public LocalDateInterval {
         Objects.requireNonNull(start);
         Objects.requireNonNull(end);
 
-        if (areDatesInvalid(start, end)) {
+        if (!start.isBefore(end)) {
             throw new IllegalArgumentException("start >= end");
         }
     }
