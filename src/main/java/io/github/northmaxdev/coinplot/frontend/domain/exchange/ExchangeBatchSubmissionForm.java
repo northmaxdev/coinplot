@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -14,7 +15,6 @@ import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
-import io.github.northmaxdev.coinplot.frontend.common.LocalizedButton;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.MultiCurrencyPicker;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.SingleCurrencyPicker;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
@@ -42,9 +42,9 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     private final MultiCurrencyPicker targetCurrencyPicker;
     private final DatePicker startDatePicker = new DatePicker();
     private final DatePicker endDatePicker = new DatePicker();
-    private final LocalizedButton submitButton = new LocalizedButton(SUBMIT_BUTTON_TEXT_KEY, VaadinIcon.CHECK);
-    private final LocalizedButton clearButton = new LocalizedButton(CLEAR_BUTTON_TEXT_KEY, VaadinIcon.CLOSE);
-    private final LocalizedButton currencyReloadButton = new LocalizedButton(CURRENCY_RELOAD_BUTTON_TEXT_KEY, VaadinIcon.DOWNLOAD);
+    private final Button submitButton = new Button(VaadinIcon.CHECK.create());
+    private final Button clearButton = new Button(VaadinIcon.CLOSE.create());
+    private final Button currencyReloadButton = new Button(VaadinIcon.DOWNLOAD.create());
     private final Consumer<ExchangeBatch> onSubmit;
 
     public ExchangeBatchSubmissionForm(@Nonnull CurrencyService currencyDataSource, @Nonnull Consumer<ExchangeBatch> onSubmit) {
@@ -165,8 +165,8 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         endDatePicker.setLocale(event.getLocale());
         I18NUtilities.setLabel(endDatePicker, event, END_DATE_PICKER_LABEL_KEY);
 
-        submitButton.localeChange(event);
-        clearButton.localeChange(event);
-        currencyReloadButton.localeChange(event);
+        I18NUtilities.setText(submitButton, event, SUBMIT_BUTTON_TEXT_KEY);
+        I18NUtilities.setText(clearButton, event, CLEAR_BUTTON_TEXT_KEY);
+        I18NUtilities.setText(currencyReloadButton, event, CURRENCY_RELOAD_BUTTON_TEXT_KEY);
     }
 }
