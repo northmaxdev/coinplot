@@ -93,6 +93,38 @@ public final class I18NUtilities {
         setTitle(chart, event.getLocale(), key);
     }
 
+    public static void setXAxisTitle(
+            @Nonnull Chart chart,
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(chart, locale, key, (c, s) -> c.getConfiguration()
+                .getxAxis()
+                .setTitle(s));
+    }
+
+    public static void setXAxisTitle(
+            @Nonnull Chart chart,
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setXAxisTitle(chart, event.getLocale(), key);
+    }
+
+    public static void setYAxisTitle(
+            @Nonnull Chart chart,
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(chart, locale, key, (c, s) -> c.getConfiguration()
+                .getyAxis()
+                .setTitle(s));
+    }
+
+    public static void setYAxisTitle(
+            @Nonnull Chart chart,
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setYAxisTitle(chart, event.getLocale(), key);
+    }
+
     ////////////////////////////
     // Implementation details //
     ////////////////////////////
