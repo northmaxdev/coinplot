@@ -44,7 +44,7 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     private final DatePicker endDatePicker = new DatePicker();
     private final Button submitButton = new Button(VaadinIcon.CHECK.create());
     private final Button clearButton = new Button(VaadinIcon.CLOSE.create());
-    private final Button currencyReloadButton = new Button(VaadinIcon.DOWNLOAD.create());
+    private final Button currencyReloadButton = new Button(VaadinIcon.CLOUD_DOWNLOAD.create());
     private final Consumer<ExchangeBatch> onSubmit;
 
     public ExchangeBatchSubmissionForm(@Nonnull CurrencyService currencyDataSource, @Nonnull Consumer<ExchangeBatch> onSubmit) {
