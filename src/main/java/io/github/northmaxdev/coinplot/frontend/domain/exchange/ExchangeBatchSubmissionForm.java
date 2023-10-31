@@ -7,11 +7,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
@@ -42,9 +42,9 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     private final MultiCurrencyPicker targetCurrencyPicker;
     private final DatePicker startDatePicker = new DatePicker();
     private final DatePicker endDatePicker = new DatePicker();
-    private final Button submitButton = new Button(VaadinIcon.CHECK.create());
-    private final Button clearButton = new Button(VaadinIcon.CLOSE.create());
-    private final Button currencyReloadButton = new Button(VaadinIcon.CLOUD_DOWNLOAD.create());
+    private final Button submitButton = new Button(LumoIcon.CHECKMARK.create());
+    private final Button clearButton = new Button(LumoIcon.CROSS.create());
+    private final Button currencyReloadButton = new Button(LumoIcon.DOWNLOAD.create());
     private final Consumer<ExchangeBatch> onSubmit;
 
     public ExchangeBatchSubmissionForm(@Nonnull CurrencyService currencyDataSource, @Nonnull Consumer<ExchangeBatch> onSubmit) {
