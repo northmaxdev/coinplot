@@ -21,10 +21,14 @@ import jakarta.annotation.Nonnull;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
 public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
+
+    private static final String X_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.x-axis.title";
+    private static final String Y_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.y-axis.title";
 
     // TODO (Self-note):
     //  My Vaadin Pro license expired around the end of October 2023.
@@ -33,10 +37,10 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
     //  Below are the unverified changes:
     //  1. Axis type configuration and DataSeriesItem creation with a timestamp as the X value
     //  (in other words, ensure the axes look and function correctly)
+    //  2. Axis title translation in LocaleChangeObserver::localeChange (might need a drawChart() or drawChart(boolean) call)
 
     public ExchangeRateDynamicsChart() {
         super(ChartType.LINE);
-
         Configuration config = getConfiguration();
 
         XAxis xAxis = config.getxAxis();
@@ -74,5 +78,15 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent localeChangeEvent) {
+        Configuration config = getConfiguration();
+        Locale newLocale = localeChangeEvent.getLocale();
+
+        XAxis xAxis = config.getxAxis();
+        String xAxisTitle = getTranslation(newLocale, X_AXIS_TITLE_KEY);
+        xAxis.setTitle(xAxisTitle);
+
+        YAxis yAxis = config.getyAxis();
+        String yAxisTitle = getTranslation(newLocale, Y_AXIS_TITLE_KEY);
+        yAxis.setTitle(yAxisTitle);
     }
 }
