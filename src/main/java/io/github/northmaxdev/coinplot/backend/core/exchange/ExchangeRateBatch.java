@@ -85,6 +85,18 @@ public final class ExchangeRateBatch {
         return CollectionUtilities.endpoints(sortedValues);
     }
 
+    public Optional<BigDecimal> getMinValue() {
+        return values.values()
+                .stream()
+                .min(BigDecimal::compareTo);
+    }
+
+    public Optional<BigDecimal> getMaxValue() {
+        return values.values()
+                .stream()
+                .max(BigDecimal::compareTo);
+    }
+
     // TODO:
     //  Methods stream() and toSet() (like the ones in ExchangeBatch)
     //  may be added in the future if they're needed
