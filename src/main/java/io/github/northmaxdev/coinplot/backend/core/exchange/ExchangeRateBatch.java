@@ -68,6 +68,15 @@ public final class ExchangeRateBatch {
         return CollectionUtilities.lastTwoElements(timeline.sequencedValues());
     }
 
+    public Optional<BigDecimal> getLatestChange() {
+        return getLatestTwoValues()
+                .map(pair -> {
+                    BigDecimal before = pair.first();
+                    BigDecimal after = pair.second();
+                    return after.subtract(before);
+                });
+    }
+
     public Optional<Percentage> getLatestChangePercentage() {
         return getLatestTwoValues()
                 .filter(xy -> xy.firstMatches(x -> !BigDecimals.equalIgnoringScale(x, BigDecimal.ZERO)))
