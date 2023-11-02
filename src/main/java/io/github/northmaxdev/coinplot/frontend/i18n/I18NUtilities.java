@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import jakarta.annotation.Nonnull;
 
@@ -72,6 +73,24 @@ public final class I18NUtilities {
             @Nonnull LocaleChangeEvent event,
             @Nonnull String key) {
         setHelperText(component, event.getLocale(), key);
+    }
+
+    //////////
+    // Grid //
+    //////////
+
+    public static <C extends Grid.Column<?>> void setGridColumnHeader(
+            @Nonnull C column,
+            @Nonnull Locale locale,
+            @Nonnull String key) {
+        set(column, locale, key, C::setHeader);
+    }
+
+    public static <C extends Grid.Column<?>> void setGridColumnHeader(
+            @Nonnull C column,
+            @Nonnull LocaleChangeEvent event,
+            @Nonnull String key) {
+        setGridColumnHeader(column, event.getLocale(), key);
     }
 
     ////////////////////////////
