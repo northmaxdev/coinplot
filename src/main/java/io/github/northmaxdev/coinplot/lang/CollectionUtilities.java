@@ -80,4 +80,16 @@ public final class CollectionUtilities {
             }
         };
     }
+
+    // Exception-less alternative to SequencedCollection::getFirst.
+    // This method does NOT take into account concurrent mutations of the collection.
+    public static <T> Optional<T> firstElement(@Nonnull SequencedCollection<T> collection) {
+        return collection.isEmpty() ? Optional.empty() : Optional.ofNullable(collection.getFirst());
+    }
+
+    // Exception-less alternative to SequencedCollection::getLast.
+    // This method does NOT take into account concurrent mutations of the collection.
+    public static <T> Optional<T> lastElement(@Nonnull SequencedCollection<T> collection) {
+        return collection.isEmpty() ? Optional.empty() : Optional.ofNullable(collection.getLast());
+    }
 }
