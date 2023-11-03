@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 // It should be noted that most Java APIs, such as HashMap's load factor or NumberFormat::getPercentInstance,
 // expect decimal representations, where a value of 75.5 would represent 7550%.
 // The decimalValue() and fromDecimalValue(double) methods may be used for compatibility.
+// Please note that methods like Percentage::ofChange may yield inaccurate results.
 public record Percentage(double value) implements Comparable<Percentage> {
 
     // More constants for common values may be added in the future
@@ -108,12 +109,12 @@ public record Percentage(double value) implements Comparable<Percentage> {
         return ofChange(before.doubleValue(), after.doubleValue());
     }
 
-    public static @Nonnull Percentage ofChange(@Nonnull Pair<? extends Number> numberPair) {
+    public static @Nonnull Percentage ofChange(@Nonnull Pair<? extends Number, ? extends Number> numberPair) {
         Objects.requireNonNull(numberPair);
 
         // Not delegating to ofChange(Number, Number) to avoid redundant null-checks
-        Number before = numberPair.first();
-        Number after = numberPair.second();
+        Number before = numberPair.getFirst();
+        Number after = numberPair.getSecond();
         return ofChange(before.doubleValue(), after.doubleValue());
     }
 
