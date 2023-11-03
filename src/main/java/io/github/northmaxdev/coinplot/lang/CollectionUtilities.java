@@ -31,7 +31,7 @@ public final class CollectionUtilities {
     //                                  ^~~~~~^
     // An empty Optional is returned if the collection has less than two elements.
     // This method does NOT take into account concurrent mutations of the collection.
-    public static <T> Optional<Pair<T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
+    public static <T> Optional<? extends Pair<T, T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
         Objects.requireNonNull(collection);
 
         @Nullable T lastElement = null;
@@ -51,7 +51,7 @@ public final class CollectionUtilities {
             return Optional.empty();
         }
 
-        Pair<T> result = new Pair<>(nextToLastElement, lastElement);
+        Pair<T, T> result = Pair.of(nextToLastElement, lastElement);
         return Optional.of(result);
     }
 
@@ -66,16 +66,17 @@ public final class CollectionUtilities {
     //
     // An empty Optional is returned if the collection is empty.
     // This method does NOT take into account concurrent mutations of the collection.
-    public static <T> Optional<Pair<T>> endpoints(@Nonnull SequencedCollection<T> collection) {
+    public static <T> Optional<? extends Pair<T, T>> endpoints(@Nonnull SequencedCollection<T> collection) {
         Objects.requireNonNull(collection);
         return switch (collection.size()) {
             case 0 -> Optional.empty();
             case 1 -> {
-                Pair<T> p = Pair.mirrored(collection.getFirst());
+                T singleton = collection.getFirst();
+                Pair<T, T> p = Pair.of(singleton, singleton);
                 yield Optional.of(p);
             }
             default -> {
-                Pair<T> p = new Pair<>(collection.getFirst(), collection.getLast());
+                Pair<T, T> p = Pair.of(collection.getFirst(), collection.getLast());
                 yield Optional.of(p);
             }
         };
