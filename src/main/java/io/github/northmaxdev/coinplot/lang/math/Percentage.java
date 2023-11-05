@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.lang.math;
 import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -21,6 +22,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
     public static final Percentage ZERO = new Percentage(0);
 
     private static final double DECIMAL_VALUE_MULTIPLIER = 100;
+    private static final BigDecimal BIG_DECIMAL_VALUE_MULTIPLIER = BigDecimal.valueOf(DECIMAL_VALUE_MULTIPLIER);
 
     public Percentage {
         if (!Double.isFinite(value)) { // Unlike isInfinite, isFinite explicitly documents NaN cases (which it rejects)
@@ -28,8 +30,17 @@ public record Percentage(double value) implements Comparable<Percentage> {
         }
     }
 
+    public Percentage(@Nonnull BigDecimal d) {
+        this(d.doubleValue());
+    }
+
     public static @Nonnull Percentage fromDecimalValue(double decimalValue) {
         return new Percentage(decimalValue * DECIMAL_VALUE_MULTIPLIER);
+    }
+
+    public static @Nonnull Percentage fromDecimalValue(@Nonnull BigDecimal decimalValue) {
+        Objects.requireNonNull(decimalValue);
+        return new Percentage(decimalValue.multiply(BIG_DECIMAL_VALUE_MULTIPLIER));
     }
 
     // +--------+-------+----------+------------------------------------------+
