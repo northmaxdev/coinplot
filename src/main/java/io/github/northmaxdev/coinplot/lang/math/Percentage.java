@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -113,10 +114,30 @@ public record Percentage(double value) implements Comparable<Percentage> {
         return fromDecimalValue(calculatedDecimalValue);
     }
 
-    public static @Nonnull Percentage ofChange(@Nonnull Number before, @Nonnull Number after) {
+    public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after, @Nonnull RoundingMode roundingMode) {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
-        return ofChange(before.doubleValue(), after.doubleValue());
+        Objects.requireNonNull(roundingMode);
+
+        if (BigDecimals.equalIgnoringScale(before, after)) {
+            return ZERO;
+        }
+
+        // At this point in time, equal arguments have been filtered out:
+        // 0, _ --> must be rejected (throw IAE)
+        // _, 0 --> calculate % (should be 100% or -100%)
+        // _, _ (unequal) --> calculate %
+
+        if (BigDecimals.equalIgnoringScale(before, BigDecimal.ZERO)) {
+            throw new IllegalArgumentException("Cannot calculate change from zero unless both operands are zero");
+        }
+
+        // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
+        BigDecimal numerator = after.subtract(before);
+        BigDecimal denominator = before.abs();
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
+
+        return fromDecimalValue(calculatedDecimalValue);
     }
 
     public static <T> @Nonnull Percentage ofMatchingPredicate(@Nonnull Iterable<T> iterable, @Nonnull Predicate<T> predicate) {
