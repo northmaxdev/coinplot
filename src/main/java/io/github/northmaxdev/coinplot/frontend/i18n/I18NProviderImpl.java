@@ -39,7 +39,7 @@ public final class I18NProviderImpl implements I18NProvider {
             return params.length > 0 ? s.formatted(params) : s;
         } catch (MissingResourceException e) {
             // For more info: https://vaadin.com/docs/latest/advanced/i18n-localization#provider-sample-for-translation
-            return "!No '%s' translation: %s".formatted(locale.getLanguage(), key);
+            return "!No '%s' translation: %s".formatted(locale, key);
         }
     }
 }
