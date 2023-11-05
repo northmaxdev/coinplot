@@ -3,7 +3,6 @@
 package io.github.northmaxdev.coinplot.lang.math;
 
 import io.github.northmaxdev.coinplot.lang.Iterables;
-import io.github.northmaxdev.coinplot.lang.Pair;
 import jakarta.annotation.Nonnull;
 
 import java.text.NumberFormat;
@@ -106,15 +105,6 @@ public record Percentage(double value) implements Comparable<Percentage> {
     public static @Nonnull Percentage ofChange(@Nonnull Number before, @Nonnull Number after) {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
-        return ofChange(before.doubleValue(), after.doubleValue());
-    }
-
-    public static @Nonnull Percentage ofChange(@Nonnull Pair<? extends Number, ? extends Number> numberPair) {
-        Objects.requireNonNull(numberPair);
-
-        // Not delegating to ofChange(Number, Number) to avoid redundant null-checks
-        Number before = numberPair.getFirst();
-        Number after = numberPair.getSecond();
         return ofChange(before.doubleValue(), after.doubleValue());
     }
 
