@@ -114,10 +114,9 @@ public record Percentage(double value) implements Comparable<Percentage> {
         return fromDecimalValue(calculatedDecimalValue);
     }
 
-    public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after, @Nonnull RoundingMode roundingMode) {
+    public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after) {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
-        Objects.requireNonNull(roundingMode);
 
         if (BigDecimals.equalIgnoringScale(before, after)) {
             return ZERO;
@@ -135,7 +134,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
         // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
         BigDecimal numerator = after.subtract(before);
         BigDecimal denominator = before.abs();
-        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, RoundingMode.HALF_UP);
 
         return fromDecimalValue(calculatedDecimalValue);
     }
