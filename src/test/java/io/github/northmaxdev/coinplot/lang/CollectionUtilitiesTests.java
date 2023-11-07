@@ -17,7 +17,7 @@ class CollectionUtilitiesTests {
     @DisplayName("lastTwoElements correctly locates the last two elements")
     void lastTwoElementsOnTwoPlus() {
         SequencedCollection<Integer> collection = List.of(5, 1, 9, 4, 3);
-        Pair<Integer, Integer> expected = Pair.of(4, 3);
+        Pair<Integer, Integer> expected = new Pair<>(4, 3);
 
         assertThat(CollectionUtilities.lastTwoElements(collection)).contains(expected);
     }
