@@ -4,6 +4,8 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
 
+import java.math.BigDecimal;
+
 public interface NumericChange<T extends Number> {
 
     @Nonnull T getInitialValue();
@@ -13,6 +15,10 @@ public interface NumericChange<T extends Number> {
     @Nonnull T asDifference();
 
     @Nonnull Percentage asPercentage();
+
+    static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal initialValue, @Nonnull BigDecimal resultingValue) {
+        return new BigDecimalChange(initialValue, resultingValue);
+    }
 
     static @Nonnull NumericChange<Double> of(double initialValue, double resultingValue) {
         return new DoubleChange(initialValue, resultingValue);
