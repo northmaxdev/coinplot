@@ -2,11 +2,10 @@
 
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
-import io.github.northmaxdev.coinplot.lang.CollectionUtilities;
 import io.github.northmaxdev.coinplot.lang.Maps;
 import io.github.northmaxdev.coinplot.lang.Pair;
-import io.github.northmaxdev.coinplot.lang.math.BigDecimals;
-import io.github.northmaxdev.coinplot.lang.math.Percentage;
+import io.github.northmaxdev.coinplot.lang.SequencedCollections;
+import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
@@ -63,35 +62,21 @@ public final class ExchangeRateBatch {
         return Collections.unmodifiableSortedMap(timeline);
     }
 
-    public Optional<Pair<BigDecimal>> getLatestTwoValues() {
+    public Optional<NumericChange<BigDecimal>> getLatestChange() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
-        return CollectionUtilities.lastTwoElements(timeline.sequencedValues());
-    }
-
-    public Optional<BigDecimal> getLatestChange() {
-        return getLatestTwoValues()
-                .map(pair -> {
-                    BigDecimal before = pair.first();
-                    BigDecimal after = pair.second();
-                    return after.subtract(before);
-                });
-    }
-
-    public Optional<Percentage> getLatestChangePercentage() {
-        return getLatestTwoValues()
-                .filter(xy -> xy.firstMatches(x -> !BigDecimals.equalIgnoringScale(x, BigDecimal.ZERO)))
-                .map(Percentage::ofChange);
+        return SequencedCollections.lastTwoElements(timeline.sequencedValues())
+                .map(pair -> NumericChange.of(pair.first(), pair.second()));
     }
 
     // The definition of "extremes" is taken from the following web resource:
     // https://www.statista.com/statistics-glossary/definition/204/extreme_value/
-    public Optional<Pair<BigDecimal>> getValueExtremes() {
+    public Optional<Pair<BigDecimal, BigDecimal>> getValueExtremes() {
         SequencedCollection<BigDecimal> sortedValues = values.values()
                 .stream()
                 .sorted()
                 .toList();
 
-        return CollectionUtilities.endpoints(sortedValues);
+        return SequencedCollections.endpoints(sortedValues);
     }
 
     public Optional<BigDecimal> getMinValue() {
