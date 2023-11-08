@@ -11,7 +11,7 @@ import java.util.SequencedCollection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CollectionUtilitiesTests {
+class SequencedCollectionsTests {
 
     @Test
     @DisplayName("lastTwoElements correctly locates the last two elements")
@@ -19,7 +19,7 @@ class CollectionUtilitiesTests {
         SequencedCollection<Integer> collection = List.of(5, 1, 9, 4, 3);
         Pair<Integer, Integer> expected = new Pair<>(4, 3);
 
-        assertThat(CollectionUtilities.lastTwoElements(collection)).contains(expected);
+        assertThat(SequencedCollections.lastTwoElements(collection)).contains(expected);
     }
 
     @Test
@@ -27,7 +27,7 @@ class CollectionUtilitiesTests {
     void lastTwoElementsOnSingleton() {
         SequencedCollection<BigInteger> collection = List.of(BigInteger.ONE);
 
-        assertThat(CollectionUtilities.lastTwoElements(collection)).isEmpty();
+        assertThat(SequencedCollections.lastTwoElements(collection)).isEmpty();
     }
 
     @Test
@@ -35,6 +35,6 @@ class CollectionUtilitiesTests {
     void lastTwoElementsOnEmpty() {
         SequencedCollection<?> collection = List.of();
 
-        assertThat(CollectionUtilities.lastTwoElements(collection)).isEmpty();
+        assertThat(SequencedCollections.lastTwoElements(collection)).isEmpty();
     }
 }

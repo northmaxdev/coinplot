@@ -10,28 +10,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.SequencedCollection;
 
-// The "Utilities" suffix is used because the name
-// "Collections" is *effectively* taken by the JDK.
-public final class CollectionUtilities {
+public final class SequencedCollections {
 
-    private CollectionUtilities() {
+    private SequencedCollections() {
         throw new UnsupportedOperationException();
     }
 
-    // SequencedCollection specifies a contract that is semantically
-    // much more appropriate for this method than a regular Collection.
-    // The notions of "first" and "last" elements imply a well-defined
-    // encounter order, which a regular Collection does not guarantee.
-    //
-    // The possibly resulting Pair<T> is mapped to the collection's last
-    // two elements in the following way:
     // The pair's first item --> the collection's next-to-last element
     // The pair's second item --> the collection's last element
     // Visualization: [1, 6, 2, 4, 9, 0, 4, 7] --> [4, 7]
     //                                  ^~~~~~^
     // An empty Optional is returned if the collection has less than two elements.
     // This method does NOT take into account concurrent mutations of the collection.
-    public static <T> Optional<? extends Pair<T, T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
+    public static <T> Optional<Pair<T, T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
         Objects.requireNonNull(collection);
 
         @Nullable T lastElement = null;
@@ -55,9 +46,6 @@ public final class CollectionUtilities {
         return Optional.of(result);
     }
 
-    // See comments of CollectionUtilities::lastTwoElements for info about method and/or interface
-    // contract stuff that is relevant to this method as well.
-    //
     // Returns the first and the last elements (if present) of the collection.
     // Visualization: [1, 3, 5, 6, 8] --> [1, 8]
     //                 ^           ^
@@ -66,7 +54,7 @@ public final class CollectionUtilities {
     //
     // An empty Optional is returned if the collection is empty.
     // This method does NOT take into account concurrent mutations of the collection.
-    public static <T> Optional<? extends Pair<T, T>> endpoints(@Nonnull SequencedCollection<T> collection) {
+    public static <T> Optional<Pair<T, T>> endpoints(@Nonnull SequencedCollection<T> collection) {
         Objects.requireNonNull(collection);
         return switch (collection.size()) {
             case 0 -> Optional.empty();
