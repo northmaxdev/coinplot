@@ -18,4 +18,8 @@ public final class BigDecimals {
     public static boolean equalIgnoringScale(@Nonnull BigDecimal x, @Nonnull BigDecimal y) {
         return x.compareTo(y) == 0;
     }
+
+    public static boolean equalsZeroIgnoringScale(@Nonnull BigDecimal x) {
+        return equalIgnoringScale(x, BigDecimal.ZERO);
+    }
 }
