@@ -4,6 +4,8 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
 record LongChange(long a, long b) implements NumericChange<Long> { // Package-private
 
     @Override
@@ -22,7 +24,12 @@ record LongChange(long a, long b) implements NumericChange<Long> { // Package-pr
     }
 
     @Override
-    public @Nonnull Percentage asPercentage() {
-        return Percentage.ofChange(a, b);
+    public Optional<Percentage> asPercentage() {
+        if (a == 0L && b != 0L) {
+            return Optional.empty();
+        }
+
+        Percentage percentage = Percentage.ofChange(a, b);
+        return Optional.of(percentage);
     }
 }

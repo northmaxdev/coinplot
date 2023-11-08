@@ -4,6 +4,8 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
 record DoubleChange(double a, double b) implements NumericChange<Double> { // Package-private
 
     public DoubleChange {
@@ -28,7 +30,7 @@ record DoubleChange(double a, double b) implements NumericChange<Double> { // Pa
     }
 
     @Override
-    public @Nonnull Percentage asPercentage() {
-        return Percentage.ofChange(a, b);
+    public Optional<Percentage> asPercentage() {
+        throw new UnsupportedOperationException("Can't be arsed");
     }
 }

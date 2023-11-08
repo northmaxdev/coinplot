@@ -6,6 +6,7 @@ import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 record BigDecimalChange(@Nonnull BigDecimal a, @Nonnull BigDecimal b) implements NumericChange<BigDecimal> { // Package-private
 
@@ -30,7 +31,12 @@ record BigDecimalChange(@Nonnull BigDecimal a, @Nonnull BigDecimal b) implements
     }
 
     @Override
-    public @Nonnull Percentage asPercentage() {
-        return Percentage.ofChange(a, b);
+    public Optional<Percentage> asPercentage() {
+        if (BigDecimals.equalsZeroIgnoringScale(a) && !BigDecimals.equalsZeroIgnoringScale(b)) {
+            return Optional.empty();
+        }
+
+        Percentage percentage = Percentage.ofChange(a, b);
+        return Optional.of(percentage);
     }
 }

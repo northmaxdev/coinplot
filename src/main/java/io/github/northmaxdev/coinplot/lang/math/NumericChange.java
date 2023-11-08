@@ -5,6 +5,7 @@ package io.github.northmaxdev.coinplot.lang.math;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public interface NumericChange<T extends Number> {
 
@@ -14,7 +15,9 @@ public interface NumericChange<T extends Number> {
 
     @Nonnull T asDifference();
 
-    @Nonnull Percentage asPercentage();
+    // Cannot compute percentage if the initial value is zero,
+    // but the resulting value is non-zero.
+    Optional<Percentage> asPercentage();
 
     static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal initialValue, @Nonnull BigDecimal resultingValue) {
         return new BigDecimalChange(initialValue, resultingValue);
