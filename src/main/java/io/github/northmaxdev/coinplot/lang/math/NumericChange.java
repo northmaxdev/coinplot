@@ -14,6 +14,10 @@ public interface NumericChange<T extends Number> {
 
     @Nonnull Percentage asPercentage();
 
+    static @Nonnull NumericChange<Double> of(double initialValue, double resultingValue) {
+        return new DoubleChange(initialValue, resultingValue);
+    }
+
     static @Nonnull NumericChange<Integer> of(int initialValue, int resultingValue) {
         return new IntChange(initialValue, resultingValue);
     }
