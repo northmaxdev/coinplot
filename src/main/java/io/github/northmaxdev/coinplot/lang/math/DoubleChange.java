@@ -2,14 +2,14 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
-import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 record DoubleChange(double a, double b) implements NumericChange<Double> { // Package-private
 
-    public DoubleChange(double a, double b) {
-        this.a = Doubles.requireFinite(a);
-        this.b = Doubles.requireFinite(b);
+    public DoubleChange {
+        if (!Double.isFinite(a) || !Double.isFinite(b)) {
+            throw new IllegalArgumentException("Values must be finite");
+        }
     }
 
     @Override

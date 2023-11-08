@@ -27,7 +27,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
 
     public Percentage {
         if (!Double.isFinite(value)) { // Unlike isInfinite, isFinite explicitly documents NaN cases (which it rejects)
-            throw new IllegalArgumentException("Percentage value must be a finite number");
+            throw new IllegalArgumentException("Percentage value must be finite");
         }
     }
 
@@ -65,7 +65,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
     // values are equal. NaN and infinities are not allowed.
     public static @Nonnull Percentage ofChange(double before, double after) {
         if (!Double.isFinite(before) || !Double.isFinite(after)) {
-            throw new IllegalArgumentException("Values must be finite numbers");
+            throw new IllegalArgumentException("Values must be finite");
         }
 
         // At this point in time, NaNs and infinities have been filtered out, but zeros are still possible:
