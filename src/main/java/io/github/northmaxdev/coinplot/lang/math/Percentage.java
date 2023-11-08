@@ -31,8 +31,8 @@ public record Percentage(double value) implements Comparable<Percentage> {
         }
     }
 
-    public Percentage(@Nonnull BigDecimal d) {
-        this(d.doubleValue());
+    public Percentage(@Nonnull BigDecimal value) {
+        this(value.doubleValue());
     }
 
     public static @Nonnull Percentage fromDecimalValue(double decimalValue) {
