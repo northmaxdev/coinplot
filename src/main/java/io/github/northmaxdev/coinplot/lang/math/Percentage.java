@@ -127,7 +127,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
         // _, 0 --> calculate % (should be 100% or -100%)
         // _, _ (unequal) --> calculate %
 
-        if (BigDecimals.equalIgnoringScale(before, BigDecimal.ZERO)) {
+        if (BigDecimals.equalsZeroIgnoringScale(before)) {
             throw new IllegalArgumentException("Cannot calculate change from zero unless both operands are zero");
         }
 
