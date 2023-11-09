@@ -19,12 +19,18 @@ Its core features include:
 
 ## Localization
 
-*Coming soon!*
+1. Copy any of the existing `.properties` files to the same [location](src/main/resources/i18n).
+2. Replace the locale ID in the newly created file's filename with the ID of the locale you'd like to add support for.
+   For instance, if you've copied the `i18n_en_US` file, and you'd like to add support for French in Switzerland,
+   you should rename the copied file to `i18n_fr_CH`.
+3. Translate the UI strings in the newly created file.
+4. Add/create the corresponding `java.util.Locale` instance to `SUPPORTED_LOCALES` in
+   [`I18NProviderImpl`](src/main/java/io/github/northmaxdev/coinplot/frontend/i18n/I18NProviderImpl.java).
 
 ## Data Providers
 
 1. Create a separate package for all classes related to the new data provider and place it in `backend`,
-   such as:`io.github.northmaxdev.coinplot.backend.fixer`, `io.github.northmaxdev.coinplot.backend.frankfurter`.
+   such as: `io.github.northmaxdev.coinplot.backend.fixer`, `io.github.northmaxdev.coinplot.backend.frankfurter`.
    **It is recommended for all classes to be package-private,**
    as the rest of the codebase interacts only with the interfaces of `io.github.northmaxdev.coinplot.backend.core`.
 2. Implement the [`CurrencyService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/CurrencyService.java)
