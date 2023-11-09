@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class Frankfurter extends AbstractDataProvider {
+final class Frankfurter extends AbstractDataProvider { // Package-private
 
-    // The class is public, but the constructor is package-private.
-    // This lets us inject, but not instantiate manually.
     @Autowired
-    Frankfurter(@Nonnull FrankfurterCurrencyService currencyService, @Nonnull FrankfurterExchangeRateService exchangeRateService) {
+    public Frankfurter(@Nonnull FrankfurterCurrencyService currencyService, @Nonnull FrankfurterExchangeRateService exchangeRateService) {
         super(currencyService, exchangeRateService);
     }
 
