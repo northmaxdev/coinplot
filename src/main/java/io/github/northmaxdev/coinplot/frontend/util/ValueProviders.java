@@ -14,7 +14,10 @@ public final class ValueProviders {
         throw new UnsupportedOperationException();
     }
 
-    public static <S, T> @Nonnull ValueProvider<S, T> of(@Nonnull Function<S, Optional<T>> f) {
-        return s -> f.apply(s).orElse(null);
+    public static <S, T> @Nonnull ValueProvider<S, T> unpackingOptionalToNull(@Nonnull Function<S, Optional<T>> f) {
+        return source -> {
+            Optional<T> target = f.apply(source);
+            return target.orElse(null);
+        };
     }
 }
