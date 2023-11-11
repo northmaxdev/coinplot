@@ -51,8 +51,8 @@ final class LongChange extends AbstractNumericChange<Long> { // Package-private
                 && this.x2 == that.x2;
     }
 
-    // TODO:
-    //  Consider overriding hashCode as follows:
-    //  Long.hashCode(x1) ^ Long.hashCode(x2)
-    //  Might be substantially more performant.
+    @Override
+    public int hashCode() {
+        return Long.hashCode(x1) ^ Long.hashCode(x2);
+    }
 }

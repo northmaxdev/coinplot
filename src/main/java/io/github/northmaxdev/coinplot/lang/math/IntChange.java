@@ -51,8 +51,8 @@ final class IntChange extends AbstractNumericChange<Integer> { // Package-privat
                 && this.x2 == that.x2;
     }
 
-    // TODO:
-    //  Consider overriding hashCode as follows:
-    //  Integer.hashCode(x1) ^ Integer.hashCode(x2)
-    //  Might be substantially more performant.
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(x1) ^ Integer.hashCode(x2);
+    }
 }

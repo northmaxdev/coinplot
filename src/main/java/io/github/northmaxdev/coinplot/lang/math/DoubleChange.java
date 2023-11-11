@@ -52,8 +52,8 @@ final class DoubleChange extends AbstractNumericChange<Double> { // Package-priv
                 && Doubles.equals(this.x2, that.x2);
     }
 
-    // TODO:
-    //  Consider overriding hashCode as follows:
-    //  Double.hashCode(x1) ^ Double.hashCode(x2)
-    //  Might be substantially more performant.
+    @Override
+    public int hashCode() {
+        return Double.hashCode(x1) ^ Double.hashCode(x2);
+    }
 }
