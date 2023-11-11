@@ -35,7 +35,7 @@ final class IntChange extends AbstractNumericChange<Integer> { // Package-privat
         if (isPercentageCalculable()) {
             return Percentage.ofChange(x1, x2);
         } else {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Change percentage is incalculable");
         }
     }
 
