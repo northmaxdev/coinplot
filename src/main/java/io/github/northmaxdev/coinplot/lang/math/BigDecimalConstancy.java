@@ -34,11 +34,11 @@ final class BigDecimalConstancy extends AbstractNumericConstancy<BigDecimal> { /
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof BigDecimalConstancy that
-                && this.x.equals(that.x);
+                && BigDecimals.equalIgnoringScale(this.x, that.x);
     }
 
     @Override
     public int hashCode() {
-        return x.hashCode();
+        return BigDecimals.hashIgnoringScale(x);
     }
 }

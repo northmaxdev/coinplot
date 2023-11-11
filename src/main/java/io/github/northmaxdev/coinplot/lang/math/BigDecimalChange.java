@@ -49,14 +49,13 @@ final class BigDecimalChange extends AbstractNumericChange<BigDecimal> { // Pack
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        // Should BigDecimals::equalIgnoringScale be used here instead?
         return obj instanceof BigDecimalChange that
-                && this.x1.equals(that.x1)
-                && this.x2.equals(that.x2);
+                && BigDecimals.equalIgnoringScale(this.x1, that.x1)
+                && BigDecimals.equalIgnoringScale(this.x2, that.x2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x1, x2);
+        return BigDecimals.hashIgnoringScale(x1) ^ BigDecimals.hashIgnoringScale(x2);
     }
 }
