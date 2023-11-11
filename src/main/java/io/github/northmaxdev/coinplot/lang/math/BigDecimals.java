@@ -22,4 +22,10 @@ public final class BigDecimals {
     public static boolean equalsZeroIgnoringScale(@Nonnull BigDecimal x) {
         return equalIgnoringScale(x, BigDecimal.ZERO);
     }
+
+    public static int hashIgnoringScale(@Nonnull BigDecimal x) {
+        // Implementation idea from: https://jqno.nl/equalsverifier/errormessages/bigdecimal-equality/
+        BigDecimal normalized = x.stripTrailingZeros();
+        return normalized.hashCode();
+    }
 }
