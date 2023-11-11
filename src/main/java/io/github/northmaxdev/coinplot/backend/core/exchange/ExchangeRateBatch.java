@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.lang.Pair;
 import io.github.northmaxdev.coinplot.lang.SequencedCollections;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,6 +39,10 @@ public final class ExchangeRateBatch {
         this.values = Objects.requireNonNull(values);
     }
 
+    // TODO:
+    //  Optimizing this class through the usage of caching and lazy-eval
+    //  (considering it's immutable after all) may yield substantial performance gains.
+
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
         Map<DatelessExchange, Map<LocalDate, BigDecimal>> groups = dataset.stream()
                 // Alternative downstream Collector: toMap(..., ..., (a, b) -> a, TreeMap::new)
@@ -60,6 +65,11 @@ public final class ExchangeRateBatch {
                 ? m
                 : new TreeMap<>(values);
         return Collections.unmodifiableSortedMap(timeline);
+    }
+
+    public Optional<BigDecimal> getLatestValue() {
+        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
+        return SequencedCollections.lastElement(timeline.sequencedValues());
     }
 
     public Optional<NumericChange<BigDecimal>> getLatestChange() {
@@ -91,9 +101,8 @@ public final class ExchangeRateBatch {
                 .max(BigDecimal::compareTo);
     }
 
-    // TODO:
-    //  Methods stream() and toSet() (like the ones in ExchangeBatch)
-    //  may be added in the future if they're needed
+    // Methods stream() and toSet() (like the ones in ExchangeBatch)
+    // may be added in the future if they're needed
 
     public int size() {
         return values.size();
@@ -105,7 +114,7 @@ public final class ExchangeRateBatch {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj instanceof ExchangeRateBatch that
                 && Objects.equals(this.exchange, that.exchange)
                 && Objects.equals(this.values, that.values);
