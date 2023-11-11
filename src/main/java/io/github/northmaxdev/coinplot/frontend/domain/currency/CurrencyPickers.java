@@ -34,9 +34,9 @@ final class CurrencyPickers { // Package-private
 
         ListDataProvider<Currency> dataProvider = new ListDataProvider<>(copiedItems);
         dataProvider.setSortComparator(SORT_COMPARATOR);
-        // TODO (Feature):
-        //  ItemFilter<Currency> that supports filtering by both the name or the ISO code.
-        //  See setItems(ItemFilter<T>, ListDataProvider<T>).
+        // Feature consideration:
+        // ItemFilter<Currency> that supports filtering by both the name or the ISO code.
+        // See setItems(ItemFilter<T>, ListDataProvider<T>).
         component.setItems(dataProvider);
 
         component.setEnabled(!copiedItems.isEmpty());
