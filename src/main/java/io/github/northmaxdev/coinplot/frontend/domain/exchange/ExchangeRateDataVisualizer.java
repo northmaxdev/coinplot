@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
-import com.vaadin.flow.component.board.Board;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
@@ -11,33 +11,30 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
-public final class ExchangeRateDataVisualizer extends Board implements LocaleChangeObserver {
+public final class ExchangeRateDataVisualizer extends VerticalLayout implements LocaleChangeObserver {
 
     private final ExchangeRateDynamicsChart dynamicsChart;
-    private final ExchangeRateLatestChangeChart latestChangeChart;
-    private final ExchangeRateExtremesChart extremesChart;
+    private final ExchangeRateMetadataReport metadataReport;
 
     public ExchangeRateDataVisualizer() {
         dynamicsChart = new ExchangeRateDynamicsChart();
-        latestChangeChart = new ExchangeRateLatestChangeChart();
-        extremesChart = new ExchangeRateExtremesChart();
+        metadataReport = new ExchangeRateMetadataReport();
 
-        addRow(dynamicsChart);
-        addRow(latestChangeChart, extremesChart);
+        add(dynamicsChart, metadataReport);
+        setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
+        setJustifyContentMode(JustifyContentMode.BETWEEN);
     }
 
     public void visualize(@Nonnull Set<ExchangeRate> dataset) {
         Set<ExchangeRateBatch> batches = ExchangeRateBatch.multipleFromDataset(dataset);
 
         dynamicsChart.visualize(batches);
-        latestChangeChart.visualize(batches);
-        extremesChart.visualize(batches);
+        metadataReport.setItems(batches);
     }
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
         dynamicsChart.localeChange(event);
-        latestChangeChart.localeChange(event);
-        extremesChart.localeChange(event);
+        metadataReport.localeChange(event);
     }
 }
