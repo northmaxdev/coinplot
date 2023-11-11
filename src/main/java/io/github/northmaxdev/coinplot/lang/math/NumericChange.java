@@ -12,10 +12,16 @@ public interface NumericChange<T extends Number> {
 
     @Nonnull T getDifference();
 
-    // Throws IllegalStateException if not computable
+    // Throws IllegalStateException if incalculable
     @Nonnull Percentage getPercentage();
 
-    // Cannot compute percentage if the initial value is zero,
-    // but the final value is non-zero.
-    boolean isPercentageComputable();
+    // Cannot calculate percentage if the initial value is zero, but the final value is non-zero.
+    // As this is an edge case, it'll generally be easier to implement the "incalculable" method,
+    // therefore, the "calculable" one is the one that gets a default implementation.
+
+    boolean isPercentageIncalculable();
+
+    default boolean isPercentageCalculable() {
+        return !isPercentageIncalculable();
+    }
 }
