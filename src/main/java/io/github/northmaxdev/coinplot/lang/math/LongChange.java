@@ -3,33 +3,56 @@
 package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import java.util.Optional;
+final class LongChange extends AbstractNumericChange<Long> { // Package-private
 
-record LongChange(long a, long b) implements NumericChange<Long> { // Package-private
+    private final long x1;
+    private final long x2;
+
+    public LongChange(long x1, long x2) {
+        this.x1 = x1;
+        this.x2 = x2;
+    }
 
     @Override
     public @Nonnull Long getInitialValue() {
-        return a;
+        return x1;
     }
 
     @Override
-    public @Nonnull Long getResultingValue() {
-        return b;
+    public @Nonnull Long getFinalValue() {
+        return x2;
     }
 
     @Override
-    public @Nonnull Long asDifference() {
-        return b - a;
+    public @Nonnull Long getDifference() {
+        return x2 - x1;
     }
 
     @Override
-    public Optional<Percentage> asPercentage() {
-        if (a == 0L && b != 0L) {
-            return Optional.empty();
+    public @Nonnull Percentage getPercentage() {
+        if (isPercentageCalculable()) {
+            return Percentage.ofChange(x1, x2);
+        } else {
+            throw new IllegalStateException();
         }
-
-        Percentage percentage = Percentage.ofChange(a, b);
-        return Optional.of(percentage);
     }
+
+    @Override
+    public boolean isPercentageIncalculable() {
+        return x1 == 0L && x2 != 0L;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof LongChange that
+                && this.x1 == that.x1
+                && this.x2 == that.x2;
+    }
+
+    // TODO:
+    //  Consider overriding hashCode as follows:
+    //  Long.hashCode(x1) ^ Long.hashCode(x2)
+    //  Might be substantially more performant.
 }

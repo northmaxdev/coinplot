@@ -3,40 +3,60 @@
 package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
-record BigDecimalChange(@Nonnull BigDecimal a, @Nonnull BigDecimal b) implements NumericChange<BigDecimal> { // Package-private
+final class BigDecimalChange extends AbstractNumericChange<BigDecimal> { // Package-private
 
-    public BigDecimalChange(@Nonnull BigDecimal a, @Nonnull BigDecimal b) {
-        this.a = Objects.requireNonNull(a);
-        this.b = Objects.requireNonNull(b);
+    private final @Nonnull BigDecimal x1;
+    private final @Nonnull BigDecimal x2;
+
+    public BigDecimalChange(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
+        this.x1 = Objects.requireNonNull(x1);
+        this.x2 = Objects.requireNonNull(x2);
     }
 
     @Override
     public @Nonnull BigDecimal getInitialValue() {
-        return a;
+        return x1;
     }
 
     @Override
-    public @Nonnull BigDecimal getResultingValue() {
-        return b;
+    public @Nonnull BigDecimal getFinalValue() {
+        return x2;
     }
 
     @Override
-    public @Nonnull BigDecimal asDifference() {
-        return b.subtract(a);
+    public @Nonnull BigDecimal getDifference() {
+        return x2.subtract(x1);
     }
 
     @Override
-    public Optional<Percentage> asPercentage() {
-        if (BigDecimals.equalsZeroIgnoringScale(a) && !BigDecimals.equalsZeroIgnoringScale(b)) {
-            return Optional.empty();
+    public @Nonnull Percentage getPercentage() {
+        if (isPercentageCalculable()) {
+            return Percentage.ofChange(x1, x2);
+        } else {
+            throw new IllegalStateException();
         }
+    }
 
-        Percentage percentage = Percentage.ofChange(a, b);
-        return Optional.of(percentage);
+    @Override
+    public boolean isPercentageIncalculable() {
+        return BigDecimals.equalsZeroIgnoringScale(x1) && !BigDecimals.equalsZeroIgnoringScale(x2);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        // Should BigDecimals::equalIgnoringScale be used here instead?
+        return obj instanceof BigDecimalChange that
+                && this.x1.equals(that.x1)
+                && this.x2.equals(that.x2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x1, x2);
     }
 }
