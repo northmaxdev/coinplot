@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -10,10 +11,7 @@ final class DoubleConstancy extends AbstractNumericConstancy<Double> { // Packag
     private final double x;
 
     public DoubleConstancy(double x) {
-        if (!Double.isFinite(x)) {
-            throw new IllegalArgumentException("Value must be finite");
-        }
-        this.x = x;
+        this.x = Doubles.requireFinite(x);
     }
 
     @Override
@@ -34,7 +32,7 @@ final class DoubleConstancy extends AbstractNumericConstancy<Double> { // Packag
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof DoubleConstancy that
-                && Double.doubleToLongBits(this.x) == Double.doubleToLongBits(that.x);
+                && Doubles.equals(this.x, that.x);
     }
 
     @Override

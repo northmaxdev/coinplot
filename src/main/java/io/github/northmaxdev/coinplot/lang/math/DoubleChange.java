@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -11,11 +12,8 @@ final class DoubleChange extends AbstractNumericChange<Double> { // Package-priv
     private final double x2;
 
     public DoubleChange(double x1, double x2) {
-        if (!Double.isFinite(x1) || !Double.isFinite(x2)) {
-            throw new IllegalArgumentException("Values must be finite");
-        }
-        this.x1 = x1;
-        this.x2 = x2;
+        this.x1 = Doubles.requireFinite(x1);
+        this.x2 = Doubles.requireFinite(x2);
     }
 
     @Override
@@ -50,8 +48,8 @@ final class DoubleChange extends AbstractNumericChange<Double> { // Package-priv
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof DoubleChange that
-                && Double.doubleToLongBits(this.x1) == Double.doubleToLongBits(that.x1)
-                && Double.doubleToLongBits(this.x2) == Double.doubleToLongBits(that.x2);
+                && Doubles.equals(this.x1, that.x1)
+                && Doubles.equals(this.x2, that.x2);
     }
 
     // TODO:

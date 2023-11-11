@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import io.github.northmaxdev.coinplot.lang.Iterables;
 import io.github.northmaxdev.coinplot.lang.Localizable;
 import jakarta.annotation.Nonnull;
@@ -26,10 +27,8 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
     private static final double DECIMAL_VALUE_MULTIPLIER = 100;
     private static final BigDecimal BIG_DECIMAL_VALUE_MULTIPLIER = BigDecimal.valueOf(DECIMAL_VALUE_MULTIPLIER);
 
-    public Percentage {
-        if (!Double.isFinite(value)) { // Unlike isInfinite, isFinite explicitly documents NaN cases (which it rejects)
-            throw new IllegalArgumentException("Percentage value must be finite");
-        }
+    public Percentage(double value) {
+        this.value = Doubles.requireFinite(value);
     }
 
     public Percentage(@Nonnull BigDecimal value) {
@@ -65,9 +64,8 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
     // case the method returns 0% - just like in any other scenario where both
     // values are equal. NaN and infinities are not allowed.
     public static @Nonnull Percentage ofChange(double before, double after) {
-        if (!Double.isFinite(before) || !Double.isFinite(after)) {
-            throw new IllegalArgumentException("Values must be finite");
-        }
+        Doubles.requireFinite(before);
+        Doubles.requireFinite(after);
 
         // At this point in time, NaNs and infinities have been filtered out, but zeros are still possible:
         // 0, 0 --> 0%
@@ -76,7 +74,7 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
         // _, _ (equal) --> 0%
         // _, _ (unequal) --> calculate %
 
-        if (Double.compare(before, after) == 0) {
+        if (Doubles.equals(before, after)) {
             return ZERO;
         }
 
