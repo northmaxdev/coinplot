@@ -8,6 +8,29 @@ import jakarta.annotation.Nonnull;
 
 public interface DataProvider {
 
+    DataProvider NO_OP = new DataProvider() {
+
+        @Override
+        public @Nonnull CurrencyService getCurrencyService() {
+            return CurrencyService.NO_OP;
+        }
+
+        @Override
+        public @Nonnull ExchangeRateService getExchangeRateService() {
+            return ExchangeRateService.NO_OP;
+        }
+
+        @Override
+        public @Nonnull String getDisplayName() {
+            return "No-op";
+        }
+
+        @Override
+        public @Nonnull String getID() {
+            return "noop";
+        }
+    };
+
     @Nonnull CurrencyService getCurrencyService();
 
     @Nonnull ExchangeRateService getExchangeRateService();
