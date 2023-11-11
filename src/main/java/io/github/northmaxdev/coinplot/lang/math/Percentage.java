@@ -26,6 +26,7 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
 
     private static final double DECIMAL_VALUE_MULTIPLIER = 100;
     private static final BigDecimal BIG_DECIMAL_VALUE_MULTIPLIER = BigDecimal.valueOf(DECIMAL_VALUE_MULTIPLIER);
+    private static final int FORMAT_MAX_FRACTION_DIGITS = 4;
 
     public Percentage(double value) {
         this.value = Doubles.requireFinite(value);
@@ -160,20 +161,18 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
         return value / DECIMAL_VALUE_MULTIPLIER;
     }
 
-    // TODO:
-    //  For format() and format(Locale), explicitly specify a RoundingMode to
-    //  get more correct String representations (by default it rounds to integer)
-
     @Override
     public @Nonnull String toString() {
-        return NumberFormat.getPercentInstance()
-                .format(decimalValue());
+        NumberFormat fmt = NumberFormat.getPercentInstance();
+        fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
+        return fmt.format(decimalValue());
     }
 
     @Override
     public @Nonnull String toLocalizedString(@Nonnull Locale locale) {
-        return NumberFormat.getPercentInstance(locale)
-                .format(decimalValue());
+        NumberFormat fmt = NumberFormat.getPercentInstance(locale);
+        fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
+        return fmt.format(decimalValue());
     }
 
     @Override
