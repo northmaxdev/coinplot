@@ -79,7 +79,6 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
 
     @Override
     public @Nonnull String toString() {
-        DatelessExchange datelessExchange = withoutDate();
-        return datelessExchange + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return withoutDate() + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }

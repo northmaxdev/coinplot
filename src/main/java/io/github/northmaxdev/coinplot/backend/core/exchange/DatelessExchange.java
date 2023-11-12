@@ -12,9 +12,9 @@ import java.util.Objects;
 // This class has been retrofitted into the Exchange/ExchangeRate class structure with no intentions of making it JPA-related.
 public record DatelessExchange(@Nonnull Currency base, @Nonnull Currency target) {
 
-    public DatelessExchange {
-        Objects.requireNonNull(base);
-        Objects.requireNonNull(target);
+    public DatelessExchange(@Nonnull Currency base, @Nonnull Currency target) {
+        this.base = Objects.requireNonNull(base);
+        this.target = Objects.requireNonNull(target);
     }
 
     public static @Nonnull DatelessExchange of(@Nonnull Exchange exchange) {
@@ -27,6 +27,6 @@ public record DatelessExchange(@Nonnull Currency base, @Nonnull Currency target)
 
     @Override
     public @Nonnull String toString() {
-        return base.getCode() + " → " + target.getCode();
+        return base.getCode() + '→' + target.getCode();
     }
 }
