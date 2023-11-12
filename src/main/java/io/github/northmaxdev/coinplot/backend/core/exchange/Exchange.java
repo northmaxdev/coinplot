@@ -79,6 +79,10 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
 
     @Override
     public @Nonnull String toString() {
-        return withoutDate() + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
+        Currency base = getBase();
+        Currency target = getTarget();
+
+        return base.getCode() + '→' + target.getCode() + ' ' + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
