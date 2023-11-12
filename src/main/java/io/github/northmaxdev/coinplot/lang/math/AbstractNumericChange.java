@@ -15,20 +15,6 @@ abstract class AbstractNumericChange<T extends Number> implements NumericChange<
 
     @Override
     public final @Nonnull String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(getInitialValue());
-        sb.append(" → ");
-        sb.append(getFinalValue());
-
-        sb.append(" (");
-        sb.append(getDifference());
-        if (isPercentageCalculable()) {
-            sb.append(' ');
-            sb.append(getPercentage());
-        }
-        sb.append(')');
-
-        return sb.toString();
+        return getInitialValue() + " → " + getFinalValue();
     }
 }
