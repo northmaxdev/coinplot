@@ -23,6 +23,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -37,6 +38,11 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     private static final String CLEAR_BUTTON_TEXT_KEY = "exchange-batch-submission-form.clear-button.text";
     private static final String CURRENCY_RELOAD_BUTTON_TEXT_KEY = "exchange-batch-submission-form.currency-reload-button.text";
     private static final int CURRENCY_PICKER_COLSPAN = 2;
+
+    private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
+            new ResponsiveStep("0", 1),
+            new ResponsiveStep("350px", 2)
+    );
 
     private final SingleCurrencyPicker baseCurrencyPicker;
     private final MultiCurrencyPicker targetCurrencyPicker;
@@ -117,6 +123,7 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         buttonBar.setMargin(true);
 
         add(baseCurrencyPicker, targetCurrencyPicker, startDatePicker, endDatePicker, buttonBar);
+        setResponsiveSteps(RESPONSIVE_STEPS);
     }
 
     public void submit() {
