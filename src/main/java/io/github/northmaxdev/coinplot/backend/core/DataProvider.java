@@ -42,6 +42,4 @@ public interface DataProvider {
     // An ID intended only for internal usage throughout this project (where relevant).
     // Example: "ecb"
     @Nonnull String getID();
-
-    // TODO: The provider's official website or source code repository (DataProvider::getURI)
 }

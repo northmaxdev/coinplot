@@ -23,8 +23,6 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
 
-    // TODO: Play with FetchType configurations (eager vs lazy)
-
     @ManyToOne(optional = false)
     private @Nonnull Currency base;
 
@@ -59,7 +57,6 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     public @Nonnull DatelessExchange withoutDate() {
-        // TODO: Consider lazy-computing and caching this
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
         return new DatelessExchange(getBase(), getTarget());
     }

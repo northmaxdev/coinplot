@@ -88,8 +88,6 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
         // Buttons' configuration //
         ////////////////////////////
 
-        // TODO: Add tooltips that hint about click shortcuts
-
         submitButton.addSingleClickListener(event -> submit());
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickShortcut(Key.ENTER);

@@ -39,10 +39,6 @@ public final class ExchangeRateBatch {
         this.values = Objects.requireNonNull(values);
     }
 
-    // TODO:
-    //  Optimizing this class through the usage of caching and lazy-eval
-    //  (considering it's immutable after all) may yield substantial performance gains.
-
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
         Map<DatelessExchange, Map<LocalDate, BigDecimal>> groups = dataset.stream()
                 // Alternative downstream Collector: toMap(..., ..., (a, b) -> a, TreeMap::new)
