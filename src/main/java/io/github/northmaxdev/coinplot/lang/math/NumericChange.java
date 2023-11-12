@@ -28,6 +28,11 @@ public interface NumericChange<T extends Number> {
         return !isPercentageIncalculable();
     }
 
+    // Force implementations to provide a human-readable
+    // and/or UI-suitable textual representation
+    @Override
+    @Nonnull String toString();
+
     static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
         return BigDecimals.equalIgnoringScale(x1, x2) ? new BigDecimalConstancy(x1) : new BigDecimalChange(x1, x2);
     }
