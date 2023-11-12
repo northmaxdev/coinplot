@@ -4,13 +4,11 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import io.github.northmaxdev.coinplot.lang.Doubles;
 import io.github.northmaxdev.coinplot.lang.Iterables;
-import io.github.northmaxdev.coinplot.lang.Localizable;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -19,7 +17,7 @@ import java.util.function.Predicate;
 // expect decimal representations, where a value of 75.5 would represent 7550%.
 // The decimalValue() and fromDecimalValue(double) methods may be used for compatibility.
 // Please note that methods like Percentage::ofChange may yield inaccurate results.
-public record Percentage(double value) implements Comparable<Percentage>, Localizable {
+public record Percentage(double value) implements Comparable<Percentage> {
 
     // More constants for common values may be added in the future
     public static final Percentage ZERO = new Percentage(0);
@@ -164,13 +162,6 @@ public record Percentage(double value) implements Comparable<Percentage>, Locali
     @Override
     public @Nonnull String toString() {
         NumberFormat fmt = NumberFormat.getPercentInstance();
-        fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
-        return fmt.format(decimalValue());
-    }
-
-    @Override
-    public @Nonnull String toLocalizedString(@Nonnull Locale locale) {
-        NumberFormat fmt = NumberFormat.getPercentInstance(locale);
         fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
         return fmt.format(decimalValue());
     }
