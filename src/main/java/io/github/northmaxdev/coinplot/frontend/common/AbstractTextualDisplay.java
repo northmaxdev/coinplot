@@ -7,6 +7,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Optional;
+
 public abstract class AbstractTextualDisplay<T> extends TextField {
 
     protected AbstractTextualDisplay() {
@@ -35,5 +37,13 @@ public abstract class AbstractTextualDisplay<T> extends TextField {
             String text = convertItemToText(item);
             setValue(text);
         }
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final void display(Optional<T> item) {
+        item.ifPresentOrElse(i -> {
+            String text = convertItemToText(i);
+            setValue(text);
+        }, this::clear);
     }
 }
