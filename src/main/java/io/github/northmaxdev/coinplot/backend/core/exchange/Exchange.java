@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
@@ -62,7 +63,7 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
         return obj instanceof Exchange that
                 && Objects.equals(this.getBase(), that.getBase())

@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.currency;
 
 import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -49,7 +50,7 @@ public class Currency implements Serializable { // Required by the JPA spec to b
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj instanceof Currency that
                 && Objects.equals(this.code, that.code);
     }
