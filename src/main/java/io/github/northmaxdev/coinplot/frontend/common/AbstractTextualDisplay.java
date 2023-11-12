@@ -21,7 +21,12 @@ public abstract class AbstractTextualDisplay<T> extends TextField {
 
     protected abstract @Nonnull Icon createIcon();
 
-    protected abstract @Nonnull String convertItemToText(@Nonnull T item);
+    // Non-final, default implementation.
+    // This is OK only if T::toString promises to be human-readable and/or UI-suitable.
+    // A more dedicated method is recommended otherwise (e.g. getName(), getDisplayName(), format(), etc.)
+    protected @Nonnull String convertItemToText(@Nonnull T item) {
+        return item.toString();
+    }
 
     public final void display(@Nullable T item) {
         if (item == null) {
