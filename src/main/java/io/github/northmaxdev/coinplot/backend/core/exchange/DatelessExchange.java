@@ -25,6 +25,10 @@ public record DatelessExchange(@Nonnull Currency base, @Nonnull Currency target)
         return of(exchangeRate.getExchange());
     }
 
+    public @Nonnull String getLabel() {
+        return base.getName() + " → " + target.getName();
+    }
+
     @Override
     public @Nonnull String toString() {
         return base.getCode() + '→' + target.getCode();
