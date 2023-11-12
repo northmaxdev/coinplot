@@ -11,7 +11,7 @@ import com.vaadin.flow.router.Route;
 import io.github.northmaxdev.coinplot.backend.core.DataProvider;
 import io.github.northmaxdev.coinplot.backend.core.DataProviderService;
 import io.github.northmaxdev.coinplot.frontend.common.LocalePicker;
-import io.github.northmaxdev.coinplot.frontend.domain.DataProviderDisplay;
+import io.github.northmaxdev.coinplot.frontend.domain.DataProviderTextualDisplay;
 import io.github.northmaxdev.coinplot.frontend.domain.exchange.ExchangeRateDataDashboard;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -46,9 +46,8 @@ public final class MainView extends AppLayout {
                 currentUI.setLocale(locale);
             }
         });
-        DataProviderDisplay dataProviderDisplay = new DataProviderDisplay(dataProvider);
 
-        HorizontalLayout navbarContent = new HorizontalLayout(localePicker, dataProviderDisplay);
+        HorizontalLayout navbarContent = new HorizontalLayout(localePicker, new DataProviderTextualDisplay(dataProvider));
         navbarContent.setSpacing(true);
         navbarContent.setPadding(true);
 
