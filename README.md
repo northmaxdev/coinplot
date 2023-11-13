@@ -1,11 +1,15 @@
 # About
 
 **CoinPlot** is a simple and modern web app for exchange rate history visualization and basic analytics.
+
+![Screenshot of CoinPlot v2.0.0 in Microsoft Edge](screenshot.png)
+
 Its core features include:
 
 * Support for the following exchange rate data providers:
     * [Fixer](https://fixer.io/)
     * [Frankfurter](https://www.frankfurter.app/) *(including self-hosted instances)*
+    * *No-op (for development and testing purposes)*
 * An efficient internal architecture that makes heavy use of caching,
   which helps substantially minimize or completely avoid outgoing API requests
 * Localization in multiple languages
