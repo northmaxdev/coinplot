@@ -10,6 +10,19 @@ import java.util.Set;
 
 public interface CurrencyService {
 
+    CurrencyService NO_OP = new CurrencyService() {
+
+        @Override
+        public @Nonnull Set<Currency> getAvailableCurrencies() {
+            return Set.of();
+        }
+
+        @Override
+        public Optional<Currency> getCurrency(@Nullable String code) {
+            return Optional.empty();
+        }
+    };
+
     @Nonnull Set<Currency> getAvailableCurrencies();
 
     Optional<Currency> getCurrency(@Nullable String code);

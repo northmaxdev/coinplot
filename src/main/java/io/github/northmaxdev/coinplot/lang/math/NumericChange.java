@@ -2,36 +2,45 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 public interface NumericChange<T extends Number> {
 
     @Nonnull T getInitialValue();
 
-    @Nonnull T getResultingValue();
+    @Nonnull T getFinalValue();
 
-    @Nonnull T asDifference();
+    @Nonnull T getDifference();
 
-    // Cannot compute percentage if the initial value is zero,
-    // but the resulting value is non-zero.
-    Optional<Percentage> asPercentage();
+    // Throws IllegalStateException if incalculable
+    @Nonnull Percentage getPercentage();
 
-    static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal initialValue, @Nonnull BigDecimal resultingValue) {
-        return new BigDecimalChange(initialValue, resultingValue);
+    // Cannot calculate percentage if the initial value is zero, but the final value is non-zero.
+    // As this is an edge case, it'll generally be easier to implement the "incalculable" method,
+    // therefore, the "calculable" one is the one that gets a default implementation.
+
+    boolean isPercentageIncalculable();
+
+    default boolean isPercentageCalculable() {
+        return !isPercentageIncalculable();
     }
 
-    static @Nonnull NumericChange<Double> of(double initialValue, double resultingValue) {
-        return new DoubleChange(initialValue, resultingValue);
+    static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
+        return BigDecimals.equalIgnoringScale(x1, x2) ? new BigDecimalConstancy(x1) : new BigDecimalChange(x1, x2);
     }
 
-    static @Nonnull NumericChange<Integer> of(int initialValue, int resultingValue) {
-        return new IntChange(initialValue, resultingValue);
+    static @Nonnull NumericChange<Double> of(double x1, double x2) {
+        return Doubles.equals(x1, x2) ? new DoubleConstancy(x1) : new DoubleChange(x1, x2);
     }
 
-    static @Nonnull NumericChange<Long> of(long initialValue, long resultingValue) {
-        return new LongChange(initialValue, resultingValue);
+    static @Nonnull NumericChange<Integer> of(int x1, int x2) {
+        return x1 == x2 ? new IntConstancy(x1) : new IntChange(x1, x2);
+    }
+
+    static @Nonnull NumericChange<Long> of(long x1, long x2) {
+        return x1 == x2 ? new LongConstancy(x1) : new LongChange(x1, x2);
     }
 }

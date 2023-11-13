@@ -2,13 +2,13 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -24,11 +24,10 @@ public record Percentage(double value) implements Comparable<Percentage> {
 
     private static final double DECIMAL_VALUE_MULTIPLIER = 100;
     private static final BigDecimal BIG_DECIMAL_VALUE_MULTIPLIER = BigDecimal.valueOf(DECIMAL_VALUE_MULTIPLIER);
+    private static final int FORMAT_MAX_FRACTION_DIGITS = 4;
 
-    public Percentage {
-        if (!Double.isFinite(value)) { // Unlike isInfinite, isFinite explicitly documents NaN cases (which it rejects)
-            throw new IllegalArgumentException("Percentage value must be finite");
-        }
+    public Percentage(double value) {
+        this.value = Doubles.requireFinite(value);
     }
 
     public Percentage(@Nonnull BigDecimal value) {
@@ -64,9 +63,8 @@ public record Percentage(double value) implements Comparable<Percentage> {
     // case the method returns 0% - just like in any other scenario where both
     // values are equal. NaN and infinities are not allowed.
     public static @Nonnull Percentage ofChange(double before, double after) {
-        if (!Double.isFinite(before) || !Double.isFinite(after)) {
-            throw new IllegalArgumentException("Values must be finite");
-        }
+        Doubles.requireFinite(before);
+        Doubles.requireFinite(after);
 
         // At this point in time, NaNs and infinities have been filtered out, but zeros are still possible:
         // 0, 0 --> 0%
@@ -75,7 +73,7 @@ public record Percentage(double value) implements Comparable<Percentage> {
         // _, _ (equal) --> 0%
         // _, _ (unequal) --> calculate %
 
-        if (Double.compare(before, after) == 0) {
+        if (Doubles.equals(before, after)) {
             return ZERO;
         }
 
@@ -161,23 +159,11 @@ public record Percentage(double value) implements Comparable<Percentage> {
         return value / DECIMAL_VALUE_MULTIPLIER;
     }
 
-    // TODO:
-    //  For format() and format(Locale), explicitly specify a RoundingMode to
-    //  get more correct String representations (by default it rounds to integer)
-
-    public @Nonnull String format() {
-        return NumberFormat.getPercentInstance()
-                .format(decimalValue());
-    }
-
-    public @Nonnull String format(@Nonnull Locale locale) {
-        return NumberFormat.getPercentInstance(locale)
-                .format(decimalValue());
-    }
-
     @Override
     public @Nonnull String toString() {
-        return format();
+        NumberFormat fmt = NumberFormat.getPercentInstance();
+        fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
+        return fmt.format(decimalValue());
     }
 
     @Override

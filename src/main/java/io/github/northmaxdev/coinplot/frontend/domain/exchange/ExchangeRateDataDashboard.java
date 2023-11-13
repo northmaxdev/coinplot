@@ -36,10 +36,9 @@ public final class ExchangeRateDataDashboard extends SplitLayout implements Loca
             dataVisualizer.visualize(dataset);
         });
 
-        VerticalLayout inputPanel = new VerticalLayout(requestAssemblyForm);
-        inputPanel.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.STRETCH);
-
         addToPrimary(dataVisualizer);
+
+        VerticalLayout inputPanel = new VerticalLayout(FlexComponent.Alignment.STRETCH, requestAssemblyForm);
         addToSecondary(inputPanel);
     }
 

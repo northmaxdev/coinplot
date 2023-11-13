@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -66,7 +67,7 @@ public class ExchangeRate implements Serializable { // Required by the JPA spec 
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj instanceof ExchangeRate that
                 && Objects.equals(this.exchange, that.exchange);
     }

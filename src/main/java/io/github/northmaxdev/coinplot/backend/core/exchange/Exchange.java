@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
@@ -22,8 +23,6 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
 
     @Serial
     private static final long serialVersionUID = 4961628072462390664L;
-
-    // TODO: Play with FetchType configurations (eager vs lazy)
 
     @ManyToOne(optional = false)
     private @Nonnull Currency base;
@@ -59,13 +58,12 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
     }
 
     public @Nonnull DatelessExchange withoutDate() {
-        // TODO: Consider lazy-computing and caching this
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
         return new DatelessExchange(getBase(), getTarget());
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
         return obj instanceof Exchange that
                 && Objects.equals(this.getBase(), that.getBase())
@@ -81,7 +79,10 @@ public class Exchange implements Serializable { // Required by the JPA spec to b
 
     @Override
     public @Nonnull String toString() {
-        DatelessExchange datelessExchange = withoutDate();
-        return datelessExchange + " " + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        // https://jqno.nl/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter/
+        Currency base = getBase();
+        Currency target = getTarget();
+
+        return base.getCode() + '→' + target.getCode() + ' ' + exchangeDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }

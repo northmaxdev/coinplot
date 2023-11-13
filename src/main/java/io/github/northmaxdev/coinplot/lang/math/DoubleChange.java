@@ -2,35 +2,58 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
+import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import java.util.Optional;
+final class DoubleChange extends AbstractNumericChange<Double> { // Package-private
 
-record DoubleChange(double a, double b) implements NumericChange<Double> { // Package-private
+    private final double x1;
+    private final double x2;
 
-    public DoubleChange {
-        if (!Double.isFinite(a) || !Double.isFinite(b)) {
-            throw new IllegalArgumentException("Values must be finite");
-        }
+    public DoubleChange(double x1, double x2) {
+        this.x1 = Doubles.requireFinite(x1);
+        this.x2 = Doubles.requireFinite(x2);
     }
 
     @Override
     public @Nonnull Double getInitialValue() {
-        return a;
+        return x1;
     }
 
     @Override
-    public @Nonnull Double getResultingValue() {
-        return b;
+    public @Nonnull Double getFinalValue() {
+        return x2;
     }
 
     @Override
-    public @Nonnull Double asDifference() {
-        return b - a;
+    public @Nonnull Double getDifference() {
+        return x2 - x1;
     }
 
     @Override
-    public Optional<Percentage> asPercentage() {
-        throw new UnsupportedOperationException("Can't be arsed");
+    public @Nonnull Percentage getPercentage() {
+        if (isPercentageCalculable()) {
+            return Percentage.ofChange(x1, x2);
+        } else {
+            throw new IllegalStateException("Change percentage is incalculable");
+        }
+    }
+
+    @Override
+    public boolean isPercentageIncalculable() {
+        throw new UnsupportedOperationException("Cannot be arsed");
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof DoubleChange that
+                && Doubles.equals(this.x1, that.x1)
+                && Doubles.equals(this.x2, that.x2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Double.hashCode(x1) ^ Double.hashCode(x2);
     }
 }

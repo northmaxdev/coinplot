@@ -37,7 +37,7 @@ public final class CommonExchangeRateSetDTOMapper extends AbstractExchangeRateSe
 
         return dto.rates()
                 .entrySet()
-                .stream() // TODO (Performance): Consider parallelStream, as exchange rate datasets can be big enough for this to matter
+                .stream()
                 .<ExchangeRate>mapMulti((datesToRatesEntry, buffer) -> {
                     LocalDate exchangeDate = datesToRatesEntry.getKey();
                     Map<String, BigDecimal> targetCodesToValues = datesToRatesEntry.getValue();

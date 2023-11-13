@@ -30,17 +30,8 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
     private static final String X_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.x-axis.title";
     private static final String Y_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.y-axis.title";
 
-    // TODO (Self-note):
-    //  My Vaadin Pro license expired around the end of October 2023.
-    //  Due to this, I couldn't verify whether the latest changes I made to this class actually work as expected.
-    //  Due to certain life circumstances, this will have to wait until things get sorted out.
-    //  Below are the unverified changes:
-    //  1. Axis type configuration and DataSeriesItem creation with a timestamp as the X value
-    //  (in other words, ensure the axes look and function correctly)
-    //  2. Axis title translation in LocaleChangeObserver::localeChange (might need a drawChart() or drawChart(boolean) call)
-
     public ExchangeRateDynamicsChart() {
-        super(ChartType.LINE);
+        super(ChartType.SPLINE);
         Configuration config = getConfiguration();
 
         XAxis xAxis = config.getxAxis();
@@ -59,13 +50,15 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
                 .map(batch -> {
                     DatelessExchange exchange = batch.getExchange();
                     List<DataSeriesItem> seriesItems = Maps.mapToList(batch.getValueTimeline(), (date, value) -> {
+                        // Vaadin formats these timestamps without L10N in mind
+                        // (or maybe it uses the JVM locale?)
                         Instant timestamp = date.atStartOfDay()
                                 .toInstant(ZoneOffset.UTC);
                         return new DataSeriesItem(timestamp, value); // (x, y)
                     });
 
                     Series s = new DataSeries(seriesItems);
-                    s.setName(exchange.toString()); // Remember that toString() may not always be suitable for UI
+                    s.setName(exchange.getLabel());
                     return s;
                 })
                 .toList();
@@ -77,9 +70,9 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
     }
 
     @Override
-    public void localeChange(@Nonnull LocaleChangeEvent localeChangeEvent) {
+    public void localeChange(@Nonnull LocaleChangeEvent event) {
         Configuration config = getConfiguration();
-        Locale newLocale = localeChangeEvent.getLocale();
+        Locale newLocale = event.getLocale();
 
         XAxis xAxis = config.getxAxis();
         String xAxisTitle = getTranslation(newLocale, X_AXIS_TITLE_KEY);
@@ -88,5 +81,7 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         YAxis yAxis = config.getyAxis();
         String yAxisTitle = getTranslation(newLocale, Y_AXIS_TITLE_KEY);
         yAxis.setTitle(yAxisTitle);
+
+        drawChart();
     }
 }

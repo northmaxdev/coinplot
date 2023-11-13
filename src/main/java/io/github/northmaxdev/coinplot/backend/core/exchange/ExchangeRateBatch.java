@@ -7,6 +7,7 @@ import io.github.northmaxdev.coinplot.lang.Pair;
 import io.github.northmaxdev.coinplot.lang.SequencedCollections;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,6 +63,11 @@ public final class ExchangeRateBatch {
         return Collections.unmodifiableSortedMap(timeline);
     }
 
+    public Optional<BigDecimal> getLatestValue() {
+        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
+        return SequencedCollections.lastElement(timeline.sequencedValues());
+    }
+
     public Optional<NumericChange<BigDecimal>> getLatestChange() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
         return SequencedCollections.lastTwoElements(timeline.sequencedValues())
@@ -79,21 +85,8 @@ public final class ExchangeRateBatch {
         return SequencedCollections.endpoints(sortedValues);
     }
 
-    public Optional<BigDecimal> getMinValue() {
-        return values.values()
-                .stream()
-                .min(BigDecimal::compareTo);
-    }
-
-    public Optional<BigDecimal> getMaxValue() {
-        return values.values()
-                .stream()
-                .max(BigDecimal::compareTo);
-    }
-
-    // TODO:
-    //  Methods stream() and toSet() (like the ones in ExchangeBatch)
-    //  may be added in the future if they're needed
+    // Methods stream() and toSet() (like the ones in ExchangeBatch)
+    // may be added in the future if they're needed
 
     public int size() {
         return values.size();
@@ -105,7 +98,7 @@ public final class ExchangeRateBatch {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return obj instanceof ExchangeRateBatch that
                 && Objects.equals(this.exchange, that.exchange)
                 && Objects.equals(this.values, that.values);

@@ -43,7 +43,7 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
         Logger logger = getLogger();
 
         Set<Exchange> exchanges = exchangeBatch.toSet();
-        Percentage cachedExchangeRatesPercentage = repository.percentageOfExistingEntities(exchanges);
+        Percentage cachedExchangeRatesPercentage = repository.calculateExistencePercentage(exchanges);
         logger.info("{} of requested exchange rates are present in cache", cachedExchangeRatesPercentage);
 
         if (cachedExchangeRatesPercentage.compareTo(CACHE_LOAD_THRESHOLD) > 0) {
