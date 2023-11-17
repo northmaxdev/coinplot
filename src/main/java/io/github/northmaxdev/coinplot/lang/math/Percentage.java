@@ -69,7 +69,11 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static @Nonnull Percentage ofChange(
             @Nonnull BigDecimal before,
             @Nonnull BigDecimal after,
+            // Assuming the desired precision for percentage values is x,
+            // the MathContext "precision" property must be equal to x+2.
+            // This is to account for the decimal arithmetic this method executes.
             @Nonnull MathContext mathContext) {
+
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
         Objects.requireNonNull(mathContext);
@@ -115,7 +119,11 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static <T> @Nonnull Percentage ofMatchingPredicate(
             @Nonnull Iterable<T> iterable,
             @Nonnull Predicate<T> predicate,
+            // Assuming the desired precision for percentage values is x,
+            // the MathContext "precision" property must be equal to x+2.
+            // This is to account for the decimal arithmetic this method executes.
             @Nonnull MathContext mathContext) {
+
         Objects.requireNonNull(iterable);
         Objects.requireNonNull(predicate);
         Objects.requireNonNull(mathContext);
