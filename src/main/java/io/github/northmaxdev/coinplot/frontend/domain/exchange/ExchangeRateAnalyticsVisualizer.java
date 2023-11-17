@@ -16,15 +16,15 @@ import jakarta.annotation.Nullable;
 
 import java.util.Set;
 
-public final class ExchangeRateDataVisualizer extends VerticalLayout implements LocaleChangeObserver {
+public final class ExchangeRateAnalyticsVisualizer extends VerticalLayout implements LocaleChangeObserver {
 
-    private static final String BATCH_PICKER_LABEL_KEY = "exchange-rate-data-visualizer.batch-picker.label";
+    private static final String BATCH_PICKER_LABEL_KEY = "exchange-rate-analytics-visualizer.batch-picker.label";
 
     private final ExchangeRateDynamicsChart dynamicsChart;
     private final ExchangeRateBatchMetricsReport metricsReport;
     private final Select<ExchangeRateBatch> batchPicker;
 
-    public ExchangeRateDataVisualizer() {
+    public ExchangeRateAnalyticsVisualizer() {
         dynamicsChart = new ExchangeRateDynamicsChart();
         metricsReport = new ExchangeRateBatchMetricsReport();
 
