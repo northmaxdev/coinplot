@@ -20,10 +20,10 @@ import jakarta.annotation.Nonnull;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
 
@@ -38,32 +38,25 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         yAxis.setType(AxisType.LINEAR);
     }
 
-    public void visualize(@Nonnull Set<ExchangeRateBatch> exchangeRateBatches) {
-        Objects.requireNonNull(exchangeRateBatches);
+    public void plot(@Nonnull ExchangeRateBatch batch) {
+        Objects.requireNonNull(batch);
+        Series series = serializeBatch(batch);
 
-        // In terms of type semantics and interface contracts, we don't really need a List here,
-        // but it's what the Vaadin Charts API requires.
-        List<Series> series = exchangeRateBatches.stream()
-                .map(batch -> {
-                    DatelessExchange exchange = batch.getExchange();
-                    List<DataSeriesItem> seriesItems = Maps.mapToList(batch.getValueTimeline(), (date, value) -> {
-                        // Vaadin formats these timestamps without L10N in mind
-                        // (or maybe it uses the JVM locale?)
-                        Instant timestamp = date.atStartOfDay()
-                                .toInstant(ZoneOffset.UTC);
-                        return new DataSeriesItem(timestamp, value); // (x, y)
-                    });
+        Configuration config = getConfiguration();
+        config.setSeries(series);
+        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
+    }
 
-                    Series s = new DataSeries(seriesItems);
-                    s.setName(exchange.getLabel());
-                    return s;
-                })
+    public void plot(@Nonnull Collection<ExchangeRateBatch> batches) {
+        Objects.requireNonNull(batches);
+        // Configuration::setSeries requires List<Series> instead of a Collection<Series>
+        List<Series> series = batches.stream()
+                .map(ExchangeRateDynamicsChart::serializeBatch)
                 .toList();
 
         Configuration config = getConfiguration();
         config.setSeries(series);
-
-        drawChart(true); // See Configuration::setSeries JavaDoc for info
+        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 
     @Override
@@ -80,5 +73,21 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         yAxis.setTitle(yAxisTitle);
 
         drawChart();
+    }
+
+    // "Serialize" as in "arrange something in a series", not the usual computer science meaning
+    private static @Nonnull Series serializeBatch(@Nonnull ExchangeRateBatch batch) {
+        DatelessExchange exchange = batch.getExchange();
+        List<DataSeriesItem> seriesItems = Maps.mapToList(batch.getValueTimeline(), (date, value) -> {
+            // Vaadin formats these timestamps without L10N in mind
+            // (or maybe it just uses the JVM locale?)
+            Instant timestamp = date.atStartOfDay()
+                    .toInstant(ZoneOffset.UTC);
+            return new DataSeriesItem(timestamp, value); // x, y
+        });
+
+        Series series = new DataSeries(seriesItems);
+        series.setName(exchange.getLabel());
+        return series;
     }
 }
