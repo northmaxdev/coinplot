@@ -68,7 +68,7 @@ public final class ExchangeRateBatch {
         return SequencedCollections.lastElement(timeline.sequencedValues());
     }
 
-    public Optional<NumericChange<BigDecimal>> getLatestChange() {
+    public Optional<NumericChange> getLatestChange() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
         return SequencedCollections.lastTwoElements(timeline.sequencedValues())
                 .map(pair -> NumericChange.of(pair.first(), pair.second()));
