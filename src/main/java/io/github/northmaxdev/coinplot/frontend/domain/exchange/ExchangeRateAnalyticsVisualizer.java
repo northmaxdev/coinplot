@@ -16,6 +16,8 @@ public final class ExchangeRateAnalyticsVisualizer extends SplitLayout implement
     private final ExchangeRateMetricsReport metricsReport;
 
     public ExchangeRateAnalyticsVisualizer() {
+        super(Orientation.VERTICAL);
+
         dynamicsChart = new ExchangeRateDynamicsChart();
         metricsReport = new ExchangeRateMetricsReport();
 
