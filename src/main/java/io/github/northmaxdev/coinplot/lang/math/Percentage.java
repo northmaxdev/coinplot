@@ -22,6 +22,14 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
         this.value = Objects.requireNonNull(value);
     }
 
+    public Percentage(long value) {
+        this(BigDecimal.valueOf(value));
+    }
+
+    public Percentage(double value) {
+        this(BigDecimal.valueOf(value));
+    }
+
     public static @Nonnull Percentage fromDecimalValue(@Nonnull BigDecimal decimalValue) {
         Objects.requireNonNull(decimalValue);
         BigDecimal value = decimalValue.multiply(BigDecimals.HUNDRED);

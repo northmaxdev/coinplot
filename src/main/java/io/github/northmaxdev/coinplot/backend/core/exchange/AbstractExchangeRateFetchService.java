@@ -23,7 +23,7 @@ public abstract class AbstractExchangeRateFetchService<R extends ExchangeRateSet
     // and if the % exceeds the threshold, we load from cache instead of API calls.
     // Increasing the threshold value will result in fewer cache hits and denser data overall.
     // Decreasing the threshold value will result in more cache hits and sparser data overall.
-    private static final Percentage CACHE_LOAD_THRESHOLD = new Percentage(70);
+    private static final Percentage CACHE_LOAD_THRESHOLD = new Percentage(70L);
 
     private final @Nonnull ExchangeRateRepository repository;
 
