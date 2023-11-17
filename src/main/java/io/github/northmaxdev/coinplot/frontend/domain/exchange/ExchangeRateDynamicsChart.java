@@ -27,9 +27,6 @@ import java.util.Set;
 
 public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
 
-    private static final String X_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.x-axis.title";
-    private static final String Y_AXIS_TITLE_KEY = "exchange-rate-dynamics-chart.y-axis.title";
-
     public ExchangeRateDynamicsChart() {
         super(ChartType.SPLINE);
         Configuration config = getConfiguration();
@@ -75,11 +72,11 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         Locale newLocale = event.getLocale();
 
         XAxis xAxis = config.getxAxis();
-        String xAxisTitle = getTranslation(newLocale, X_AXIS_TITLE_KEY);
+        String xAxisTitle = getTranslation(newLocale, "exchange-rate-dynamics-chart.x-axis.title");
         xAxis.setTitle(xAxisTitle);
 
         YAxis yAxis = config.getyAxis();
-        String yAxisTitle = getTranslation(newLocale, Y_AXIS_TITLE_KEY);
+        String yAxisTitle = getTranslation(newLocale, "exchange-rate-dynamics-chart.y-axis.title");
         yAxis.setTitle(yAxisTitle);
 
         drawChart();
