@@ -4,6 +4,8 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import jakarta.annotation.Nonnull;
 
+import java.util.Optional;
+
 // Represents a NumericChange between two equal values, which is, in fact, not a change, but a "constancy".
 // In other words, this is a separate line of Java classes for an edge case.
 abstract class AbstractNumericConstancy<T extends Number> extends AbstractNumericChange<T> { // Package-private
@@ -21,5 +23,10 @@ abstract class AbstractNumericConstancy<T extends Number> extends AbstractNumeri
     @Override
     public final boolean isPercentageCalculable() {
         return true;
+    }
+
+    @Override
+    public final Optional<Percentage> getPercentageIfCalculable() {
+        return Optional.of(Percentage.ZERO);
     }
 }

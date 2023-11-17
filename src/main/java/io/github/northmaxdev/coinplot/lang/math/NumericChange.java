@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public interface NumericChange<T extends Number> {
 
@@ -26,6 +27,10 @@ public interface NumericChange<T extends Number> {
 
     default boolean isPercentageCalculable() {
         return !isPercentageIncalculable();
+    }
+
+    default Optional<Percentage> getPercentageIfCalculable() {
+        return isPercentageCalculable() ? Optional.of(getPercentage()) : Optional.empty();
     }
 
     static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
