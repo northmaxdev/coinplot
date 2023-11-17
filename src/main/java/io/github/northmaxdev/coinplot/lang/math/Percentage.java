@@ -122,6 +122,7 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
 
         // Consider somehow doing a protective copy against potential TOCTOU issues
 
+        // Mandatory edge-case to avoid a division of zero by zero later on
         if (Iterables.isEmpty(iterable)) {
             return ZERO;
         }
@@ -130,6 +131,11 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
         long predicateMatchCount = Iterables.stream(iterable)
                 .filter(predicate)
                 .count();
+
+        // Optional edge-case for optimization
+        if (predicateMatchCount == totalCount) {
+            return HUNDRED;
+        }
 
         BigDecimal numerator = BigDecimal.valueOf(predicateMatchCount);
         BigDecimal denominator = BigDecimal.valueOf(totalCount);
