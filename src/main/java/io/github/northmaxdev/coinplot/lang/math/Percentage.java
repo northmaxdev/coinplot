@@ -170,6 +170,10 @@ public final class Percentage implements Comparable<Percentage> {
         return ofMatchingPredicate(iterable, predicate, DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT);
     }
 
+    public @Nonnull BigDecimal getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof Percentage that
