@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 // This class deals with percentage values, NOT decimal ones. This means a value of 75.5 represents 75.5%.
 // It should be noted that most Java APIs, such as HashMap's load factor or NumberFormat::getPercentInstance,
 // expect decimal representations, where a value of 75.5 would represent 7550%.
-public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percentage> {
+public final class Percentage implements Comparable<Percentage> {
 
     public static final Percentage ZERO = new Percentage(BigDecimal.ZERO);
     public static final Percentage HUNDRED = new Percentage(BigDecimals.HUNDRED);
@@ -30,16 +30,27 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     // the actual MathContext minimum precision for decimal arithmetic is therefore x+2, where x>=3.
     private static final MathContext DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT = new MathContext(5, RoundingMode.HALF_UP);
 
-    public Percentage(@Nonnull BigDecimal value) {
-        this.value = Objects.requireNonNull(value);
+    private final @Nonnull BigDecimal value;
+
+    private Percentage(@Nonnull BigDecimal value) {
+        this.value = value;
     }
 
-    public Percentage(long value) {
-        this(BigDecimal.valueOf(value));
+    public static @Nonnull Percentage of(@Nonnull BigDecimal value) {
+        Objects.requireNonNull(value);
+        return new Percentage(value);
     }
 
-    public Percentage(double value) {
-        this(BigDecimal.valueOf(value));
+    public static @Nonnull Percentage of(long value) {
+        return new Percentage(BigDecimal.valueOf(value));
+    }
+
+    public static @Nonnull Percentage of(double value) {
+        if (Double.isFinite(value)) {
+            return new Percentage(BigDecimal.valueOf(value));
+        } else {
+            throw new IllegalArgumentException("Value must be finite");
+        }
     }
 
     public static @Nonnull Percentage fromDecimalValue(@Nonnull BigDecimal decimalValue) {
