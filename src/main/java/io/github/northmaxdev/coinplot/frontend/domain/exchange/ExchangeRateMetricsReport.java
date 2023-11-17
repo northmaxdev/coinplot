@@ -22,14 +22,14 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class ExchangeRateBatchMetricsReport extends FormLayout implements LocaleChangeObserver {
+public final class ExchangeRateMetricsReport extends FormLayout implements LocaleChangeObserver {
 
-    private static final String LATEST_VALUE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.latest-value-field.label";
-    private static final String LATEST_CHANGE_DIFFERENCE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.latest-change-difference-field.label";
-    private static final String LATEST_CHANGE_PERCENTAGE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.latest-change-percentage-field.label";
-    private static final String MIN_VALUE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.min-value-field.label";
-    private static final String MAX_VALUE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.max-value-field.label";
-    private static final String BATCH_SIZE_FIELD_LABEL_KEY = "exchange-rate-batch-metrics-report.batch-size-field.label";
+    private static final String LATEST_VALUE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.latest-value-field.label";
+    private static final String LATEST_CHANGE_DIFFERENCE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.latest-change-difference-field.label";
+    private static final String LATEST_CHANGE_PERCENTAGE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.latest-change-percentage-field.label";
+    private static final String MIN_VALUE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.min-value-field.label";
+    private static final String MAX_VALUE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.max-value-field.label";
+    private static final String BATCH_SIZE_FIELD_LABEL_KEY = "exchange-rate-metrics-report.batch-size-field.label";
 
     private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
             new ResponsiveStep("0", 1),
@@ -44,7 +44,7 @@ public final class ExchangeRateBatchMetricsReport extends FormLayout implements 
     private final BigDecimalField maxValueField;
     private final IntegerField batchSizeField;
 
-    public ExchangeRateBatchMetricsReport() {
+    public ExchangeRateMetricsReport() {
         latestValueField = new BigDecimalField();
         latestValueField.setReadOnly(true);
         latestValueField.setPrefixComponent(VaadinIcon.TIME_FORWARD.create());
