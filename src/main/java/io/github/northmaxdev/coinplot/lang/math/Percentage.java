@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.lang.math;
 
 import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -156,6 +157,17 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
             @Nonnull Iterable<T> iterable,
             @Nonnull Predicate<T> predicate) {
         return ofMatchingPredicate(iterable, predicate, DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof Percentage that
+                && BigDecimals.equalIgnoringScale(this.value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return BigDecimals.hashIgnoringScale(value);
     }
 
     @Override
