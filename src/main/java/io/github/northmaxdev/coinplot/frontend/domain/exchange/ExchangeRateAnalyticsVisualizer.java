@@ -18,8 +18,6 @@ import java.util.Set;
 
 public final class ExchangeRateAnalyticsVisualizer extends VerticalLayout implements LocaleChangeObserver {
 
-    private static final String BATCH_PICKER_LABEL_KEY = "exchange-rate-analytics-visualizer.batch-picker.label";
-
     private final ExchangeRateDynamicsChart dynamicsChart;
     private final ExchangeRateBatchMetricsReport metricsReport;
     private final Select<ExchangeRateBatch> batchPicker;
@@ -59,6 +57,6 @@ public final class ExchangeRateAnalyticsVisualizer extends VerticalLayout implem
     public void localeChange(@Nonnull LocaleChangeEvent event) {
         dynamicsChart.localeChange(event);
         metricsReport.localeChange(event);
-        I18NUtilities.setLabel(batchPicker, event, BATCH_PICKER_LABEL_KEY);
+        I18NUtilities.setLabel(batchPicker, event, "exchange-rate-analytics-visualizer.batch-picker.label");
     }
 }
