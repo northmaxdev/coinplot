@@ -27,6 +27,8 @@ import java.util.Objects;
 
 public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
 
+    private static final List<Series> NO_SERIES = List.of();
+
     public ExchangeRateDynamicsChart() {
         super(ChartType.SPLINE);
         Configuration config = getConfiguration();
@@ -56,6 +58,12 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
 
         Configuration config = getConfiguration();
         config.setSeries(series);
+        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
+    }
+
+    public void clear() {
+        Configuration config = getConfiguration();
+        config.setSeries(NO_SERIES);
         drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 
