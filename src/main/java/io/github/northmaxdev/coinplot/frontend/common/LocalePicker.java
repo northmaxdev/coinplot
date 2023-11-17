@@ -20,10 +20,9 @@ public final class LocalePicker extends Select<Locale> {
     private static final ItemLabelGenerator<Locale> ITEM_LABEL_GENERATOR = locale -> locale.getDisplayName(locale);
 
     public LocalePicker(@Nonnull Collection<Locale> locales) {
-        // Protective copy + deep null-checks
-        Collection<Locale> copiedItems = List.copyOf(locales);
+        Collection<Locale> protectiveCopy = List.copyOf(locales); // Implicit deep null-check(s)
 
-        ListDataProvider<Locale> dataProvider = new ListDataProvider<>(copiedItems);
+        ListDataProvider<Locale> dataProvider = new ListDataProvider<>(protectiveCopy);
         dataProvider.setSortComparator(SORT_COMPARATOR);
         setItems(dataProvider);
 

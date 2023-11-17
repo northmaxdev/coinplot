@@ -30,15 +30,15 @@ final class CurrencyPickers { // Package-private
     static <C extends ComboBoxBase<C, Currency, ?>> void loadItems(@Nonnull C component, @Nonnull CurrencyService dataSource) {
         // Explicit null-checks are omitted for an implementation helper method
         Set<Currency> availableCurrencies = dataSource.getAvailableCurrencies();
-        Set<Currency> copiedItems = Set.copyOf(availableCurrencies); // Protective copy
+        Set<Currency> protectiveCopy = Set.copyOf(availableCurrencies);
 
-        ListDataProvider<Currency> dataProvider = new ListDataProvider<>(copiedItems);
+        ListDataProvider<Currency> dataProvider = new ListDataProvider<>(protectiveCopy);
         dataProvider.setSortComparator(SORT_COMPARATOR);
         // Feature consideration:
         // ItemFilter<Currency> that supports filtering by both the name or the ISO code.
         // See setItems(ItemFilter<T>, ListDataProvider<T>).
         component.setItems(dataProvider);
 
-        component.setEnabled(!copiedItems.isEmpty());
+        component.setEnabled(!protectiveCopy.isEmpty());
     }
 }
