@@ -20,10 +20,10 @@ import jakarta.annotation.Nonnull;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
 
@@ -49,7 +49,7 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 
-    public void plot(@Nonnull Collection<ExchangeRateBatch> batches) {
+    public void plot(@Nonnull Set<ExchangeRateBatch> batches) {
         Objects.requireNonNull(batches);
         // Configuration::setSeries requires List<Series> instead of a Collection<Series>
         List<Series> series = batches.stream()
