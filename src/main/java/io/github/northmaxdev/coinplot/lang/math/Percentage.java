@@ -19,7 +19,15 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static final Percentage ZERO = new Percentage(BigDecimal.ZERO);
     public static final Percentage HUNDRED = new Percentage(BigDecimals.HUNDRED);
 
-    private static final MathContext DEFAULT_MATH_CONTEXT = new MathContext(3, RoundingMode.HALF_UP);
+    // Let's say we're calculating a percentage of change between X and Y which is expected to be 12.5%.
+    // If the arithmetic operations of the calculation yield a decimal value, which in this case would be 0.125,
+    // the MathContext in use would have to have a precision of at least 3 in order to avoid serious rounding errors.
+    // Setting the precision to a value of 3 solves the issue for decimal arithmetic,
+    // but limits the actual percentage value to a precision of 1, as in the case of 12.5% and 0.125.
+    // Thus, if we want to allow percentage values to have a precision of 3
+    // (an arbitrarily chosen number that seems reasonable for percentages in most use-cases),
+    // the actual MathContext minimum precision for decimal arithmetic is therefore x+2, where x>=3.
+    private static final MathContext DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT = new MathContext(5, RoundingMode.HALF_UP);
 
     public Percentage(@Nonnull BigDecimal value) {
         this.value = Objects.requireNonNull(value);
@@ -88,7 +96,7 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     }
 
     public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after) {
-        return ofChange(before, after, DEFAULT_MATH_CONTEXT);
+        return ofChange(before, after, DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT);
     }
 
     public static @Nonnull Percentage ofChange(long before, long after) {
@@ -133,7 +141,7 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static <T> @Nonnull Percentage ofMatchingPredicate(
             @Nonnull Iterable<T> iterable,
             @Nonnull Predicate<T> predicate) {
-        return ofMatchingPredicate(iterable, predicate, DEFAULT_MATH_CONTEXT);
+        return ofMatchingPredicate(iterable, predicate, DEFAULT_DECIMAL_ARITHMETIC_MATH_CONTEXT);
     }
 
     @Override
