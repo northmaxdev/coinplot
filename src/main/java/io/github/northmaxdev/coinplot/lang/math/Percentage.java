@@ -6,6 +6,7 @@ import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -17,6 +18,8 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
 
     public static final Percentage ZERO = new Percentage(BigDecimal.ZERO);
     public static final Percentage HUNDRED = new Percentage(BigDecimals.HUNDRED);
+
+    private static final MathContext DEFAULT_MATH_CONTEXT = new MathContext(3, RoundingMode.HALF_UP);
 
     public Percentage(@Nonnull BigDecimal value) {
         this.value = Objects.requireNonNull(value);
@@ -58,10 +61,10 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static @Nonnull Percentage ofChange(
             @Nonnull BigDecimal before,
             @Nonnull BigDecimal after,
-            @Nonnull RoundingMode roundingMode) {
+            @Nonnull MathContext mathContext) {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
-        Objects.requireNonNull(roundingMode);
+        Objects.requireNonNull(mathContext);
 
         if (BigDecimals.equalIgnoringScale(before, after)) {
             return ZERO;
@@ -79,13 +82,13 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
         // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
         BigDecimal numerator = after.subtract(before);
         BigDecimal denominator = before.abs();
-        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, mathContext);
 
         return fromDecimalValue(calculatedDecimalValue);
     }
 
     public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after) {
-        return ofChange(before, after, RoundingMode.HALF_UP);
+        return ofChange(before, after, DEFAULT_MATH_CONTEXT);
     }
 
     public static @Nonnull Percentage ofChange(long before, long after) {
@@ -104,10 +107,10 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static <T> @Nonnull Percentage ofMatchingPredicate(
             @Nonnull Iterable<T> iterable,
             @Nonnull Predicate<T> predicate,
-            @Nonnull RoundingMode roundingMode) {
+            @Nonnull MathContext mathContext) {
         Objects.requireNonNull(iterable);
         Objects.requireNonNull(predicate);
-        Objects.requireNonNull(roundingMode);
+        Objects.requireNonNull(mathContext);
 
         // Consider somehow doing a protective copy against potential TOCTOU issues
 
@@ -122,7 +125,7 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
 
         BigDecimal numerator = BigDecimal.valueOf(predicateMatchCount);
         BigDecimal denominator = BigDecimal.valueOf(totalCount);
-        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, mathContext);
 
         return fromDecimalValue(calculatedDecimalValue);
     }
@@ -130,7 +133,7 @@ public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percen
     public static <T> @Nonnull Percentage ofMatchingPredicate(
             @Nonnull Iterable<T> iterable,
             @Nonnull Predicate<T> predicate) {
-        return ofMatchingPredicate(iterable, predicate, RoundingMode.HALF_UP);
+        return ofMatchingPredicate(iterable, predicate, DEFAULT_MATH_CONTEXT);
     }
 
     @Override
