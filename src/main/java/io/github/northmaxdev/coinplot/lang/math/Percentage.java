@@ -2,45 +2,30 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
-import io.github.northmaxdev.coinplot.lang.Doubles;
 import io.github.northmaxdev.coinplot.lang.Iterables;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 // This class deals with percentage values, NOT decimal ones. This means a value of 75.5 represents 75.5%.
 // It should be noted that most Java APIs, such as HashMap's load factor or NumberFormat::getPercentInstance,
 // expect decimal representations, where a value of 75.5 would represent 7550%.
-// The decimalValue() and fromDecimalValue(double) methods may be used for compatibility.
-// Please note that methods like Percentage::ofChange may yield inaccurate results.
-public record Percentage(double value) implements Comparable<Percentage> {
+public record Percentage(@Nonnull BigDecimal value) implements Comparable<Percentage> {
 
-    // More constants for common values may be added in the future
-    public static final Percentage ZERO = new Percentage(0);
-
-    private static final double DECIMAL_VALUE_MULTIPLIER = 100;
-    private static final BigDecimal BIG_DECIMAL_VALUE_MULTIPLIER = BigDecimal.valueOf(DECIMAL_VALUE_MULTIPLIER);
-    private static final int FORMAT_MAX_FRACTION_DIGITS = 4;
-
-    public Percentage(double value) {
-        this.value = Doubles.requireFinite(value);
-    }
+    public static final Percentage ZERO = new Percentage(BigDecimal.ZERO);
+    public static final Percentage HUNDRED = new Percentage(BigDecimals.HUNDRED);
 
     public Percentage(@Nonnull BigDecimal value) {
-        this(value.doubleValue());
-    }
-
-    public static @Nonnull Percentage fromDecimalValue(double decimalValue) {
-        return new Percentage(decimalValue * DECIMAL_VALUE_MULTIPLIER);
+        this.value = Objects.requireNonNull(value);
     }
 
     public static @Nonnull Percentage fromDecimalValue(@Nonnull BigDecimal decimalValue) {
         Objects.requireNonNull(decimalValue);
-        return new Percentage(decimalValue.multiply(BIG_DECIMAL_VALUE_MULTIPLIER));
+        BigDecimal value = decimalValue.multiply(BigDecimals.HUNDRED);
+        return new Percentage(value);
     }
 
     // +--------+-------+----------+------------------------------------------+
@@ -61,60 +46,14 @@ public record Percentage(double value) implements Comparable<Percentage> {
     // It is not allowed for the 'before' value to be zero, with the only
     // exception being a specific edge case of both values being zero, in which
     // case the method returns 0% - just like in any other scenario where both
-    // values are equal. NaN and infinities are not allowed.
-    public static @Nonnull Percentage ofChange(double before, double after) {
-        Doubles.requireFinite(before);
-        Doubles.requireFinite(after);
-
-        // At this point in time, NaNs and infinities have been filtered out, but zeros are still possible:
-        // 0, 0 --> 0%
-        // 0, _ --> must be rejected (throw IAE)
-        // _, 0 --> calculate % (should be 100% or -100%)
-        // _, _ (equal) --> 0%
-        // _, _ (unequal) --> calculate %
-
-        if (Doubles.equals(before, after)) {
-            return ZERO;
-        }
-
-        // At this point in time, equal arguments have been filtered out:
-        // 0, _ --> must be rejected (throw IAE)
-        // _, 0 --> calculate % (should be 100% or -100%)
-        // _, _ (unequal) --> calculate %
-
-        // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
-        double calculatedDecimalValue = (after - before) / Math.abs(before);
-
-        // At this point in time, possible result options are:
-        // 0, _ --> +Inf or -Inf (since in this case it's division by 0) --> eventual IAE by the canonical constructor (not fail-fast)
-        // _, 0 --> OK calculation
-        // _, _ (unequal) --> OK calculation
-
-        return fromDecimalValue(calculatedDecimalValue);
-    }
-
-    public static @Nonnull Percentage ofChange(long before, long after) {
-        if (before == after) {
-            return ZERO;
-        }
-
-        // At this point in time, equal arguments have been filtered out:
-        // 0, _ --> must be rejected (throw IAE)
-        // _, 0 --> calculate % (should be 100% or -100%)
-        // _, _ (unequal) --> calculate %
-
-        if (before == 0L) {
-            throw new IllegalArgumentException("Cannot calculate change from zero unless both operands are zero");
-        }
-
-        // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
-        double calculatedDecimalValue = (double) (after - before) / Math.abs(before);
-        return fromDecimalValue(calculatedDecimalValue);
-    }
-
-    public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after) {
+    // values are equal.
+    public static @Nonnull Percentage ofChange(
+            @Nonnull BigDecimal before,
+            @Nonnull BigDecimal after,
+            @Nonnull RoundingMode roundingMode) {
         Objects.requireNonNull(before);
         Objects.requireNonNull(after);
+        Objects.requireNonNull(roundingMode);
 
         if (BigDecimals.equalIgnoringScale(before, after)) {
             return ZERO;
@@ -132,14 +71,35 @@ public record Percentage(double value) implements Comparable<Percentage> {
         // Source: https://www.calculatorsoup.com/calculators/algebra/percentage-increase-calculator.php
         BigDecimal numerator = after.subtract(before);
         BigDecimal denominator = before.abs();
-        BigDecimal calculatedDecimalValue = numerator.divide(denominator, RoundingMode.HALF_UP);
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
 
         return fromDecimalValue(calculatedDecimalValue);
     }
 
-    public static <T> @Nonnull Percentage ofMatchingPredicate(@Nonnull Iterable<T> iterable, @Nonnull Predicate<T> predicate) {
+    public static @Nonnull Percentage ofChange(@Nonnull BigDecimal before, @Nonnull BigDecimal after) {
+        return ofChange(before, after, RoundingMode.HALF_UP);
+    }
+
+    public static @Nonnull Percentage ofChange(long before, long after) {
+        // Quick optimization
+        if (before == after) {
+            return ZERO;
+        }
+
+        return ofChange(BigDecimal.valueOf(before), BigDecimal.valueOf(after));
+    }
+
+    public static @Nonnull Percentage ofChange(double before, double after) {
+        return ofChange(BigDecimal.valueOf(before), BigDecimal.valueOf(after));
+    }
+
+    public static <T> @Nonnull Percentage ofMatchingPredicate(
+            @Nonnull Iterable<T> iterable,
+            @Nonnull Predicate<T> predicate,
+            @Nonnull RoundingMode roundingMode) {
         Objects.requireNonNull(iterable);
         Objects.requireNonNull(predicate);
+        Objects.requireNonNull(roundingMode);
 
         // Consider somehow doing a protective copy against potential TOCTOU issues
 
@@ -147,27 +107,32 @@ public record Percentage(double value) implements Comparable<Percentage> {
             return ZERO;
         }
 
-        int totalCount = Iterables.size(iterable);
-        int predicateMatchCount = (int) Iterables.stream(iterable)
+        long totalCount = Iterables.size(iterable);
+        long predicateMatchCount = Iterables.stream(iterable)
                 .filter(predicate)
                 .count();
 
-        return fromDecimalValue((double) predicateMatchCount / totalCount);
+        BigDecimal numerator = BigDecimal.valueOf(predicateMatchCount);
+        BigDecimal denominator = BigDecimal.valueOf(totalCount);
+        BigDecimal calculatedDecimalValue = numerator.divide(denominator, roundingMode);
+
+        return fromDecimalValue(calculatedDecimalValue);
     }
 
-    public double decimalValue() {
-        return value / DECIMAL_VALUE_MULTIPLIER;
+    public static <T> @Nonnull Percentage ofMatchingPredicate(
+            @Nonnull Iterable<T> iterable,
+            @Nonnull Predicate<T> predicate) {
+        return ofMatchingPredicate(iterable, predicate, RoundingMode.HALF_UP);
     }
 
     @Override
     public @Nonnull String toString() {
-        NumberFormat fmt = NumberFormat.getPercentInstance();
-        fmt.setMaximumFractionDigits(FORMAT_MAX_FRACTION_DIGITS);
-        return fmt.format(decimalValue());
+        // Consider NumberFormat.getPercentInstance()
+        return value.toPlainString() + '%';
     }
 
     @Override
     public int compareTo(@Nonnull Percentage other) {
-        return Double.compare(value, other.value);
+        return value.compareTo(other.value);
     }
 }
