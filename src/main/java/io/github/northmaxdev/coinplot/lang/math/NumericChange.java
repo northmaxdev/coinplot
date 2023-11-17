@@ -5,9 +5,10 @@ package io.github.northmaxdev.coinplot.lang.math;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Optional;
 
-public interface NumericChange {
+public sealed interface NumericChange permits NumericConstancy, RegularNumericChange {
 
     @Nonnull BigDecimal getInitialValue();
 
@@ -26,6 +27,11 @@ public interface NumericChange {
     }
 
     static @Nonnull NumericChange of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
+        Objects.requireNonNull(x1);
+        Objects.requireNonNull(x2);
 
+        return BigDecimals.equalIgnoringScale(x1, x2)
+                ? new NumericConstancy(x1)
+                : new RegularNumericChange(x1, x2);
     }
 }
