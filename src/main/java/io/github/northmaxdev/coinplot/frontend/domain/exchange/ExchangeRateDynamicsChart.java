@@ -15,17 +15,20 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
+import io.github.northmaxdev.coinplot.frontend.common.MultiVisualizer;
 import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
-public final class ExchangeRateDynamicsChart extends Chart implements LocaleChangeObserver {
+public final class ExchangeRateDynamicsChart
+        extends Chart
+        implements MultiVisualizer<ExchangeRateBatch>, LocaleChangeObserver {
 
     private static final List<Series> NO_SERIES = List.of();
 
@@ -40,7 +43,8 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         yAxis.setType(AxisType.LINEAR);
     }
 
-    public void plot(@Nonnull ExchangeRateBatch batch) {
+    @Override
+    public void visualize(@Nonnull ExchangeRateBatch batch) {
         Objects.requireNonNull(batch);
         Series series = serializeBatch(batch);
 
@@ -49,7 +53,8 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 
-    public void plot(@Nonnull Set<ExchangeRateBatch> batches) {
+    @Override
+    public void visualize(@Nonnull Collection<ExchangeRateBatch> batches) {
         Objects.requireNonNull(batches);
         // Configuration::setSeries requires List<Series> instead of a Collection<Series>
         List<Series> series = batches.stream()
@@ -61,6 +66,7 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
         drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 
+    @Override
     public void clear() {
         Configuration config = getConfiguration();
         config.setSeries(NO_SERIES);
