@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.Maps;
 import io.github.northmaxdev.coinplot.lang.SequencedCollections;
+import io.github.northmaxdev.coinplot.lang.SequencedMaps;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import io.github.northmaxdev.coinplot.lang.math.NumericExtremes;
 import jakarta.annotation.Nonnull;
@@ -62,12 +63,23 @@ public final class ExchangeRateBatch {
         return Collections.unmodifiableSortedMap(timeline);
     }
 
-    public Optional<BigDecimal> getLatestValue() {
-        SortedMap<LocalDate, BigDecimal> timeline = getRateTimeline();
-        return SequencedCollections.lastElement(timeline.sequencedValues());
+    public Optional<LocalDate> getEarliestAvailableDate() {
+        return SequencedMaps.firstKey(getRateTimeline());
     }
 
-    public Optional<NumericChange> getLatestChange() {
+    public Optional<LocalDate> getLatestAvailableDate() {
+        return SequencedMaps.lastKey(getRateTimeline());
+    }
+
+    public Optional<BigDecimal> getEarliestAvailableRate() {
+        return SequencedMaps.firstValue(getRateTimeline());
+    }
+
+    public Optional<BigDecimal> getLatestAvailableRate() {
+        return SequencedMaps.lastValue(getRateTimeline());
+    }
+
+    public Optional<NumericChange> getLatestAvailableChange() {
         SortedMap<LocalDate, BigDecimal> timeline = getRateTimeline();
         return SequencedCollections.applyToLastTwo(timeline.sequencedValues(), NumericChange::of);
     }
