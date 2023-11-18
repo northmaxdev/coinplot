@@ -3,9 +3,9 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.Maps;
-import io.github.northmaxdev.coinplot.lang.Pair;
 import io.github.northmaxdev.coinplot.lang.SequencedCollections;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
+import io.github.northmaxdev.coinplot.lang.math.NumericExtremes;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -16,7 +16,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.SequencedCollection;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -70,19 +69,11 @@ public final class ExchangeRateBatch {
 
     public Optional<NumericChange> getLatestChange() {
         SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
-        return SequencedCollections.lastTwoElements(timeline.sequencedValues())
-                .map(pair -> NumericChange.of(pair.first(), pair.second()));
+        return SequencedCollections.applyToLastTwo(timeline.sequencedValues(), NumericChange::of);
     }
 
-    // The definition of "extremes" is taken from the following web resource:
-    // https://www.statista.com/statistics-glossary/definition/204/extreme_value/
-    public Optional<Pair<BigDecimal, BigDecimal>> getValueExtremes() {
-        SequencedCollection<BigDecimal> sortedValues = values.values()
-                .stream()
-                .sorted()
-                .toList();
-
-        return SequencedCollections.endpoints(sortedValues);
+    public Optional<NumericExtremes> getValueExtremes() {
+        return NumericExtremes.find(values.values());
     }
 
     // Methods stream() and toSet() (like the ones in ExchangeBatch)
