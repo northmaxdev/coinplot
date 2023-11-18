@@ -14,7 +14,6 @@ import jakarta.annotation.Nonnull;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 
 public final class NumericChangeReport
         extends FormLayout
@@ -56,15 +55,15 @@ public final class NumericChangeReport
         initialValueField.setValue(numericChange.getInitialValue());
         finalValueField.setValue(numericChange.getFinalValue());
         differenceField.setValue(numericChange.getDifference());
-
-        Optional<Percentage> percentage = numericChange.getPercentageIfCalculable();
-        percentage.ifPresentOrElse(p -> {
-            percentageField.setPlaceholder(null);
-            percentageField.setValue(p.getValue());
-        }, () -> {
-            percentageField.clear();
-            percentageField.setPlaceholder(INCALCULABLE_PERCENTAGE_PLACEHOLDER);
-        });
+        numericChange.getPercentageIfCalculable()
+                .map(Percentage::getValue)
+                .ifPresentOrElse(value -> {
+                    percentageField.setPlaceholder(null);
+                    percentageField.setValue(value);
+                }, () -> {
+                    percentageField.setPlaceholder(INCALCULABLE_PERCENTAGE_PLACEHOLDER);
+                    percentageField.clear();
+                });
     }
 
     @Override
