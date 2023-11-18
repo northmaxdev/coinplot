@@ -31,11 +31,11 @@ public final class ExchangeRateBatch {
     public static final Comparator<ExchangeRateBatch> SIZE_BASED_ORDER = Comparator.comparingInt(ExchangeRateBatch::size);
 
     private final @Nonnull DatelessExchange exchange;
-    private final @Nonnull Map<LocalDate, BigDecimal> values;
+    private final @Nonnull Map<LocalDate, BigDecimal> rates;
 
-    private ExchangeRateBatch(@Nonnull DatelessExchange exchange, @Nonnull Map<LocalDate, BigDecimal> values) {
+    private ExchangeRateBatch(@Nonnull DatelessExchange exchange, @Nonnull Map<LocalDate, BigDecimal> rates) {
         this.exchange = Objects.requireNonNull(exchange);
-        this.values = Objects.requireNonNull(values);
+        this.rates = Objects.requireNonNull(rates);
     }
 
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
@@ -51,52 +51,52 @@ public final class ExchangeRateBatch {
         return exchange;
     }
 
-    public @Nonnull Map<LocalDate, BigDecimal> getValues() {
-        return Collections.unmodifiableMap(values);
+    public @Nonnull Map<LocalDate, BigDecimal> getRates() {
+        return Collections.unmodifiableMap(rates);
     }
 
-    public @Nonnull SortedMap<LocalDate, BigDecimal> getValueTimeline() {
-        SortedMap<LocalDate, BigDecimal> timeline = values instanceof SortedMap<LocalDate, BigDecimal> m
-                ? m
-                : new TreeMap<>(values);
+    public @Nonnull SortedMap<LocalDate, BigDecimal> getRateTimeline() {
+        SortedMap<LocalDate, BigDecimal> timeline = rates instanceof SortedMap<LocalDate, BigDecimal> sortedMap
+                ? sortedMap
+                : new TreeMap<>(rates);
         return Collections.unmodifiableSortedMap(timeline);
     }
 
     public Optional<BigDecimal> getLatestValue() {
-        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
+        SortedMap<LocalDate, BigDecimal> timeline = getRateTimeline();
         return SequencedCollections.lastElement(timeline.sequencedValues());
     }
 
     public Optional<NumericChange> getLatestChange() {
-        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
+        SortedMap<LocalDate, BigDecimal> timeline = getRateTimeline();
         return SequencedCollections.applyToLastTwo(timeline.sequencedValues(), NumericChange::of);
     }
 
     public Optional<NumericExtremes> getValueExtremes() {
-        return NumericExtremes.find(values.values());
+        return NumericExtremes.find(rates.values());
     }
 
     // Methods stream() and toSet() (like the ones in ExchangeBatch)
     // may be added in the future if they're needed
 
     public int size() {
-        return values.size();
+        return rates.size();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(exchange, values);
+        return Objects.hash(exchange, rates);
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof ExchangeRateBatch that
                 && Objects.equals(this.exchange, that.exchange)
-                && Objects.equals(this.values, that.values);
+                && Objects.equals(this.rates, that.rates);
     }
 
     @Override
     public @Nonnull String toString() {
-        return "[exchange: " + exchange + ", size: " + values.size() + ']';
+        return "[exchange: " + exchange + ", size: " + rates.size() + ']';
     }
 }

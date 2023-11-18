@@ -86,7 +86,7 @@ public final class ExchangeRateDynamicsChart extends Chart implements LocaleChan
     // "Serialize" as in "arrange something in a series", not the usual computer science meaning
     private static @Nonnull Series serializeBatch(@Nonnull ExchangeRateBatch batch) {
         DatelessExchange exchange = batch.getExchange();
-        List<DataSeriesItem> seriesItems = Maps.mapToList(batch.getValueTimeline(), (date, value) -> {
+        List<DataSeriesItem> seriesItems = Maps.mapToList(batch.getRateTimeline(), (date, value) -> {
             // Vaadin formats these timestamps without L10N in mind
             // (or maybe it just uses the JVM locale?)
             Instant timestamp = date.atStartOfDay()
