@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.frontend.i18n;
+package io.github.northmaxdev.coinplot.frontend;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import jakarta.annotation.Nonnull;
