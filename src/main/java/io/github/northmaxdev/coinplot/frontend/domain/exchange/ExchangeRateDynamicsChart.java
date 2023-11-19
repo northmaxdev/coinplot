@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public final class ExchangeRateDynamicsChart
         extends Chart
@@ -45,31 +47,35 @@ public final class ExchangeRateDynamicsChart
     @Override
     public void visualize(@Nonnull ExchangeRateBatch batch) {
         Objects.requireNonNull(batch);
-        Series series = serializeBatch(batch);
+        List<Series> series = Stream.of(batch)
+                .map(ExchangeRateDynamicsChart::serializeBatch)
+                .toList();
 
-        Configuration config = getConfiguration();
-        config.setSeries(series);
-        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
+        redrawSeries(series);
     }
 
     @Override
     public void visualize(@Nonnull Collection<ExchangeRateBatch> batches) {
         Objects.requireNonNull(batches);
-        // Configuration::setSeries requires List<Series> instead of a Collection<Series>
         List<Series> series = batches.stream()
                 .map(ExchangeRateDynamicsChart::serializeBatch)
                 .toList();
 
-        Configuration config = getConfiguration();
-        config.setSeries(series);
-        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
+        redrawSeries(series);
     }
 
     @Override
     public void clear() {
-        Configuration config = getConfiguration();
-        config.setSeries(NO_SERIES);
-        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
+        redrawSeries(NO_SERIES);
+    }
+
+    @Override
+    public void visualizeOrClear(Optional<ExchangeRateBatch> optional) {
+        List<Series> series = optional.map(ExchangeRateDynamicsChart::serializeBatch)
+                .map(List::of)
+                .orElse(NO_SERIES);
+
+        redrawSeries(series);
     }
 
     @Override
@@ -102,5 +108,11 @@ public final class ExchangeRateDynamicsChart
         Series series = new DataSeries(seriesItems);
         series.setName(exchange.getLabel());
         return series;
+    }
+
+    private void redrawSeries(@Nonnull List<Series> series) {
+        Configuration config = getConfiguration();
+        config.setSeries(series);
+        drawChart(true); // See Configuration::setSeries(List<Series>) JavaDoc for info
     }
 }
