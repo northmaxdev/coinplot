@@ -21,8 +21,7 @@ public final class I18NProviderImpl implements I18NProvider {
     private static final List<Locale> SUPPORTED_LOCALES = List.of(
             // The first item in this list is the default option
             Locale.of("en", "US"),
-            Locale.of("ru", "RU"),
-            Locale.of("he", "IL")
+            Locale.of("ru", "RU")
     );
 
     @Override
