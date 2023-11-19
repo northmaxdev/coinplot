@@ -6,7 +6,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import io.github.northmaxdev.coinplot.lang.math.Percentage;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 public final class NumericChangeReport
         extends FormLayout
-        implements Visualizer<NumericChange>, LocaleChangeObserver {
+        implements LocalizedVisualizer<NumericChange> {
 
     private static final String INCALCULABLE_PERCENTAGE_PLACEHOLDER = "∞";
 

@@ -12,10 +12,9 @@ import com.vaadin.flow.component.charts.model.Series;
 import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
-import io.github.northmaxdev.coinplot.frontend.common.MultiVisualizer;
+import io.github.northmaxdev.coinplot.frontend.common.LocalizedMultiVisualizer;
 import io.github.northmaxdev.coinplot.lang.Maps;
 import jakarta.annotation.Nonnull;
 
@@ -28,7 +27,7 @@ import java.util.Objects;
 
 public final class ExchangeRateDynamicsChart
         extends Chart
-        implements MultiVisualizer<ExchangeRateBatch>, LocaleChangeObserver {
+        implements LocalizedMultiVisualizer<ExchangeRateBatch> {
 
     private static final List<Series> NO_SERIES = List.of();
 
