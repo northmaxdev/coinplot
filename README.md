@@ -18,8 +18,10 @@ Its core features include:
 * Modern, slick and responsive UI
 
 # Building & Installing
+**No proper build and deployment instructions will be provided in the foreseeable future.**
 
-*Coming soon!*
+Just clone the repository and open it in your IDE (preferably IntelliJ IDEA) :)
+
 
 # Contributing
 
