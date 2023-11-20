@@ -2,30 +2,42 @@
 
 package io.github.northmaxdev.coinplot.frontend.domain.exchange;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import io.github.northmaxdev.coinplot.backend.core.DataProvider;
 import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
+import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateService;
 import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 
-public final class ExchangeRateAnalyticsDashboard extends VerticalLayout implements LocaleChangeObserver {
+public final class ExchangeRateAnalyticsDashboard
+        extends SplitLayout
+        implements LocaleChangeObserver {
 
+    private final ExchangeBatchSubmissionForm requestAssemblyForm;
     private final Select<ExchangeRateBatch> analysisTargetPicker;
-    private final ExchangeRateAnalyticsVisualizer visualizer;
+    private final ExchangeRateDynamicsChart dynamicsChart;
+    private final ExchangeRateMetricsOverview metricsOverview;
 
-    public ExchangeRateAnalyticsDashboard() {
-        super(Alignment.STRETCH);
+    public ExchangeRateAnalyticsDashboard(@Nonnull DataProvider dataProvider) {
+        super(Orientation.HORIZONTAL);
+        Objects.requireNonNull(dataProvider);
 
-        // Initialization in reverse order
-        visualizer = new ExchangeRateAnalyticsVisualizer();
+        // Initialize in reverse order
+        metricsOverview = new ExchangeRateMetricsOverview();
+        dynamicsChart = new ExchangeRateDynamicsChart();
 
         analysisTargetPicker = new Select<>();
         analysisTargetPicker.setPrefixComponent(VaadinIcon.MONEY_EXCHANGE.create());
@@ -35,33 +47,40 @@ public final class ExchangeRateAnalyticsDashboard extends VerticalLayout impleme
         });
         analysisTargetPicker.addValueChangeListener(event -> {
             @Nullable ExchangeRateBatch selectedAnalysisTarget = event.getValue();
-            if (selectedAnalysisTarget == null) {
-                visualizer.clear();
-            } else {
-                visualizer.visualize(selectedAnalysisTarget);
-            }
+            dynamicsChart.visualizeOrClear(selectedAnalysisTarget);
+            metricsOverview.visualizeOrClear(selectedAnalysisTarget);
         });
 
-        HorizontalLayout controlsBar = new HorizontalLayout(analysisTargetPicker);
-        controlsBar.setPadding(false);
-        controlsBar.setSpacing(true);
+        requestAssemblyForm = new ExchangeBatchSubmissionForm(dataProvider.getCurrencyService(), desiredExchanges -> {
+            ExchangeRateService service = dataProvider.getExchangeRateService();
+            Set<ExchangeRate> dataset = service.getAvailableExchangeRates(desiredExchanges);
+            Set<ExchangeRateBatch> exchangeRateBatches = ExchangeRateBatch.multipleFromDataset(dataset);
+            analysisTargetPicker.setItems(exchangeRateBatches);
+        });
 
-        add(controlsBar, visualizer);
-        setPadding(true);
-        setSpacing(true);
-    }
+        // The components of both sides should be wrapped identically
+        // for the sake of visual symmetry.
 
-    // Duplicates are functionally OK (stuff works),
-    // but semantically redundant (not very useful).
-    // Therefore, enforce uniqueness by requiring a Set.
-    public void setAnalysisTargets(@Nonnull Set<ExchangeRateBatch> batches) {
-        Set<ExchangeRateBatch> protectiveCopy = Set.copyOf(batches); // Implicit deep null-check(s)
-        analysisTargetPicker.setItems(protectiveCopy); // This also fires a value change event that resets the selection
+        VerticalLayout primaryContent = wrap(analysisTargetPicker, dynamicsChart, metricsOverview);
+        addToPrimary(primaryContent);
+
+        VerticalLayout secondaryContent = wrap(requestAssemblyForm);
+        addToSecondary(secondaryContent);
     }
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
+        requestAssemblyForm.localeChange(event);
         I18NUtilities.setLabel(analysisTargetPicker, event, "exchange-rate-analytics-dashboard.analysis-target-picker.label");
-        visualizer.localeChange(event);
+        dynamicsChart.localeChange(event);
+        metricsOverview.localeChange(event);
+    }
+
+    private static @Nonnull VerticalLayout wrap(@Nonnull Component... components) {
+        VerticalLayout panel = new VerticalLayout(components);
+        panel.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.STRETCH);
+        panel.setSpacing(true);
+        panel.setPadding(true);
+        return panel;
     }
 }
