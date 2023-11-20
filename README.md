@@ -2,7 +2,9 @@
 
 **CoinPlot** is a simple and modern web app for exchange rate history visualization and basic analytics.
 
-![Screenshot of CoinPlot v2.0.0 in Microsoft Edge](screenshot_en_US.png)
+![GIF of CoinPlot v2.1.0 usage demo in Google Chrome](coinplot_demo_2-1-0.gif)
+
+![Screenshot of CoinPlot logging a cache hit](coinplot_logs.png)
 
 Its core features include:
 
