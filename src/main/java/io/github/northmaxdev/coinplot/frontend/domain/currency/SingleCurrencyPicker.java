@@ -14,8 +14,6 @@ import java.util.Objects;
 
 public final class SingleCurrencyPicker extends ComboBox<Currency> implements LocaleChangeObserver {
 
-    private static final String HELPER_TEXT_KEY = "single-currency-picker.helper-text";
-
     private final CurrencyService dataSource;
 
     public SingleCurrencyPicker(@Nonnull CurrencyService dataSource) {
@@ -31,6 +29,6 @@ public final class SingleCurrencyPicker extends ComboBox<Currency> implements Lo
 
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
-        I18NUtilities.setHelperText(this, event, HELPER_TEXT_KEY);
+        I18NUtilities.setHelperText(this, event, "single-currency-picker.helper-text");
     }
 }
