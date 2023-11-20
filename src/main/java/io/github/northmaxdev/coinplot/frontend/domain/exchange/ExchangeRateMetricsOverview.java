@@ -13,7 +13,7 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
 import io.github.northmaxdev.coinplot.frontend.common.LocalizedVisualizer;
 import io.github.northmaxdev.coinplot.frontend.common.NumericChangeReport;
 import io.github.northmaxdev.coinplot.frontend.common.NumericExtremesReport;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
+import io.github.northmaxdev.coinplot.frontend.I18NUtilities;
 import jakarta.annotation.Nonnull;
 
 import java.util.Locale;

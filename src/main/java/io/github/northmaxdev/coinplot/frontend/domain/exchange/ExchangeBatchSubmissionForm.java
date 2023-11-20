@@ -17,7 +17,7 @@ import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.MultiCurrencyPicker;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.SingleCurrencyPicker;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
+import io.github.northmaxdev.coinplot.frontend.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

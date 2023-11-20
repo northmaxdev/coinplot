@@ -15,7 +15,7 @@ import io.github.northmaxdev.coinplot.backend.core.exchange.DatelessExchange;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRate;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateBatch;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeRateService;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
+import io.github.northmaxdev.coinplot.frontend.I18NUtilities;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 

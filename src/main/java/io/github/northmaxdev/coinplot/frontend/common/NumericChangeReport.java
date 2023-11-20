@@ -6,7 +6,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
+import io.github.northmaxdev.coinplot.frontend.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
 import io.github.northmaxdev.coinplot.lang.math.Percentage;
 import jakarta.annotation.Nonnull;

@@ -16,7 +16,6 @@ import io.github.northmaxdev.coinplot.backend.core.DataProvider;
 import io.github.northmaxdev.coinplot.backend.core.DataProviderService;
 import io.github.northmaxdev.coinplot.frontend.common.LocalePicker;
 import io.github.northmaxdev.coinplot.frontend.domain.exchange.ExchangeRateAnalyticsDashboard;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
