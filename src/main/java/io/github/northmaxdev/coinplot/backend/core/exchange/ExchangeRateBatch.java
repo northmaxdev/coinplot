@@ -3,9 +3,10 @@
 package io.github.northmaxdev.coinplot.backend.core.exchange;
 
 import io.github.northmaxdev.coinplot.lang.Maps;
-import io.github.northmaxdev.coinplot.lang.Pair;
 import io.github.northmaxdev.coinplot.lang.SequencedCollections;
+import io.github.northmaxdev.coinplot.lang.SequencedMaps;
 import io.github.northmaxdev.coinplot.lang.math.NumericChange;
+import io.github.northmaxdev.coinplot.lang.math.NumericExtremes;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -16,7 +17,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.SequencedCollection;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -32,11 +32,11 @@ public final class ExchangeRateBatch {
     public static final Comparator<ExchangeRateBatch> SIZE_BASED_ORDER = Comparator.comparingInt(ExchangeRateBatch::size);
 
     private final @Nonnull DatelessExchange exchange;
-    private final @Nonnull Map<LocalDate, BigDecimal> values;
+    private final @Nonnull Map<LocalDate, BigDecimal> rates;
 
-    private ExchangeRateBatch(@Nonnull DatelessExchange exchange, @Nonnull Map<LocalDate, BigDecimal> values) {
+    private ExchangeRateBatch(@Nonnull DatelessExchange exchange, @Nonnull Map<LocalDate, BigDecimal> rates) {
         this.exchange = Objects.requireNonNull(exchange);
-        this.values = Objects.requireNonNull(values);
+        this.rates = Objects.requireNonNull(rates);
     }
 
     public static @Nonnull Set<ExchangeRateBatch> multipleFromDataset(@Nonnull Set<ExchangeRate> dataset) {
@@ -52,60 +52,63 @@ public final class ExchangeRateBatch {
         return exchange;
     }
 
-    public @Nonnull Map<LocalDate, BigDecimal> getValues() {
-        return Collections.unmodifiableMap(values);
+    public @Nonnull Map<LocalDate, BigDecimal> getRates() {
+        return Collections.unmodifiableMap(rates);
     }
 
-    public @Nonnull SortedMap<LocalDate, BigDecimal> getValueTimeline() {
-        SortedMap<LocalDate, BigDecimal> timeline = values instanceof SortedMap<LocalDate, BigDecimal> m
-                ? m
-                : new TreeMap<>(values);
+    public @Nonnull SortedMap<LocalDate, BigDecimal> getRateTimeline() {
+        SortedMap<LocalDate, BigDecimal> timeline = rates instanceof SortedMap<LocalDate, BigDecimal> sortedMap
+                ? sortedMap
+                : new TreeMap<>(rates);
         return Collections.unmodifiableSortedMap(timeline);
     }
 
-    public Optional<BigDecimal> getLatestValue() {
-        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
-        return SequencedCollections.lastElement(timeline.sequencedValues());
+    public Optional<LocalDate> getEarliestAvailableDate() {
+        return SequencedMaps.firstKey(getRateTimeline());
     }
 
-    public Optional<NumericChange<BigDecimal>> getLatestChange() {
-        SortedMap<LocalDate, BigDecimal> timeline = getValueTimeline();
-        return SequencedCollections.lastTwoElements(timeline.sequencedValues())
-                .map(pair -> NumericChange.of(pair.first(), pair.second()));
+    public Optional<LocalDate> getLatestAvailableDate() {
+        return SequencedMaps.lastKey(getRateTimeline());
     }
 
-    // The definition of "extremes" is taken from the following web resource:
-    // https://www.statista.com/statistics-glossary/definition/204/extreme_value/
-    public Optional<Pair<BigDecimal, BigDecimal>> getValueExtremes() {
-        SequencedCollection<BigDecimal> sortedValues = values.values()
-                .stream()
-                .sorted()
-                .toList();
+    public Optional<BigDecimal> getEarliestAvailableRate() {
+        return SequencedMaps.firstValue(getRateTimeline());
+    }
 
-        return SequencedCollections.endpoints(sortedValues);
+    public Optional<BigDecimal> getLatestAvailableRate() {
+        return SequencedMaps.lastValue(getRateTimeline());
+    }
+
+    public Optional<NumericChange> getLatestAvailableChange() {
+        SortedMap<LocalDate, BigDecimal> timeline = getRateTimeline();
+        return SequencedCollections.applyToLastTwo(timeline.sequencedValues(), NumericChange::of);
+    }
+
+    public Optional<NumericExtremes> getValueExtremes() {
+        return NumericExtremes.find(rates.values());
     }
 
     // Methods stream() and toSet() (like the ones in ExchangeBatch)
     // may be added in the future if they're needed
 
     public int size() {
-        return values.size();
+        return rates.size();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(exchange, values);
+        return Objects.hash(exchange, rates);
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof ExchangeRateBatch that
                 && Objects.equals(this.exchange, that.exchange)
-                && Objects.equals(this.values, that.values);
+                && Objects.equals(this.rates, that.rates);
     }
 
     @Override
     public @Nonnull String toString() {
-        return "[exchange: " + exchange + ", size: " + values.size() + ']';
+        return "[exchange: " + exchange + ", size: " + rates.size() + ']';
     }
 }

@@ -15,13 +15,13 @@ import com.vaadin.flow.router.Route;
 import io.github.northmaxdev.coinplot.backend.core.DataProvider;
 import io.github.northmaxdev.coinplot.backend.core.DataProviderService;
 import io.github.northmaxdev.coinplot.frontend.common.LocalePicker;
-import io.github.northmaxdev.coinplot.frontend.domain.exchange.ExchangeRateDataDashboard;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
+import io.github.northmaxdev.coinplot.frontend.domain.exchange.ExchangeRateAnalyticsDashboard;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
+import java.util.Objects;
 
 @Route
 @PageTitle("CoinPlot")
@@ -29,39 +29,33 @@ public final class MainView extends AppLayout {
 
     private static final class Header extends HorizontalLayout implements LocaleChangeObserver {
 
-        private static final String UI_LOCALE_PICKER_LABEL_KEY = "main-view.header.ui-locale-picker.label";
-        private static final String DATA_PROVIDER_DISPLAY_NAME_FIELD_LABEL_KEY = "main-view.header.data-provider-display-name-field.label";
-
         private final LocalePicker uiLocalePicker;
-        private final TextField dataProviderDisplayNameField;
+        private final TextField dataProviderDisplayField;
 
         public Header(@Nonnull I18NProvider i18nProvider, @Nonnull DataProvider dataProvider) {
-            // Omit null-checks
-
             uiLocalePicker = new LocalePicker(i18nProvider.getProvidedLocales());
             uiLocalePicker.addValueChangeListener(event -> {
                 @Nullable Locale selectedLocale = event.getValue();
-                @Nullable UI currentUI = UI.getCurrent();
-                // Not sure if the current UI being null is an actually realistic case
-                if (selectedLocale != null && currentUI != null) {
+                @Nonnull UI currentUI = Objects.requireNonNull(UI.getCurrent(), "Current UI is null");
+                if (selectedLocale != null) {
                     currentUI.setLocale(selectedLocale);
                 }
             });
 
-            dataProviderDisplayNameField = new TextField();
-            dataProviderDisplayNameField.setValue(dataProvider.getDisplayName());
-            dataProviderDisplayNameField.setReadOnly(true);
-            dataProviderDisplayNameField.setPrefixComponent(VaadinIcon.DATABASE.create());
+            dataProviderDisplayField = new TextField();
+            dataProviderDisplayField.setValue(dataProvider.getDisplayName());
+            dataProviderDisplayField.setReadOnly(true);
+            dataProviderDisplayField.setPrefixComponent(VaadinIcon.DATABASE.create());
 
-            add(uiLocalePicker, dataProviderDisplayNameField);
+            add(uiLocalePicker, dataProviderDisplayField);
             setPadding(true);
             setSpacing(true);
         }
 
         @Override
         public void localeChange(@Nonnull LocaleChangeEvent event) {
-            I18NUtilities.setLabel(uiLocalePicker, event, UI_LOCALE_PICKER_LABEL_KEY);
-            I18NUtilities.setLabel(dataProviderDisplayNameField, event, DATA_PROVIDER_DISPLAY_NAME_FIELD_LABEL_KEY);
+            I18NUtilities.setLabel(uiLocalePicker, event, "main-view.header.ui-locale-picker.label");
+            I18NUtilities.setLabel(dataProviderDisplayField, event, "main-view.header.data-provider-display-field.label");
         }
     }
 
@@ -69,12 +63,10 @@ public final class MainView extends AppLayout {
     public MainView(@Nonnull DataProviderService dataProviderService, @Nonnull I18NProvider i18nProvider) {
         DataProvider dataProvider = dataProviderService.getSelectedProviderOrDefault();
 
-        ExchangeRateDataDashboard dashboard = new ExchangeRateDataDashboard(dataProvider);
+        var dashboard = new ExchangeRateAnalyticsDashboard(dataProvider);
         setContent(dashboard);
 
-        Header header = new Header(i18nProvider, dataProvider);
+        var header = new Header(i18nProvider, dataProvider);
         addToNavbar(header);
-
-        setPrimarySection(Section.NAVBAR);
     }
 }

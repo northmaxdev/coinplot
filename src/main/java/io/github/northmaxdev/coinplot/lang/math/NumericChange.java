@@ -2,45 +2,36 @@
 
 package io.github.northmaxdev.coinplot.lang.math;
 
-import io.github.northmaxdev.coinplot.lang.Doubles;
 import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Optional;
 
-public interface NumericChange<T extends Number> {
+public sealed interface NumericChange permits NumericConstancy, RegularNumericChange {
 
-    @Nonnull T getInitialValue();
+    @Nonnull BigDecimal getInitialValue();
 
-    @Nonnull T getFinalValue();
+    @Nonnull BigDecimal getFinalValue();
 
-    @Nonnull T getDifference();
+    @Nonnull BigDecimal getDifference();
 
     // Throws IllegalStateException if incalculable
     @Nonnull Percentage getPercentage();
 
     // Cannot calculate percentage if the initial value is zero, but the final value is non-zero.
-    // As this is an edge case, it'll generally be easier to implement the "incalculable" method,
-    // therefore, the "calculable" one is the one that gets a default implementation.
+    boolean isPercentageCalculable();
 
-    boolean isPercentageIncalculable();
-
-    default boolean isPercentageCalculable() {
-        return !isPercentageIncalculable();
+    default Optional<Percentage> getPercentageIfCalculable() {
+        return isPercentageCalculable() ? Optional.of(getPercentage()) : Optional.empty();
     }
 
-    static @Nonnull NumericChange<BigDecimal> of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
-        return BigDecimals.equalIgnoringScale(x1, x2) ? new BigDecimalConstancy(x1) : new BigDecimalChange(x1, x2);
-    }
+    static @Nonnull NumericChange of(@Nonnull BigDecimal x1, @Nonnull BigDecimal x2) {
+        Objects.requireNonNull(x1);
+        Objects.requireNonNull(x2);
 
-    static @Nonnull NumericChange<Double> of(double x1, double x2) {
-        return Doubles.equals(x1, x2) ? new DoubleConstancy(x1) : new DoubleChange(x1, x2);
-    }
-
-    static @Nonnull NumericChange<Integer> of(int x1, int x2) {
-        return x1 == x2 ? new IntConstancy(x1) : new IntChange(x1, x2);
-    }
-
-    static @Nonnull NumericChange<Long> of(long x1, long x2) {
-        return x1 == x2 ? new LongConstancy(x1) : new LongChange(x1, x2);
+        return BigDecimals.equalIgnoringScale(x1, x2)
+                ? new NumericConstancy(x1)
+                : new RegularNumericChange(x1, x2);
     }
 }

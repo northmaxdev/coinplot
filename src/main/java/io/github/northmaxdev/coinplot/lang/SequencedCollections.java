@@ -5,10 +5,10 @@ package io.github.northmaxdev.coinplot.lang;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.SequencedCollection;
+import java.util.function.BiFunction;
 
 public final class SequencedCollections {
 
@@ -16,68 +16,86 @@ public final class SequencedCollections {
         throw new UnsupportedOperationException();
     }
 
-    // The pair's first item --> the collection's next-to-last element
-    // The pair's second item --> the collection's last element
-    // Visualization: [1, 6, 2, 4, 9, 0, 4, 7] --> [4, 7]
-    //                                  ^~~~~~^
-    // An empty Optional is returned if the collection has less than two elements.
-    // This method does NOT take into account concurrent mutations of the collection.
+    // IMPORTANT:
+    // All utility methods in this class do NOT take into account
+    // concurrent mutations of the provided collection(s).
+
+    // Returns the last two elements (must not be null) if they exist.
+    // Examples:
+    //     []           -> none
+    //     [5]          -> none
+    //     [5, 4]       -> {5, 4}
+    //     [5, 4, 8]    -> {4, 8}
+    //     [5, 4, 8, 0] -> {8, 0}
     public static <T> Optional<Pair<T, T>> lastTwoElements(@Nonnull SequencedCollection<T> collection) {
+        return applyToLastTwo(collection, Pair::new);
+    }
+
+    // Applies the given function (if possible) to the before-last and last elements, respectively.
+    // It's OK for the function to produce nulls.
+    // The function should cover null arguments if the collection permits null elements.
+    // Examples:
+    //     []           -> function is not applied
+    //     [5]          -> function is not applied
+    //     [5, 4]       -> f(5, 4)
+    //     [5, 4, 8]    -> f(4, 8)
+    //     [5, 4, 8, 0] -> f(8, 0)
+    public static <E, R> Optional<R> applyToLastTwo(@Nonnull SequencedCollection<E> collection, @Nonnull BiFunction<E, E, R> function) {
         Objects.requireNonNull(collection);
+        Objects.requireNonNull(function);
 
-        @Nullable T lastElement = null;
-        @Nullable T nextToLastElement = null;
-        SequencedCollection<T> reversedView = collection.reversed();
-        Iterator<T> reverseIterator = reversedView.iterator();
-
-        if (reverseIterator.hasNext()) {
-            lastElement = reverseIterator.next();
-        }
-        if (reverseIterator.hasNext()) {
-            nextToLastElement = reverseIterator.next();
-        }
-
-        // If either of them is null, then the collection has less than two items.
-        if (lastElement == null || nextToLastElement == null) {
+        if (collection.size() < 2) {
             return Optional.empty();
         }
 
-        Pair<T, T> result = new Pair<>(nextToLastElement, lastElement);
-        return Optional.of(result);
+        // Given: [5, 6, 1, 0, 4]
+        SequencedCollection<E> reversedSlice = collection.reversed() // [4, 0, 1, 6, 5]
+                .stream()
+                .limit(2L) // [4, 0]
+                .toList();
+
+        @Nullable R result = function.apply(reversedSlice.getLast(), reversedSlice.getFirst());
+        return Optional.ofNullable(result);
     }
 
-    // Returns the first and the last elements (if present) of the collection.
-    // Visualization: [1, 3, 5, 6, 8] --> [1, 8]
-    //                 ^           ^
-    // If the collection contains exactly one element, it is used as both the first
-    // and the second values of the resulting Pair<T>.
-    //
-    // An empty Optional is returned if the collection is empty.
-    // This method does NOT take into account concurrent mutations of the collection.
+    // Returns the first and last elements (must not be null) if they exist.
+    // Examples:
+    //     []           -> none
+    //     [5]          -> {5, 5}
+    //     [5, 4]       -> {5, 4}
+    //     [5, 4, 8]    -> {5, 8}
+    //     [5, 4, 8, 0] -> {5, 0}
     public static <T> Optional<Pair<T, T>> endpoints(@Nonnull SequencedCollection<T> collection) {
+        return applyToEndpoints(collection, Pair::new);
+    }
+
+    // Applies the given function (if possible) to the first and last elements, respectively.
+    // It's OK for the function to produce nulls.
+    // The function should cover null arguments if the collection permits null elements.
+    // Examples:
+    //     []           -> function is not applied
+    //     [5]          -> f(5, 5)
+    //     [5, 4]       -> f(5, 4)
+    //     [5, 4, 8]    -> f(5, 8)
+    //     [5, 4, 8, 0] -> f(5, 0)
+    public static <E, R> Optional<R> applyToEndpoints(@Nonnull SequencedCollection<E> collection, @Nonnull BiFunction<E, E, R> function) {
         Objects.requireNonNull(collection);
-        return switch (collection.size()) {
-            case 0 -> Optional.empty();
-            case 1 -> {
-                T singleton = collection.getFirst();
-                Pair<T, T> p = new Pair<>(singleton, singleton);
-                yield Optional.of(p);
-            }
-            default -> {
-                Pair<T, T> p = new Pair<>(collection.getFirst(), collection.getLast());
-                yield Optional.of(p);
-            }
-        };
+        Objects.requireNonNull(function);
+
+        if (collection.isEmpty()) {
+            return Optional.empty();
+        }
+
+        @Nullable R result = function.apply(collection.getFirst(), collection.getLast());
+        return Optional.ofNullable(result);
     }
 
     // Exception-less alternative to SequencedCollection::getFirst.
-    // This method does NOT take into account concurrent mutations of the collection.
     public static <T> Optional<T> firstElement(@Nonnull SequencedCollection<T> collection) {
         return collection.isEmpty() ? Optional.empty() : Optional.ofNullable(collection.getFirst());
     }
 
     // Exception-less alternative to SequencedCollection::getLast.
-    // This method does NOT take into account concurrent mutations of the collection.
     public static <T> Optional<T> lastElement(@Nonnull SequencedCollection<T> collection) {
         return collection.isEmpty() ? Optional.empty() : Optional.ofNullable(collection.getLast());
     }

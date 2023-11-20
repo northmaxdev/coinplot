@@ -18,7 +18,7 @@ public final class Iterables {
     // All methods are implemented using switch expressions and pattern-matching
     // to allow for future extensibility of edge cases.
 
-    public static int size(@Nonnull Iterable<?> iterable) {
+    public static long size(@Nonnull Iterable<?> iterable) {
         return switch (iterable) {
             case null -> throw new NullPointerException();
             case Collection<?> collection -> collection.size();

@@ -15,9 +15,9 @@ import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.backend.core.currency.Currency;
 import io.github.northmaxdev.coinplot.backend.core.currency.CurrencyService;
 import io.github.northmaxdev.coinplot.backend.core.exchange.ExchangeBatch;
+import io.github.northmaxdev.coinplot.frontend.I18NUtilities;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.MultiCurrencyPicker;
 import io.github.northmaxdev.coinplot.frontend.domain.currency.SingleCurrencyPicker;
-import io.github.northmaxdev.coinplot.frontend.i18n.I18NUtilities;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -30,15 +30,7 @@ import java.util.function.Consumer;
 
 public final class ExchangeBatchSubmissionForm extends FormLayout implements LocaleChangeObserver {
 
-    private static final String BASE_CURRENCY_PICKER_LABEL_KEY = "exchange-batch-submission-form.base-currency-picker.label";
-    private static final String TARGET_CURRENCY_PICKER_LABEL_KEY = "exchange-batch-submission-form.target-currency-picker.label";
-    private static final String START_DATE_PICKER_LABEL_KEY = "exchange-batch-submission-form.start-date-picker.label";
-    private static final String END_DATE_PICKER_LABEL_KEY = "exchange-batch-submission-form.end-date-picker.label";
-    private static final String SUBMIT_BUTTON_TEXT_KEY = "exchange-batch-submission-form.submit-button.text";
-    private static final String CLEAR_BUTTON_TEXT_KEY = "exchange-batch-submission-form.clear-button.text";
-    private static final String CURRENCY_RELOAD_BUTTON_TEXT_KEY = "exchange-batch-submission-form.currency-reload-button.text";
     private static final int CURRENCY_PICKER_COLSPAN = 2;
-
     private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
             new ResponsiveStep("0", 1),
             new ResponsiveStep("350px", 2)
@@ -159,19 +151,19 @@ public final class ExchangeBatchSubmissionForm extends FormLayout implements Loc
     @Override
     public void localeChange(@Nonnull LocaleChangeEvent event) {
         baseCurrencyPicker.localeChange(event);
-        I18NUtilities.setLabel(baseCurrencyPicker, event, BASE_CURRENCY_PICKER_LABEL_KEY);
+        I18NUtilities.setLabel(baseCurrencyPicker, event, "exchange-batch-submission-form.base-currency-picker.label");
 
         targetCurrencyPicker.localeChange(event);
-        I18NUtilities.setLabel(targetCurrencyPicker, event, TARGET_CURRENCY_PICKER_LABEL_KEY);
+        I18NUtilities.setLabel(targetCurrencyPicker, event, "exchange-batch-submission-form.target-currency-picker.label");
 
         startDatePicker.setLocale(event.getLocale());
-        I18NUtilities.setLabel(startDatePicker, event, START_DATE_PICKER_LABEL_KEY);
+        I18NUtilities.setLabel(startDatePicker, event, "exchange-batch-submission-form.start-date-picker.label");
 
         endDatePicker.setLocale(event.getLocale());
-        I18NUtilities.setLabel(endDatePicker, event, END_DATE_PICKER_LABEL_KEY);
+        I18NUtilities.setLabel(endDatePicker, event, "exchange-batch-submission-form.end-date-picker.label");
 
-        I18NUtilities.setText(submitButton, event, SUBMIT_BUTTON_TEXT_KEY);
-        I18NUtilities.setText(clearButton, event, CLEAR_BUTTON_TEXT_KEY);
-        I18NUtilities.setText(currencyReloadButton, event, CURRENCY_RELOAD_BUTTON_TEXT_KEY);
+        I18NUtilities.setText(submitButton, event, "exchange-batch-submission-form.submit-button.text");
+        I18NUtilities.setText(clearButton, event, "exchange-batch-submission-form.clear-button.text");
+        I18NUtilities.setText(currencyReloadButton, event, "exchange-batch-submission-form.currency-reload-button.text");
     }
 }
