@@ -2,7 +2,7 @@
 
 @NonNullApi
 @NonNullFields
-package io.github.northmaxdev.coinplot.domain;
+package io.github.northmaxdev.coinplot.config;
 
 import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
