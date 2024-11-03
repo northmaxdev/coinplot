@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.core.web;
+package io.github.northmaxdev.coinplot.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import java.net.http.HttpClient.Version;
 import java.time.Duration;
 
 @Configuration
-public class HTTPClientConfiguration {
+public class HttpClientConfig {
 
     private static final Duration CONNECT_TIMEOUT = Duration.ofMinutes(2);
 
