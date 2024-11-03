@@ -9,13 +9,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.3.5</version>
         <relativePath/>
     </parent>
 
     <groupId>io.github.northmaxdev</groupId>
     <artifactId>coinplot</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0-dev</version>
 
     <name>CoinPlot</name>
     <description>Exchange Rate History Visualizer</description>
@@ -23,9 +23,9 @@
     <url>https://github.com/northmaxdev/coinplot</url>
 
     <properties>
-        <java.version>21</java.version>
-        <vaadin.version>24.2.2</vaadin.version>
-        <equalsverifier.version>3.15.3</equalsverifier.version>
+        <java.version>23</java.version>
+        <vaadin.version>24.5.2</vaadin.version>
+        <equalsverifier.version>3.17.1</equalsverifier.version>
     </properties>
 
     <dependencies>
