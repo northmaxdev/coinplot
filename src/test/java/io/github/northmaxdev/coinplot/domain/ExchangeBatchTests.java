@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.backend.core.exchange;
+package io.github.northmaxdev.coinplot.domain;
 
+import io.github.northmaxdev.coinplot.backend.core.exchange.Exchange;
 import io.github.northmaxdev.coinplot.lang.chrono.LocalDateInterval;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,7 @@ import java.time.Month;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static io.github.northmaxdev.coinplot.Tests.BAR_FRANC;
-import static io.github.northmaxdev.coinplot.Tests.BAZ_POUND;
-import static io.github.northmaxdev.coinplot.Tests.FOO_DOLLAR;
+import static io.github.northmaxdev.coinplot.Tests.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ExchangeBatchTests {
