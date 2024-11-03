@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Objects;
 
-public record Exchange(Currency base, Currency target, LocalDate date) {
+public record CurrencyExchange(Currency base, Currency target, LocalDate date) {
 
-    public Exchange(Currency base, Currency target, LocalDate date) {
+    public CurrencyExchange(Currency base, Currency target, LocalDate date) {
         this.base = Objects.requireNonNull(base, "base must not be null");
         this.target = Objects.requireNonNull(target, "target must not be null");
         this.date = Objects.requireNonNull(date, "date must not be null");
