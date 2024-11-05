@@ -17,19 +17,19 @@ class LocalDateIntervalTests {
     static final LocalDate JAN_2 = LocalDate.of(2000, Month.JANUARY, 2);
 
     @Test
-    @DisplayName("Canonical constructor throws IAE if start > end")
+    @DisplayName("Constructor throws IAE if start > end")
     void constructorRejectsDescendingDates() {
         assertThatIllegalArgumentException().isThrownBy(() -> new LocalDateInterval(JAN_2, JAN_1));
     }
 
     @Test
-    @DisplayName("Canonical constructor throws IAE if start == end")
+    @DisplayName("Constructor throws IAE if start == end")
     void constructorRejectsEqualDates() {
         assertThatIllegalArgumentException().isThrownBy(() -> new LocalDateInterval(JAN_2, JAN_2));
     }
 
     @Test
-    @DisplayName("Canonical constructor does not throw if start < end")
+    @DisplayName("Constructor does not throw if start < end")
     void constructorAcceptsAscendingDates() {
         assertThatNoException().isThrownBy(() -> new LocalDateInterval(JAN_1, JAN_2));
     }
