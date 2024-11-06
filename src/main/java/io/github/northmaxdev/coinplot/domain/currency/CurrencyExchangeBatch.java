@@ -44,7 +44,10 @@ public record CurrencyExchangeBatch(Currency base, Set<Currency> targets, LocalD
         });
     }
 
-    public long size() {
-        return targets.size() * dateInterval.length();
+    public int size() {
+        // The multiplication can theoretically yield an int64 result.
+        // If this is realistic, this method should return an int64.
+        // If this is not realistic, this method should return an int32 with an overflow check (chosen option).
+        return Math.multiplyExact(targets.size(), dateInterval.length());
     }
 }
