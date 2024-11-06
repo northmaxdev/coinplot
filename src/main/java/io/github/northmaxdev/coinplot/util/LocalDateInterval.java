@@ -30,9 +30,11 @@ public record LocalDateInterval(LocalDate start, LocalDate end) {
         return start.datesUntil(end);
     }
 
-    public long length() {
-        // TODO: Consider a guaranteed O(1) impl
-        return stream().count();
+    // Long.MAX_VALUE in days is equal to 25252216391115060 years
+    // Integer.MAX_VALUE in days is equal to 5879489.79 years
+    // This method should realistically return an int instead of a long.
+    public int length() {
+        return Math.toIntExact(stream().count());
     }
 
     @Override
