@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.domain;
+package io.github.northmaxdev.coinplot.domain.currency;
 
 import java.math.BigDecimal;
 import java.util.Currency;

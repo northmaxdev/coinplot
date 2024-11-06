@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.domain;
+package io.github.northmaxdev.coinplot.domain.currency;
 
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.junit.jupiter.api.Test;

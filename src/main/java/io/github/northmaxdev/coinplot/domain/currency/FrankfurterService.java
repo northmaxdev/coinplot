@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.frankfurter;
+package io.github.northmaxdev.coinplot.domain.currency;
 
-import io.github.northmaxdev.coinplot.domain.CurrencyExchange;
-import io.github.northmaxdev.coinplot.domain.CurrencyExchangeBatch;
-import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
