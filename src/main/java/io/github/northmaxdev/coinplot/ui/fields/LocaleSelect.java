@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.ui.inputs;
+package io.github.northmaxdev.coinplot.ui.fields;
 
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.icon.VaadinIcon;
