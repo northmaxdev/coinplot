@@ -34,8 +34,7 @@ public final class FrankfurterService implements ExchangeRatesService {
                 .uri("/currencies")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .body(new ParameterizedTypeReference<>() {
-                });
+                .body(new ParameterizedTypeReference<>() {});
 
         if (dto == null) {
             throw new IllegalStateException("DTO is null");

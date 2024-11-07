@@ -9,5 +9,4 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ExchangeRatesDto(String base, Map<LocalDate, Map<String, BigDecimal>> rates) {
-}
+public record ExchangeRatesDto(String base, Map<LocalDate, Map<String, BigDecimal>> rates) {}
