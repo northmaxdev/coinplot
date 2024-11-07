@@ -2,6 +2,7 @@
 
 package io.github.northmaxdev.coinplot.domain.currency;
 
+import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -10,12 +11,14 @@ import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Service
@@ -77,6 +80,17 @@ public final class FrankfurterService implements ExchangeRatesService {
     }
 
     private static String serializeExchangeBatchToUri(CurrencyExchangeBatch exchangeBatch) {
+        String joinedTargetCodes = exchangeBatch.targets()
+                .stream()
+                .map(Currency::getCurrencyCode)
+                .collect(joining(","));
 
+        LocalDateInterval dateInterval = exchangeBatch.dateInterval();
+        return "/%s..%s?base=%s&symbols=%s".formatted(
+                dateInterval.start().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                dateInterval.end().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                exchangeBatch.base().getCurrencyCode(),
+                joinedTargetCodes
+        );
     }
 }
