@@ -6,7 +6,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import io.github.northmaxdev.coinplot.domain.currency.ExchangeRatesService;
-import io.github.northmaxdev.coinplot.ui.I18NUtil;
+import io.github.northmaxdev.coinplot.ui.I18nUtil;
 
 import java.util.Collection;
 import java.util.Currency;
@@ -26,6 +26,6 @@ public final class CurrencyComboBox extends ComboBox<Currency> implements Locale
     public void localeChange(LocaleChangeEvent event) {
         Locale newLocale = event.getLocale();
         setItemLabelGenerator(currency -> currency.getDisplayName(newLocale));
-        I18NUtil.setHelperText(this, event, "currency-combo-box.helper-text");
+        I18nUtil.setHelperText(this, event, "currency-combo-box.helper-text");
     }
 }

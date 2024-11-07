@@ -11,7 +11,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Component
-public final class I18NProviderImpl implements I18NProvider {
+public final class I18nProviderImpl implements I18NProvider {
 
     private static final String RESOURCE_BUNDLE_PREFIX = "i18n/i18n";
     private static final List<Locale> SUPPORTED_LOCALES = List.of(

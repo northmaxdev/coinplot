@@ -11,9 +11,9 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
-public final class I18NUtil {
+public final class I18nUtil {
 
-    private I18NUtil() {
+    private I18nUtil() {
         throw new UnsupportedOperationException();
     }
 
