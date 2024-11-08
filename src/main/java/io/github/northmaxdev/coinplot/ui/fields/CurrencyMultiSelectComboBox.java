@@ -5,7 +5,7 @@ package io.github.northmaxdev.coinplot.ui.fields;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import io.github.northmaxdev.coinplot.ui.I18nUtil;
+import io.github.northmaxdev.coinplot.ui.i18n.I18nUtil;
 
 import java.util.Collection;
 import java.util.Currency;

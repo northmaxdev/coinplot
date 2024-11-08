@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.ui;
+package io.github.northmaxdev.coinplot.ui.i18n;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.stereotype.Component;

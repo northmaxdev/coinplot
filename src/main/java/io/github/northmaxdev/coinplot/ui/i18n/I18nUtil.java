@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.ui;
+package io.github.northmaxdev.coinplot.ui.i18n;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasHelper;
