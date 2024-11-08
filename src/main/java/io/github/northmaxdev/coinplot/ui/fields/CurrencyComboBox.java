@@ -5,7 +5,6 @@ package io.github.northmaxdev.coinplot.ui.fields;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
-import io.github.northmaxdev.coinplot.domain.currency.ExchangeRatesService;
 import io.github.northmaxdev.coinplot.ui.I18nUtil;
 
 import java.util.Collection;
@@ -16,10 +15,6 @@ public final class CurrencyComboBox extends ComboBox<Currency> implements Locale
 
     public CurrencyComboBox(Collection<Currency> currencies) {
         setItems(currencies);
-    }
-
-    public CurrencyComboBox(ExchangeRatesService exchangeRatesService) {
-        this(exchangeRatesService.getSupportedCurrencies());
     }
 
     @Override
