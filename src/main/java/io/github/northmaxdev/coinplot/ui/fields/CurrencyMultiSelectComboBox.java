@@ -3,24 +3,16 @@
 package io.github.northmaxdev.coinplot.ui.fields;
 
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
-import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
-import io.github.northmaxdev.coinplot.ui.i18n.I18nUtil;
+import io.github.northmaxdev.coinplot.ui.IsraelL10n;
 
 import java.util.Collection;
 import java.util.Currency;
-import java.util.Locale;
 
-public final class CurrencyMultiSelectComboBox extends MultiSelectComboBox<Currency> implements LocaleChangeObserver {
+public final class CurrencyMultiSelectComboBox extends MultiSelectComboBox<Currency> {
 
     public CurrencyMultiSelectComboBox(Collection<Currency> currencies) {
         setItems(currencies);
-    }
-
-    @Override
-    public void localeChange(LocaleChangeEvent event) {
-        Locale newLocale = event.getLocale();
-        setItemLabelGenerator(currency -> currency.getDisplayName(newLocale));
-        I18nUtil.setHelperText(this, event, "currency-multi-select-combo-box.helper-text");
+        setItemLabelGenerator(IsraelL10n.CURRENCY_LABEL_GENERATOR);
+        setI18n(IsraelL10n.MULTI_SELECT_COMBO_BOX_L10N);
     }
 }
