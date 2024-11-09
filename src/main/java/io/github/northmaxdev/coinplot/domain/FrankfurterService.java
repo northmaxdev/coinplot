@@ -3,6 +3,8 @@
 package io.github.northmaxdev.coinplot.domain;
 
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
@@ -23,6 +26,9 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @Service
 public final class FrankfurterService implements ExchangeRatesService {
+
+    // TODO: Log stuff
+    private static final Logger LOG = LoggerFactory.getLogger(FrankfurterService.class);
 
     private final RestClient restClient;
 
@@ -38,10 +44,7 @@ public final class FrankfurterService implements ExchangeRatesService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
-
-        if (dto == null) {
-            throw new IllegalStateException("DTO is null");
-        }
+        Objects.requireNonNull(dto, "DTO is null");
 
         return dto.keySet()
                 .stream()
@@ -58,13 +61,9 @@ public final class FrankfurterService implements ExchangeRatesService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(ExchangeRatesDto.class);
-
-        if (dto == null) {
-            throw new IllegalStateException("DTO is null");
-        }
+        Objects.requireNonNull(dto, "DTO is null");
 
         Map<CurrencyExchange, BigDecimal> exchangeRates = HashMap.newHashMap(exchangesOfInterest.size());
-
         Currency base = Currency.getInstance(dto.base());
         for (var dateEntry : dto.rates().entrySet()) {
             LocalDate date = dateEntry.getKey();
@@ -75,21 +74,22 @@ public final class FrankfurterService implements ExchangeRatesService {
                 exchangeRates.put(exchange, rate);
             }
         }
-
         return Collections.unmodifiableMap(exchangeRates);
     }
 
     private static String serializeExchangeBatchToUri(CurrencyExchangeBatch exchangeBatch) {
+        Currency base = exchangeBatch.base();
+        LocalDateInterval dateInterval = exchangeBatch.dateInterval();
+
         String joinedTargetCodes = exchangeBatch.targets()
                 .stream()
                 .map(Currency::getCurrencyCode)
                 .collect(joining(","));
 
-        LocalDateInterval dateInterval = exchangeBatch.dateInterval();
         return "/%s..%s?base=%s&symbols=%s".formatted(
-                dateInterval.start().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                dateInterval.end().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                exchangeBatch.base().getCurrencyCode(),
+                DateTimeFormatter.ISO_LOCAL_DATE.format(dateInterval.start()),
+                DateTimeFormatter.ISO_LOCAL_DATE.format(dateInterval.end()),
+                base.getCurrencyCode(),
                 joinedTargetCodes
         );
     }
