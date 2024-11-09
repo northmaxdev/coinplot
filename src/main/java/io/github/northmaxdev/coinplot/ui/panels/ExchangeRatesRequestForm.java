@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class CurrencyExchangeBatchForm extends FormLayout {
+public final class ExchangeRatesRequestForm extends FormLayout {
 
     // TODO: Set minimum width for the entire layout
 
@@ -41,7 +41,7 @@ public final class CurrencyExchangeBatchForm extends FormLayout {
     private final DatePicker endDatePicker;
     private @Nullable Consumer<CurrencyExchangeBatch> onSubmit;
 
-    public CurrencyExchangeBatchForm(ExchangeRatesService currencyDataSource) {
+    public ExchangeRatesRequestForm(ExchangeRatesService currencyDataSource) {
 
         //////////////////////
         // Currency pickers //
