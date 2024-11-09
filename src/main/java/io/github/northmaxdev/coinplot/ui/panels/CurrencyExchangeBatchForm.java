@@ -12,23 +12,27 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoIcon;
-import io.github.northmaxdev.coinplot.domain.currency.CurrencyExchangeBatch;
-import io.github.northmaxdev.coinplot.domain.currency.ExchangeRatesService;
+import io.github.northmaxdev.coinplot.domain.CurrencyExchangeBatch;
+import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
 import io.github.northmaxdev.coinplot.ui.IsraelL10n;
+import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
 public final class CurrencyExchangeBatchForm extends FormLayout {
 
+    // TODO: Set minimum width for the entire layout
+
     private static final int CURRENCY_PICKER_COLSPAN = 2;
     private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
             new ResponsiveStep("0", 1),
-            new ResponsiveStep("350px", 2) // TODO: Do not use pixel count for width, use something more relative
+            new ResponsiveStep("350px", 2)
     );
 
     private final ComboBox<Currency> basePicker;
@@ -93,8 +97,7 @@ public final class CurrencyExchangeBatchForm extends FormLayout {
         /////////////
 
         Button okButton = new Button("אישור", LumoIcon.CHECKMARK.create());
-//        okButton.addSingleClickListener(_ -> {
-//        });
+        okButton.addSingleClickListener(_ -> submit());
         okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         okButton.addClickShortcut(Key.ENTER);
         okButton.setTooltipText("ניתן גם ללחוץ \"Enter\" בתור מקש קיצור");
@@ -120,26 +123,40 @@ public final class CurrencyExchangeBatchForm extends FormLayout {
         setResponsiveSteps(RESPONSIVE_STEPS);
     }
 
-    public void submit() {
-//        @Nullable Currency baseCurrency = baseCurrencyPicker.getValue();
-//        @Nonnull Set<Currency> targetCurrencies = targetCurrencyPicker.getSelectedItems();
-//        @Nullable LocalDate startDate = startDatePicker.getValue();
-//        @Nullable LocalDate endDate = endDatePicker.getValue();
-//
-//        if (baseCurrency != null
-//                && !targetCurrencies.isEmpty()
-//                && startDate != null
-//                && endDate != null) {
-//            // The date pickers are responsible for ensuring the dates are always
-//            // in a valid chronological order, as required by LocalDateInterval.
-//            LocalDateInterval dateInterval = new LocalDateInterval(startDate, endDate);
-//            ExchangeBatch exchangeBatch = new ExchangeBatch(baseCurrency, targetCurrencies, dateInterval);
-//            onSubmit.accept(exchangeBatch);
-//        }
-    }
-
     public void setOnSubmit(@Nullable Consumer<CurrencyExchangeBatch> onSubmit) {
         this.onSubmit = onSubmit;
+    }
+
+    public void submit() {
+        Optional<Currency> base = basePicker.getOptionalValue();
+        if (base.isEmpty()) {
+            // TODO: Give visual feedback to the user about this field being mandatory
+            return;
+        }
+
+        Set<Currency> targets = targetPicker.getSelectedItems();
+        if (targets.isEmpty()) {
+            // TODO: Give visual feedback to the user about this field being mandatory
+            return;
+        }
+
+        Optional<LocalDate> start = startDatePicker.getOptionalValue();
+        if (start.isEmpty()) {
+            // TODO: Give visual feedback to the user about this field being mandatory
+            return;
+        }
+
+        Optional<LocalDate> end = endDatePicker.getOptionalValue();
+        if (end.isEmpty()) {
+            // TODO: Give visual feedback to the user about this field being mandatory
+            return;
+        }
+
+        LocalDateInterval dateInterval = new LocalDateInterval(start.get(), end.get());
+        CurrencyExchangeBatch exchangeBatch = new CurrencyExchangeBatch(base.get(), targets, dateInterval);
+        if (onSubmit != null) {
+            onSubmit.accept(exchangeBatch);
+        }
     }
 
     public void clear() {
