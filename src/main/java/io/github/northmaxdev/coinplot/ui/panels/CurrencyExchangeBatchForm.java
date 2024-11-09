@@ -45,12 +45,14 @@ public final class CurrencyExchangeBatchForm extends FormLayout {
 
         Set<Currency> supportedCurrencies = currencyDataSource.getSupportedCurrencies();
 
-        this.basePicker = new ComboBox<>("המטבע שנותנים", supportedCurrencies);
+        this.basePicker = new ComboBox<>("מטבע המקור", supportedCurrencies);
+        this.basePicker.setTooltipText("המטבע שאתם נותנים בהמרה");
         this.basePicker.setRequired(true);
         setColspan(this.basePicker, CURRENCY_PICKER_COLSPAN);
         IsraelL10n.localize(this.basePicker);
 
         this.targetPicker = new MultiSelectComboBox<>("מטבע היעד", supportedCurrencies);
+        this.targetPicker.setTooltipText("המטבע שאתם מקבלים בהמרה");
         this.targetPicker.setRequired(true);
         setColspan(this.targetPicker, CURRENCY_PICKER_COLSPAN);
         IsraelL10n.localize(this.targetPicker);
@@ -61,6 +63,8 @@ public final class CurrencyExchangeBatchForm extends FormLayout {
 
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1L);
+
+        // TODO: Set tooltips for date pickers (null does not disable the default ones)
 
         this.startDatePicker = new DatePicker("מתאריך");
         this.startDatePicker.setRequired(true);
