@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.domain.currency;
+package io.github.northmaxdev.coinplot.domain;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.lang.Nullable;

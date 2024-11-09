@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.domain.currency;
+package io.github.northmaxdev.coinplot.domain;
 
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class FrankfurterServiceTests {
 
     @Autowired
-    private FrankfurterService service;
+    FrankfurterService service;
 
     // This is a half-assed test, but this should be ok for now
     @Test

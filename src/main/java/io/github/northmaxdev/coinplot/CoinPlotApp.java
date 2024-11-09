@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot;
 
-import io.github.northmaxdev.coinplot.domain.currency.FrankfurterConfig;
+import io.github.northmaxdev.coinplot.domain.FrankfurterConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

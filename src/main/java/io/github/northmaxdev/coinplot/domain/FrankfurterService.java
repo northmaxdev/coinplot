@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.domain.currency;
+package io.github.northmaxdev.coinplot.domain;
 
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.springframework.beans.factory.annotation.Autowired;
