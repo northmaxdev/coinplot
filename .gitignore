@@ -6,8 +6,8 @@ target/
 !**/src/test/**/target/
 
 # Vaadin
-node_modules
-/frontend/
+/src/main/frontend
+/src/main/bundles
 
 ### STS ###
 .apt_generated
