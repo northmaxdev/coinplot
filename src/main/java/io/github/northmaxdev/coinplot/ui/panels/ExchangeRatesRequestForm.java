@@ -14,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.domain.CurrencyExchangeBatch;
 import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
-import io.github.northmaxdev.coinplot.ui.IsraelL10n;
+import io.github.northmaxdev.coinplot.ui.ComponentL10n;
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
 import org.springframework.lang.Nullable;
 
@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 public final class ExchangeRatesRequestForm extends FormLayout {
 
     // TODO: Set minimum width for the entire layout
+    // TODO: Add duration preview to form via LocalDateInterval::toPeriod
 
     private static final int CURRENCY_PICKER_COLSPAN = 2;
     private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
@@ -52,14 +53,16 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         this.basePicker = new ComboBox<>("מטבע המקור", supportedCurrencies);
         this.basePicker.setTooltipText("המטבע שאתם נותנים בהמרה");
         this.basePicker.setRequired(true);
+        ComponentL10n.localize(this.basePicker);
+        this.basePicker.setItemLabelGenerator(ComponentL10n.CURRENCY_LABEL_GENERATOR);
         setColspan(this.basePicker, CURRENCY_PICKER_COLSPAN);
-        IsraelL10n.localize(this.basePicker);
 
         this.targetPicker = new MultiSelectComboBox<>("מטבע היעד", supportedCurrencies);
         this.targetPicker.setTooltipText("המטבע שאתם מקבלים בהמרה");
         this.targetPicker.setRequired(true);
+        ComponentL10n.localize(this.targetPicker);
+        this.targetPicker.setItemLabelGenerator(ComponentL10n.CURRENCY_LABEL_GENERATOR);
         setColspan(this.targetPicker, CURRENCY_PICKER_COLSPAN);
-        IsraelL10n.localize(this.targetPicker);
 
         //////////////////
         // Date pickers //
@@ -68,17 +71,15 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1L);
 
-        // TODO: Set tooltips for date pickers (null does not disable the default ones)
-
         this.startDatePicker = new DatePicker("מתאריך");
         this.startDatePicker.setRequired(true);
         this.startDatePicker.setMax(yesterday);
-        IsraelL10n.localize(this.startDatePicker);
+        ComponentL10n.localize(this.startDatePicker);
 
         this.endDatePicker = new DatePicker("עד לתאריך");
         this.endDatePicker.setRequired(true);
         this.endDatePicker.setMax(today);
-        IsraelL10n.localize(this.endDatePicker);
+        ComponentL10n.localize(this.endDatePicker);
 
         this.startDatePicker.addValueChangeListener(event -> {
             LocalDate start = event.getValue(); // Nullable (Spring nullability annotations don't support local variables)
