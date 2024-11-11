@@ -15,6 +15,11 @@ public record CurrencyExchange(Currency base, Currency target, LocalDate date) {
         this.date = Objects.requireNonNull(date, "date must not be null");
     }
 
+    public DatelessCurrencyExchange withoutDate() {
+        // This can be cached
+        return new DatelessCurrencyExchange(base, target);
+    }
+
     @Override
     public String toString() {
         return base.getCurrencyCode() + '→' + target.getCurrencyCode() + ' ' + date.format(DateTimeFormatter.ISO_LOCAL_DATE);
