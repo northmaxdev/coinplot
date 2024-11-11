@@ -9,6 +9,6 @@ class CurrencyExchangeTests {
 
     @Test
     void eq() {
-        EqualsVerifier.forClass(CurrencyExchange.class);
+        EqualsVerifier.forClass(CurrencyExchange.class).verify();
     }
 }
