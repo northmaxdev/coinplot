@@ -25,8 +25,16 @@
     <properties>
         <java.version>23</java.version>
         <vaadin.version>24.5.2</vaadin.version>
+        <apexcharts.version>24.0.1</apexcharts.version>
         <equalsverifier.version>3.17.1</equalsverifier.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -34,8 +42,9 @@
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-charts-flow</artifactId>
+            <groupId>com.github.appreciated</groupId>
+            <artifactId>apexcharts</artifactId>
+            <version>${apexcharts.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
