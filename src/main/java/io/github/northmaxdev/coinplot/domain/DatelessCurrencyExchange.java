@@ -6,7 +6,6 @@ import java.util.Currency;
 import java.util.Objects;
 import java.util.function.Function;
 
-
 /**
  * This class exists for when we need to map just the exchange itself (no date) to something.
  * <p>Example:</p>
@@ -45,6 +44,6 @@ public record DatelessCurrencyExchange(Currency base, Currency target) {
 
     @Override
     public String toString() {
-        return base.getCurrencyCode() + "-->" + target.getCurrencyCode();
+        return base.getCurrencyCode() + '/' + target.getCurrencyCode();
     }
 }
