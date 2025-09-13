@@ -9,20 +9,26 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-// A "compressed" way to represent a bunch of currency exchanges.
-// The following CurrencyExchange instances:
-//
-//     {FOO, BAR, 2000-01-01}
-//     {FOO, BAZ, 2000-01-01}
-//     {FOO, BAR, 2000-01-02}
-//     {FOO, BAZ, 2000-01-02}
-//
-// ...can be represented as the following CurrencyExchangeBatch:
-//
-//     {base=FOO, targets={BAR,BAZ}, dateInterval=[2000-01-01, 2000-01-03)}
-//
-// A CurrencyExchangeBatch easily converts into a sequence of CurrencyExchange instances, but not the other way around.
-// There will always be at least one target currency and one date (both non-null), so stream() is never empty.
+/**
+ * A "compressed" way to represent a bunch of currency exchanges.
+ * <p>
+ * The following {@link CurrencyExchange} instances:
+ * <pre>{@code
+ * {FOO, BAR, 2000-01-01}
+ * {FOO, BAZ, 2000-01-01}
+ * {FOO, BAR, 2000-01-02}
+ * {FOO, BAZ, 2000-01-02}}
+ * </pre>
+ * <p>
+ * ...can be represented as the following {@link CurrencyExchangeBatch}:
+ * <pre>{@code
+ * {base=FOO, targets={BAR,BAZ}, dateInterval=[2000-01-01, 2000-01-03)}}
+ * </pre>
+ * <p>
+ * A {@link CurrencyExchangeBatch} can easily "expand" into a sequence of {@link CurrencyExchange} instances, but not the other way around.
+ * <p>
+ * There will always be at least one target currency and one date. {@code null}s are not permitted anywhere.
+ */
 public record CurrencyExchangeBatch(Currency base, Set<Currency> targets, LocalDateInterval dateInterval) {
 
     public CurrencyExchangeBatch(Currency base, Set<Currency> targets, LocalDateInterval dateInterval) {
