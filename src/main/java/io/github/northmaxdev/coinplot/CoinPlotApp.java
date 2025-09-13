@@ -13,10 +13,10 @@ import java.util.Locale;
 @SpringBootApplication
 public class CoinPlotApp {
 
-    public static final Locale COINPLOT_LOCALE = Locale.UK; // This is the closest thing to Microsoft's "English (International)"
+    public static final Locale MAIN_LOCALE = Locale.UK; // This is the closest thing to Microsoft's "English (International)"
 
     public static void main(String[] args) {
-        Locale.setDefault(COINPLOT_LOCALE);
+        Locale.setDefault(MAIN_LOCALE);
         SpringApplication.run(CoinPlotApp.class, args);
     }
 }
