@@ -11,7 +11,7 @@ import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
 // TODO: Try the new Master-Detail layout (https://vaadin.com/docs/latest/components/master-detail-layout)
 public final class ExchangeRatesDashboard extends SplitLayout {
 
-    private static final double PRIMARY_CONTENT_SPLIT_PERCENTAGE = 70;
+    private static final double PRIMARY_CONTENT_SPLIT_PERCENTAGE = 65;
 
     public ExchangeRatesDashboard(ExchangeRatesService dataSource) {
         super(Orientation.HORIZONTAL);
