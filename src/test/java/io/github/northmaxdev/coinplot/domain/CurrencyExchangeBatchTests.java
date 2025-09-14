@@ -3,6 +3,7 @@
 package io.github.northmaxdev.coinplot.domain;
 
 import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CurrencyExchangeBatchTests {
 
     @Test
-    void stream() {
+    @DisplayName("stream() produces expected results in any order")
+    void streamProducesExpectedResultsInAnyOrder() {
         Currency euro = Currency.getInstance("EUR");
         Currency swissFranc = Currency.getInstance("CHF");
         Currency canadianDollar = Currency.getInstance("CAD");
