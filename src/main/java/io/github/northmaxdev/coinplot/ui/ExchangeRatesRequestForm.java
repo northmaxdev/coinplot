@@ -51,6 +51,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         //------------------//
 
         // TODO: load async
+        // TODO: Handle fetch exceptions
         Set<Currency> supportedCurrencies = currencyDataSource.getSupportedCurrencies();
 
         basePicker = new ComboBox<>("Base currency", supportedCurrencies);

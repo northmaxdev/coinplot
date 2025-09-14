@@ -19,6 +19,7 @@ public final class ExchangeRatesDashboard extends SplitLayout {
         ExchangeRatesPlot plot = new ExchangeRatesPlot();
         ExchangeRatesRequestForm form = new ExchangeRatesRequestForm(dataSource);
         form.setOnSubmit(exchangeBatch -> {
+            // TODO: Handle fetch exceptions
             var dataset = dataSource.getExchangeRates(exchangeBatch);
             plot.plot(dataset);
         });
