@@ -22,8 +22,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
-
-public final class ExchangeRateChart extends Chart {
+public final class ExchangeRatesPlot extends Chart {
 
     private static final List<Series> EMPTY_LIST_OF_SERIES = List.of();
 
@@ -34,7 +33,7 @@ public final class ExchangeRateChart extends Chart {
         return x.longValue();
     });
 
-    public ExchangeRateChart() {
+    public ExchangeRatesPlot() {
         super(ChartType.LINE);
         Configuration config = getConfiguration();
 
