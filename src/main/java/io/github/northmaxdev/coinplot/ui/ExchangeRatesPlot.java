@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 package io.github.northmaxdev.coinplot.ui;
 
 import com.vaadin.flow.component.charts.Chart;
