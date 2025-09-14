@@ -2,9 +2,12 @@
 
 package io.github.northmaxdev.coinplot.ui;
 
+import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -31,9 +34,12 @@ public final class ExchangeRatesRequestForm extends FormLayout {
             new ResponsiveStep("350px", 2)
     );
     private static final int CURRENCY_PICKER_COLSPAN = 2;
+    // TODO: Sort currencies by display name (right now it's not sorted at all). Refer to ListDataProvider or ask an LLM.
+    // TODO: Add flag emoji or SVG to currency label generator
+    private static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getDisplayName;
 
-    private final CurrencyComboBox basePicker;
-    private final MultiCurrencyComboBox targetPicker;
+    private final ComboBox<Currency> basePicker;
+    private final MultiSelectComboBox<Currency> targetPicker;
     private final DatePicker startDatePicker;
     private final DatePicker endDatePicker;
     private @Nullable Consumer<CurrencyExchangeBatch> onSubmit;
@@ -47,12 +53,14 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         // TODO: load async
         Set<Currency> supportedCurrencies = currencyDataSource.getSupportedCurrencies();
 
-        basePicker = new CurrencyComboBox("Base currency", supportedCurrencies);
+        basePicker = new ComboBox<>("Base currency", supportedCurrencies);
         basePicker.setRequired(true);
+        basePicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         setColspan(basePicker, CURRENCY_PICKER_COLSPAN);
 
-        targetPicker = new MultiCurrencyComboBox("Target currencies", supportedCurrencies);
+        targetPicker = new MultiSelectComboBox<>("Target currencies", supportedCurrencies);
         targetPicker.setRequired(true);
+        targetPicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         targetPicker.setHelperText("You can select multiple currencies");
         setColspan(targetPicker, CURRENCY_PICKER_COLSPAN);
 
