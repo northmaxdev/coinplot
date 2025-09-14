@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-package io.github.northmaxdev.coinplot.util;
+package io.github.northmaxdev.coinplot.langext;
 
 import java.time.LocalDate;
 import java.time.Period;

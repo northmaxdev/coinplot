@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.domain;
 
-import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import io.github.northmaxdev.coinplot.langext.LocalDateInterval;
 
 import java.util.Currency;
 import java.util.Objects;

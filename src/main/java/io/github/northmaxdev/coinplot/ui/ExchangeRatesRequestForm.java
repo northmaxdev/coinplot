@@ -15,7 +15,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.domain.CurrencyExchangeBatch;
 import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
-import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import io.github.northmaxdev.coinplot.langext.LocalDateInterval;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;

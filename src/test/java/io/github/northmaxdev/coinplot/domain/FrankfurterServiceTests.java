@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.domain;
 
-import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import io.github.northmaxdev.coinplot.langext.LocalDateInterval;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@
 
 package io.github.northmaxdev.coinplot.domain;
 
-import io.github.northmaxdev.coinplot.util.LocalDateInterval;
+import io.github.northmaxdev.coinplot.langext.LocalDateInterval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

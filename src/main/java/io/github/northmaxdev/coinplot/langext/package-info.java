@@ -2,7 +2,7 @@
 
 @NonNullApi
 @NonNullFields
-package io.github.northmaxdev.coinplot.util;
+package io.github.northmaxdev.coinplot.langext;
 
 import org.springframework.lang.NonNullApi;
 import org.springframework.lang.NonNullFields;
