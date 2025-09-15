@@ -22,8 +22,8 @@ public record CurrencyExchange(Currency base, Currency target, LocalDate date) {
         Objects.requireNonNull(date, "date must not be null");
     }
 
-    public DatelessCurrencyExchange withoutDate() {
-        return new DatelessCurrencyExchange(base, target);
+    public Exchange withoutDate() {
+        return new Exchange(base, target);
     }
 
     public Instant approximatePublicationTimestamp() {

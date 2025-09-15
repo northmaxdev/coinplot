@@ -12,7 +12,7 @@ import com.vaadin.flow.component.charts.model.Series;
 import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
 import io.github.northmaxdev.coinplot.domain.CurrencyExchange;
-import io.github.northmaxdev.coinplot.domain.DatelessCurrencyExchange;
+import io.github.northmaxdev.coinplot.domain.Exchange;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -50,7 +50,7 @@ public final class ExchangeRatesPlot extends Chart {
 
     public void plot(Map<CurrencyExchange, BigDecimal> exchangeRates) {
         // "DataSeriesItem" here is just a 2D coordinate on a line chart
-        Map<DatelessCurrencyExchange, List<DataSeriesItem>> coordinatesGroupedByExchange = exchangeRates.entrySet()
+        Map<Exchange, List<DataSeriesItem>> coordinatesGroupedByExchange = exchangeRates.entrySet()
                 .stream()
                 .collect(groupingBy(mapEntry -> {
                     CurrencyExchange exchange = mapEntry.getKey();
@@ -67,7 +67,7 @@ public final class ExchangeRatesPlot extends Chart {
         List<Series> series = coordinatesGroupedByExchange.entrySet()
                 .stream()
                 .map(mapEntry -> {
-                    DatelessCurrencyExchange exchange = mapEntry.getKey();
+                    Exchange exchange = mapEntry.getKey();
                     List<DataSeriesItem> coordinates = mapEntry.getValue();
                     // The charting library won't chronologically sort the data points for us - we must do so ourselves
                     // https://assets.highcharts.com/errors/15/
