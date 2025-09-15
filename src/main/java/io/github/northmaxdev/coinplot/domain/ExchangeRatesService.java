@@ -11,5 +11,5 @@ public interface ExchangeRatesService {
 
     Set<Currency> getSupportedCurrencies();
 
-    Map<CurrencyExchange, BigDecimal> getExchangeRates(CurrencyExchangeBatch exchangesOfInterest);
+    Map<DatedExchange, BigDecimal> getExchangeRates(CurrencyExchangeBatch exchangesOfInterest);
 }

@@ -53,7 +53,7 @@ public final class FrankfurterService implements ExchangeRatesService {
     }
 
     @Override
-    public Map<CurrencyExchange, BigDecimal> getExchangeRates(CurrencyExchangeBatch exchangesOfInterest) {
+    public Map<DatedExchange, BigDecimal> getExchangeRates(CurrencyExchangeBatch exchangesOfInterest) {
         String endpointUri = serializeExchangeBatchToUri(exchangesOfInterest);
 
         ExchangeRatesDto dto = restClient.get()
@@ -63,14 +63,14 @@ public final class FrankfurterService implements ExchangeRatesService {
                 .body(ExchangeRatesDto.class);
         Objects.requireNonNull(dto, "DTO is null");
 
-        Map<CurrencyExchange, BigDecimal> exchangeRates = HashMap.newHashMap(exchangesOfInterest.size());
+        Map<DatedExchange, BigDecimal> exchangeRates = HashMap.newHashMap(exchangesOfInterest.size());
         Currency base = Currency.getInstance(dto.base());
         for (var dateEntry : dto.rates().entrySet()) {
             LocalDate date = dateEntry.getKey();
             for (var rateEntry : dateEntry.getValue().entrySet()) {
                 Currency target = Currency.getInstance(rateEntry.getKey());
                 BigDecimal rate = rateEntry.getValue();
-                CurrencyExchange exchange = new CurrencyExchange(base, target, date);
+                DatedExchange exchange = new DatedExchange(base, target, date);
                 exchangeRates.put(exchange, rate);
             }
         }

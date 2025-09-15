@@ -11,7 +11,7 @@ import com.vaadin.flow.component.charts.model.DataSeriesItem;
 import com.vaadin.flow.component.charts.model.Series;
 import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
-import io.github.northmaxdev.coinplot.domain.CurrencyExchange;
+import io.github.northmaxdev.coinplot.domain.DatedExchange;
 import io.github.northmaxdev.coinplot.domain.Exchange;
 
 import java.math.BigDecimal;
@@ -48,15 +48,15 @@ public final class ExchangeRatesPlot extends Chart {
         yAxis.setType(AxisType.LINEAR);
     }
 
-    public void plot(Map<CurrencyExchange, BigDecimal> exchangeRates) {
+    public void plot(Map<DatedExchange, BigDecimal> exchangeRates) {
         // "DataSeriesItem" here is just a 2D coordinate on a line chart
         Map<Exchange, List<DataSeriesItem>> coordinatesGroupedByExchange = exchangeRates.entrySet()
                 .stream()
                 .collect(groupingBy(mapEntry -> {
-                    CurrencyExchange exchange = mapEntry.getKey();
+                    DatedExchange exchange = mapEntry.getKey();
                     return exchange.withoutDate();
                 }, mapping(mapEntry -> {
-                    CurrencyExchange exchange = mapEntry.getKey();
+                    DatedExchange exchange = mapEntry.getKey();
                     BigDecimal rate = mapEntry.getValue();
                     // TODO: Make each coordinate display a tooltip with its value and date (see setName or setDescription)
                     //  date (x) is to be formatted in a more human-readable format, e.g. "January 1st, 2015"

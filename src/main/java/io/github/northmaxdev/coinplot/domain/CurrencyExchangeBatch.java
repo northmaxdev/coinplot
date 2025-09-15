@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * A "compressed" way to represent a bunch of currency exchanges.
  * <p>
- * The following {@link CurrencyExchange} instances:
+ * The following {@link DatedExchange} instances:
  * <pre>{@code
  * {FOO, BAR, 2000-01-01}
  * {FOO, BAZ, 2000-01-01}
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * {base=FOO, targets={BAR,BAZ}, dateInterval=[2000-01-01, 2000-01-03)}}
  * </pre>
  * <p>
- * A {@link CurrencyExchangeBatch} can easily "expand" into a sequence of {@link CurrencyExchange} instances, but not the other way around.
+ * A {@link CurrencyExchangeBatch} can easily "expand" into a sequence of {@link DatedExchange} instances, but not the other way around.
  * <p>
  * There will always be at least one target currency and one date. {@code null}s are not permitted anywhere.
  */
@@ -41,10 +41,10 @@ public record CurrencyExchangeBatch(Currency base, Set<Currency> targets, LocalD
         this.targets = Set.copyOf(targets); // Implicit null-checks on the set's items
     }
 
-    public Stream<CurrencyExchange> stream() {
+    public Stream<DatedExchange> stream() {
         return dateInterval.stream().mapMulti((date, buffer) -> {
             for (Currency target : targets) {
-                CurrencyExchange exchange = new CurrencyExchange(base, target, date);
+                DatedExchange exchange = new DatedExchange(base, target, date);
                 buffer.accept(exchange);
             }
         });

@@ -32,15 +32,15 @@ class CurrencyExchangeBatchTests {
                 )
         );
 
-        Stream<CurrencyExchange> stream = batch.stream();
+        Stream<DatedExchange> stream = batch.stream();
 
         assertThat(stream).containsExactlyInAnyOrder(
-                new CurrencyExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 1)),
-                new CurrencyExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 1)),
-                new CurrencyExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 2)),
-                new CurrencyExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 2)),
-                new CurrencyExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 3)),
-                new CurrencyExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 3))
+                new DatedExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 1)),
+                new DatedExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 1)),
+                new DatedExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 2)),
+                new DatedExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 2)),
+                new DatedExchange(euro, swissFranc, LocalDate.of(2000, Month.JANUARY, 3)),
+                new DatedExchange(euro, canadianDollar, LocalDate.of(2000, Month.JANUARY, 3))
         );
     }
 }

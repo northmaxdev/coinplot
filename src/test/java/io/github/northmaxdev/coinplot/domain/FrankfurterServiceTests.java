@@ -37,7 +37,7 @@ class FrankfurterServiceTests {
                 new LocalDateInterval(start, end)
         );
 
-        Map<CurrencyExchange, BigDecimal> exchangeRates = service.getExchangeRates(batch);
+        Map<DatedExchange, BigDecimal> exchangeRates = service.getExchangeRates(batch);
         assertThat(exchangeRates).isNotEmpty();
     }
 }

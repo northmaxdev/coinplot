@@ -10,20 +10,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.Objects;
 
-public record CurrencyExchange(Currency base, Currency target, LocalDate date) {
+public record DatedExchange(Exchange exchange, LocalDate date) {
 
     // https://data.ecb.europa.eu/methodology/exchange-rates
     private static final LocalTime USUAL_ECB_PUBLICATION_TIME = LocalTime.of(16, 0);
     private static final ZoneId ECB_TIMEZONE = ZoneId.of("Europe/Berlin");
 
-    public CurrencyExchange {
-        Objects.requireNonNull(base, "base must not be null");
-        Objects.requireNonNull(target, "target must not be null");
+    public DatedExchange {
+        Objects.requireNonNull(exchange, "exchange must not be null");
         Objects.requireNonNull(date, "date must not be null");
     }
 
+    public DatedExchange(Currency base, Currency target, LocalDate date) {
+        this(new Exchange(base, target), date);
+    }
+
+    // Syntactic sugar
     public Exchange withoutDate() {
-        return new Exchange(base, target);
+        return exchange;
     }
 
     public Instant approximatePublicationTimestamp() {
@@ -34,6 +38,6 @@ public record CurrencyExchange(Currency base, Currency target, LocalDate date) {
 
     @Override
     public String toString() {
-        return base.getCurrencyCode() + '/' + target.getCurrencyCode() + ' ' + date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return exchange.toString() + ' ' + date.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
