@@ -4,18 +4,25 @@ package io.github.northmaxdev.coinplot.langext;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Objects;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.util.Objects.requireNonNull;
 
-// Endpoints: start is inclusive, end is exclusive
-// Mathematical notation: [start, end)
+/**
+ * Interval of local dates.
+ * <p>
+ * Mathematical notation: {@code [start, end)}
+ *
+ * @param start <b>inclusive</b> start date, not {@code null}
+ * @param end <b>exclusive</b> end date, not {@code null} and must be strictly <b>after</b> the start date
+ */
 public record LocalDateInterval(LocalDate start, LocalDate end) {
 
     public LocalDateInterval {
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(end, "end must not be null");
+        requireNonNull(start, "start date must not be null");
+        requireNonNull(end, "end date must not be null");
 
         if (!start.isBefore(end)) {
             throw new IllegalArgumentException("start >= end");
@@ -30,11 +37,11 @@ public record LocalDateInterval(LocalDate start, LocalDate end) {
         return start.datesUntil(end);
     }
 
-    // Long.MAX_VALUE in days is equal to 25252216391115060 years
-    // Integer.MAX_VALUE in days is equal to 5879489.79 years
-    // This method should realistically return an int instead of a long.
-    public int length() {
-        return Math.toIntExact(stream().count());
+    public int countDays() {
+        long count = LongStream.range(start.toEpochDay(), end.toEpochDay()).count();
+        // A day count that is equal to Integer.MAX_VALUE is roughly 5,883,517 years,
+        // which is enough for the vast majority of real-life practical applications.
+        return Math.toIntExact(count);
     }
 
     @Override
