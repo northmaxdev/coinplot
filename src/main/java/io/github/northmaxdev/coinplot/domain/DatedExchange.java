@@ -8,7 +8,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public record DatedExchange(Exchange exchange, LocalDate date) {
 
@@ -17,8 +18,8 @@ public record DatedExchange(Exchange exchange, LocalDate date) {
     private static final ZoneId ECB_TIMEZONE = ZoneId.of("Europe/Berlin");
 
     public DatedExchange {
-        Objects.requireNonNull(exchange, "exchange must not be null");
-        Objects.requireNonNull(date, "date must not be null");
+        requireNonNull(exchange, "exchange must not be null");
+        requireNonNull(date, "date must not be null");
     }
 
     public DatedExchange(Currency base, Currency target, LocalDate date) {

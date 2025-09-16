@@ -3,13 +3,14 @@
 package io.github.northmaxdev.coinplot.domain;
 
 import java.util.Currency;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public record Exchange(Currency base, Currency target) {
 
     public Exchange {
-        Objects.requireNonNull(base, "base must not be null");
-        Objects.requireNonNull(target, "target must not be null");
+        requireNonNull(base, "base must not be null");
+        requireNonNull(target, "target must not be null");
     }
 
     @Override
