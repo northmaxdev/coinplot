@@ -14,11 +14,9 @@ import org.springframework.web.client.RestClient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
@@ -27,7 +25,6 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 @Service
 public final class FrankfurterService implements ExchangeRatesService {
 
-    // TODO: Log stuff
     private static final Logger LOG = LoggerFactory.getLogger(FrankfurterService.class);
 
     private final RestClient restClient;
@@ -44,28 +41,42 @@ public final class FrankfurterService implements ExchangeRatesService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
-        Objects.requireNonNull(dto, "DTO is null");
 
-        return dto.keySet()
+        if (dto == null) {
+            LOG.error("Received HTTP response but it has no body (currencies)");
+            throw new IllegalStateException("DTO is null");
+        }
+
+        Set<Currency> currencies = dto.keySet()
                 .stream()
                 .map(Currency::getInstance)
                 .collect(toUnmodifiableSet());
+
+        LOG.info("Fetched and deserialized {} currencies", currencies.size());
+        return currencies;
     }
 
     @Override
-    public Map<DatedExchange, BigDecimal> getExchangeRates(CurrencyExchangeBatch exchangesOfInterest) {
-        String endpointUri = serializeExchangeBatchToUri(exchangesOfInterest);
+    public ExchangeRatesDataset getExchangeRates(DatedExchangeZip exchangesOfInterest) {
+        String endpointPath = serializeExchangesToPath(exchangesOfInterest);
 
         ExchangeRatesDto dto = restClient.get()
-                .uri(endpointUri)
+                .uri(endpointPath)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(ExchangeRatesDto.class);
-        Objects.requireNonNull(dto, "DTO is null");
+
+        if (dto == null) {
+            LOG.error("Received HTTP response but it has no body (exchange rates)");
+            throw new IllegalStateException("DTO is null");
+        }
 
         Map<DatedExchange, BigDecimal> exchangeRates = HashMap.newHashMap(exchangesOfInterest.size());
+
         Currency base = Currency.getInstance(dto.base());
         for (var dateEntry : dto.rates().entrySet()) {
+            // Consideration: launch a virtual thread for each date,
+            // see if that makes a performance difference for large datasets compared to current impl
             LocalDate date = dateEntry.getKey();
             for (var rateEntry : dateEntry.getValue().entrySet()) {
                 Currency target = Currency.getInstance(rateEntry.getKey());
@@ -74,14 +85,16 @@ public final class FrankfurterService implements ExchangeRatesService {
                 exchangeRates.put(exchange, rate);
             }
         }
-        return Collections.unmodifiableMap(exchangeRates);
+
+        LOG.info("Fetched and deserialized {} exchange rates", exchangeRates.size());
+        return new ExchangeRatesDataset(exchangeRates);
     }
 
-    private static String serializeExchangeBatchToUri(CurrencyExchangeBatch exchangeBatch) {
-        Currency base = exchangeBatch.base();
-        LocalDateInterval dateInterval = exchangeBatch.dateInterval();
+    private static String serializeExchangesToPath(DatedExchangeZip exchangesOfInterest) {
+        Currency base = exchangesOfInterest.base();
+        LocalDateInterval dateInterval = exchangesOfInterest.dateInterval();
 
-        String joinedTargetCodes = exchangeBatch.targets()
+        String joinedTargetCodes = exchangesOfInterest.targets()
                 .stream()
                 .map(Currency::getCurrencyCode)
                 .collect(joining(","));
