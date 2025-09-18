@@ -20,35 +20,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("CoinPlot")
 public final class MainView extends AppLayout {
 
-    // TODO: Application-wide exception handler (error dialog or a separate view)
+    // TODO:
+    //  Application-wide exception handler (error dialog or a separate view),
+    //  see Vaadin's ErrorHandler and DefaultErrorHandler for reference
 
     @Autowired
     public MainView(ExchangeRatesService exchangeRatesService) {
-
-        //--------------//
-        // Main content //
-        //--------------//
-
         ExchangeRatesDashboard dashboard = new ExchangeRatesDashboard(exchangeRatesService);
         setContent(dashboard);
 
-        //---------//
-        // Top bar //
-        //---------//
+        // The minWidth values here were eyeballed - this may or may not look different depending on browser and OS settings
 
-        TextField localeDisplayField = new TextField("Language");
-        localeDisplayField.setValue(CoinPlotApp.MAIN_LOCALE.getDisplayName());
-        localeDisplayField.setMinWidth(70, Unit.PERCENTAGE);
-        localeDisplayField.setReadOnly(true);
-        localeDisplayField.setPrefixComponent(VaadinIcon.GLOBE.create());
-        localeDisplayField.setTooltipText("Well, if this is it, old boy, I hope you don't mind if I go out speaking the King's.");
+        TextField localeIndicator = new TextField("Language");
+        localeIndicator.setReadOnly(true);
+        localeIndicator.setValue(CoinPlotApp.MAIN_LOCALE.getDisplayName());
+        localeIndicator.setPrefixComponent(VaadinIcon.GLOBE.create());
+        localeIndicator.setMinWidth(45.0f, Unit.PERCENTAGE);
+        localeIndicator.setTooltipText("Well, if this is it, old boy, I hope you don't mind if I go out speaking the King's.");
+
+        TextField bankIndicator = new TextField("Bank");
+        bankIndicator.setReadOnly(true);
+        bankIndicator.setValue("European Central Bank");
+        bankIndicator.setPrefixComponent(VaadinIcon.EURO.create());
+        bankIndicator.setMinWidth(40.0f, Unit.PERCENTAGE);
 
         Button sourceCodeButton = new Button("Source code", VaadinIcon.CURLY_BRACKETS.create());
         sourceCodeButton.addClickListener(_ -> getUI()
                 .map(UI::getPage)
                 .ifPresent(page -> page.open("https://github.com/northmaxdev/coinplot")));
 
-        HorizontalLayout topBar = new HorizontalLayout(FlexComponent.Alignment.END, localeDisplayField, sourceCodeButton);
+        HorizontalLayout topBar = new HorizontalLayout(FlexComponent.Alignment.END, localeIndicator, bankIndicator, sourceCodeButton);
         topBar.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
         topBar.setPadding(true);
         addToNavbar(topBar);
