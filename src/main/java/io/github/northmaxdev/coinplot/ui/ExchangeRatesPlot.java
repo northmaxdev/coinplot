@@ -13,6 +13,7 @@ import com.vaadin.flow.component.charts.model.XAxis;
 import com.vaadin.flow.component.charts.model.YAxis;
 import io.github.northmaxdev.coinplot.domain.DatedExchange;
 import io.github.northmaxdev.coinplot.domain.Exchange;
+import io.github.northmaxdev.coinplot.domain.ExchangeRatesDataset;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -48,9 +49,10 @@ public final class ExchangeRatesPlot extends Chart {
         yAxis.setType(AxisType.LINEAR);
     }
 
-    public void plot(Map<DatedExchange, BigDecimal> exchangeRates) {
+    public void plot(ExchangeRatesDataset dataset) {
         // "DataSeriesItem" here is just a 2D coordinate on a line chart
-        Map<Exchange, List<DataSeriesItem>> coordinatesGroupedByExchange = exchangeRates.entrySet()
+        Map<Exchange, List<DataSeriesItem>> coordinatesGroupedByExchange = dataset.getData()
+                .entrySet()
                 .stream()
                 .collect(groupingBy(mapEntry -> {
                     DatedExchange exchange = mapEntry.getKey();
