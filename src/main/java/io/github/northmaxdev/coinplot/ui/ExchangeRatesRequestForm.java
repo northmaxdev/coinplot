@@ -13,7 +13,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoIcon;
-import io.github.northmaxdev.coinplot.domain.CurrencyExchangeBatch;
+import io.github.northmaxdev.coinplot.domain.DatedExchangeZip;
 import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
 import io.github.northmaxdev.coinplot.langext.LocalDateInterval;
 import org.springframework.lang.Nullable;
@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-// TODO: Set minimum width for the entire layout
 // TODO: Add duration preview to form via LocalDateInterval::toPeriod
 public final class ExchangeRatesRequestForm extends FormLayout {
 
@@ -42,7 +41,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
     private final MultiSelectComboBox<Currency> targetPicker;
     private final DatePicker startDatePicker;
     private final DatePicker endDatePicker;
-    private @Nullable Consumer<CurrencyExchangeBatch> onSubmit;
+    private @Nullable Consumer<DatedExchangeZip> onSubmit;
 
     public ExchangeRatesRequestForm(ExchangeRatesService currencyDataSource) {
 
@@ -100,7 +99,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         okButton.addSingleClickListener(_ -> submit());
         okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         okButton.addClickShortcut(Key.ENTER);
-        okButton.setTooltipText("Keyboard hotkey: Enter");
+        okButton.setTooltipText("Keyboard shortcut: \"Enter\"");
         onSubmit = null;
 
         Button clearButton = new Button("Clear", LumoIcon.CROSS.create());
@@ -110,6 +109,9 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         //--------//
         // Layout //
         //--------//
+
+        // TODO: Set minimum width for the entire layout
+        // TODO: Play around with this: https://vaadin.com/docs/latest/components/form-layout#column-span
 
         // https://vaadin.com/docs/latest/components/form-layout#button-placement
         HorizontalLayout buttonBar = new HorizontalLayout(okButton, clearButton);
@@ -121,7 +123,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         setResponsiveSteps(RESPONSIVE_STEPS);
     }
 
-    public void setOnSubmit(@Nullable Consumer<CurrencyExchangeBatch> onSubmit) {
+    public void setOnSubmit(@Nullable Consumer<DatedExchangeZip> onSubmit) {
         this.onSubmit = onSubmit;
     }
 
@@ -151,7 +153,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         }
 
         LocalDateInterval dateInterval = new LocalDateInterval(start.get(), end.get());
-        CurrencyExchangeBatch exchangeBatch = new CurrencyExchangeBatch(base.get(), targets, dateInterval);
+        DatedExchangeZip exchangeBatch = new DatedExchangeZip(base.get(), targets, dateInterval);
         if (onSubmit != null) {
             onSubmit.accept(exchangeBatch);
         }
