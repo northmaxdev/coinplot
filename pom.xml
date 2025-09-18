@@ -23,7 +23,7 @@
     <url>https://github.com/northmaxdev/coinplot</url>
 
     <properties>
-        <java.version>24</java.version>
+        <java.version>25</java.version>
         <vaadin.version>24.8.7</vaadin.version>
         <equalsverifier.version>4.1</equalsverifier.version>
     </properties>
