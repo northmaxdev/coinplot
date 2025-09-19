@@ -4,6 +4,7 @@ package io.github.northmaxdev.coinplot.ui;
 
 import com.vaadin.flow.component.ItemLabelGenerator;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -110,9 +111,6 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         // Layout //
         //--------//
 
-        // TODO: Set minimum width for the entire layout
-        // TODO: Play around with this: https://vaadin.com/docs/latest/components/form-layout#column-span
-
         // https://vaadin.com/docs/latest/components/form-layout#button-placement
         HorizontalLayout buttonBar = new HorizontalLayout(okButton, clearButton);
         buttonBar.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
@@ -121,6 +119,9 @@ public final class ExchangeRatesRequestForm extends FormLayout {
 
         add(basePicker, targetPicker, startDatePicker, endDatePicker, buttonBar);
         setResponsiveSteps(RESPONSIVE_STEPS);
+
+        // Eyeballed value - might look different depending on display resolution and/or scaling
+        setMinWidth(210, Unit.PIXELS);
     }
 
     public void setOnSubmit(@Nullable Consumer<DatedExchangeZip> onSubmit) {
