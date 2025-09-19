@@ -24,7 +24,6 @@ import org.springframework.lang.Nullable;
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -72,11 +71,13 @@ public final class ExchangeRatesRequestForm extends FormLayout {
 
         basePicker = new ComboBox<>("Base currency");
         basePicker.setRequired(true);
+        basePicker.setErrorMessage("A base currency must be selected");
         basePicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         setColspan(basePicker, CURRENCY_PICKER_COLSPAN);
 
         targetPicker = new MultiSelectComboBox<>("Target currencies");
         targetPicker.setRequired(true);
+        targetPicker.setErrorMessage("At least one target currency must be selected");
         targetPicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         targetPicker.setHelperText("You can select multiple currencies");
         setColspan(targetPicker, CURRENCY_PICKER_COLSPAN);
@@ -92,13 +93,17 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         } catch (RuntimeException e) {
             String errorMessage = "Failed to load currency data (" + e.getClass().getName() + ')';
 
-            basePicker.setEnabled(false);
             basePicker.setErrorMessage(errorMessage);
             basePicker.setInvalid(true);
 
-            targetPicker.setEnabled(false);
             targetPicker.setErrorMessage(errorMessage);
             targetPicker.setInvalid(true);
+
+            // Disabling the whole form avoids awkward UX when we disable just the currency fields on a bad fetch.
+            // Example: submitting with empty date pickers provides no visual feedback to the user because
+            // the form first checks if we selected currencies, which we didn't because there are none available.
+            // Simply disabling the entire form is probably the cleanest solution to this.
+            setEnabled(false);
         }
 
         //--------------//
@@ -110,10 +115,12 @@ public final class ExchangeRatesRequestForm extends FormLayout {
 
         startDatePicker = new DatePicker("Start date");
         startDatePicker.setRequired(true);
+        startDatePicker.setErrorMessage("A start date must be selected");
         startDatePicker.setMax(yesterday);
 
         endDatePicker = new DatePicker("End date");
         endDatePicker.setRequired(true);
+        endDatePicker.setErrorMessage("An end date must be selected");
         endDatePicker.setMax(today);
 
         startDatePicker.addValueChangeListener(event -> {
@@ -165,34 +172,28 @@ public final class ExchangeRatesRequestForm extends FormLayout {
     }
 
     public void submit() {
-        Optional<Currency> base = basePicker.getOptionalValue();
-        if (base.isEmpty()) {
-            // TODO: Give visual feedback to the user about this field being mandatory
+        if (basePicker.isEmpty()) {
+            basePicker.setInvalid(true);
+            return;
+        }
+        if (targetPicker.isEmpty()) {
+            targetPicker.setInvalid(true);
+            return;
+        }
+        if (startDatePicker.isEmpty()) {
+            startDatePicker.setInvalid(true);
+            return;
+        }
+        if (endDatePicker.isEmpty()) {
+            endDatePicker.setInvalid(true);
             return;
         }
 
-        Set<Currency> targets = targetPicker.getSelectedItems();
-        if (targets.isEmpty()) {
-            // TODO: Give visual feedback to the user about this field being mandatory
-            return;
-        }
-
-        Optional<LocalDate> start = startDatePicker.getOptionalValue();
-        if (start.isEmpty()) {
-            // TODO: Give visual feedback to the user about this field being mandatory
-            return;
-        }
-
-        Optional<LocalDate> end = endDatePicker.getOptionalValue();
-        if (end.isEmpty()) {
-            // TODO: Give visual feedback to the user about this field being mandatory
-            return;
-        }
-
-        LocalDateInterval dateInterval = new LocalDateInterval(start.get(), end.get());
-        DatedExchangeZip exchangeBatch = new DatedExchangeZip(base.get(), targets, dateInterval);
+        // We don't explicitly null-check the values, but as long as we prematurely exit the method if a field is empty, this should be safe
+        LocalDateInterval dateInterval = new LocalDateInterval(startDatePicker.getValue(), endDatePicker.getValue());
+        DatedExchangeZip exchangeZip = new DatedExchangeZip(basePicker.getValue(), targetPicker.getSelectedItems(), dateInterval);
         if (onSubmit != null) {
-            onSubmit.accept(exchangeBatch);
+            onSubmit.accept(exchangeZip);
         }
     }
 
@@ -201,5 +202,12 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         targetPicker.clear();
         startDatePicker.clear();
         endDatePicker.clear();
+
+        // clear() triggers the fields' "no selection" error messages, but since clearing the form is a deliberate action,
+        // it's not right to show error messages for that, so we manually mark the fields as valid.
+        basePicker.setInvalid(false);
+        targetPicker.setInvalid(false);
+        startDatePicker.setInvalid(false);
+        endDatePicker.setInvalid(false);
     }
 }
