@@ -19,7 +19,7 @@ There are two versions of this project:
 
 > [!NOTE]
 > Starting with version `3.0.0`, i18n is dropped completely in favor of just `en_GB` (the closest standard equivalent to Microsoft's `English (International)` locale). This is to ensure UI consistency as not all UI components are documented well-enough for i18n...
-> 
+
 > [!WARNING]
 > This web app was not tested for mobile screens.
 
