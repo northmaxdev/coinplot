@@ -1,80 +1,65 @@
-# About
+## About
 
-**CoinPlot** is a simple and modern web app for exchange rate history visualization and basic analytics.
+**CoinPlot** is a simple and modern single-page web app for exchange rates visualization.
 
-![GIF of CoinPlot v2.1.0 usage demo in Google Chrome](coinplot_demo_2-1-0.gif)
+![Screenshot of CoinPlot](screenshot.png)
 
-![Screenshot of CoinPlot logging a cache hit](coinplot_logs.png)
+There are two versions of this project:
 
-Its core features include:
+* `2.1.0` _(discontinued, has a separate branch in the repo)_
+    * Far more focus on extensibility and architecture
+    * Multiple exchange rate data providers
+    * I18N and multi-language support
+    * In-memory DB caching
+    * [Lots of verbose code documentation](https://github.com/northmaxdev/coinplot/blob/2.x.x/src/main/java/io/github/northmaxdev/coinplot/lang/math/Percentage.java)
+* `3.x.x` (`main` branch)
+    * Is all about KISS - significantly leaner codebase with a clearer vision
+    * Optimized for a single exchange rate data provider and a single locale
+    * Probably far more performant (both speed and memory)
 
-* Support for the following exchange rate data providers:
-    * [Fixer](https://fixer.io/)
-    * [Frankfurter](https://www.frankfurter.app/) *(including self-hosted instances)*
-    * *No-op (for development and testing purposes)*
-* An efficient internal architecture that makes heavy use of caching,
-  which helps substantially minimize or completely avoid outgoing API requests
-* Localization in multiple languages
-* Modern, slick and responsive UI
+> [!NOTE]
+> Starting with version `3.0.0`, i18n is dropped completely in favor of just `en_GB` (the closest standard equivalent to Microsoft's `English (International)` locale). This is to ensure UI consistency as not all UI components are documented well-enough for i18n...
+> 
+> [!WARNING]
+> This web app was not tested for mobile screens.
 
-# Building & Installing
-**No proper build and deployment instructions will be provided in the foreseeable future.**
+> [!TIP]
+> 1. This project wouldn't exist without the [Frankfurter API](https://frankfurter.dev/) - all other exchange rate APIs are paid for and/or a headache. Consider supporting [the project](https://github.com/lineofflight/frankfurter) and [its developer](https://github.com/hakanensari) ❤️ 
+> 2. The Frankfurter API can be self-hosted, and this app supports that. Simply change the API URI in the [Spring application properties file](src/main/resources/application.properties).
 
-Just clone the repository and open it in your IDE (preferably IntelliJ IDEA) :)
+## TODO
+* [ ] Do all the in-code `TODO`'s
+* [ ] Migrate to Spring Boot 4
+* [ ] Migrate to Vaadin 25 & Aura theme
+* [ ] Profile and compare performance between `2.1.0` and `3.x.x`
+* [ ] Compare LoC count between `2.1.0` and `3.x.x` (could be an interesting statistic in addition to profiling results)
+* [ ] A prettier screenshot (preferably on macOS)
 
+## Build & run
 
-# Contributing
+1. Ensure you have JDK 25 setup, including `JAVA_HOME`. You may download one from the [Adoptium](https://adoptium.net/) project,
+   or your local package manager. Or just ask ChatGPT, as always...
 
-## Localization
+2. Run the following commands:
 
-1. Copy any of the existing `.properties` files to the same [location](src/main/resources/i18n).
-2. Replace the locale ID in the newly created file's filename with the ID of the locale you'd like to add support for.
-   For instance, if you've copied the `i18n_en_US` file, and you'd like to add support for French in Switzerland,
-   you should rename the copied file to `i18n_fr_CH`.
-3. Translate the UI strings in the newly created file.
-4. Add/create the corresponding `java.util.Locale` instance to `SUPPORTED_LOCALES` in
-   [`I18NProviderImpl`](src/main/java/io/github/northmaxdev/coinplot/frontend/i18n/I18NProviderImpl.java).
+   **Linux & macOS**
+   ```shell
+   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   cd coinplot # go into the cloned repo
+   ./mvnw package -Pproduction # build a self-contained JAR file (this might take a few minutes)
+   java -jar ./target/coinplot-3.0.0.jar # run the JAR file on the JRE
+   ```
+   
+   **Microsoft Windows**
+   ```shell
+   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   cd coinplot # go into the cloned repo
+   \mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
+   java -jar .\target\coinplot-3.0.0-dev.jar # run the JAR file on the JRE
+   ```
 
-## Data Providers
+   The resulting JAR file should be fully self-contained and can be copied and ran in any environment where JRE 25 is set up.
 
-1. Create a separate package for all classes related to the new data provider and place it in `backend`,
-   such as: `io.github.northmaxdev.coinplot.backend.fixer`, `io.github.northmaxdev.coinplot.backend.frankfurter`.
-   **It is recommended for all classes to be package-private,**
-   as the rest of the codebase interacts only with the interfaces of `io.github.northmaxdev.coinplot.backend.core`.
-2. Implement the [`CurrencyService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/CurrencyService.java)
-   interface. If your data provider is a web API, you should consider extending
-   [`AbstractCurrencyFetchService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/AbstractCurrencyFetchService.java),
-   in which case you'll need to implement a
-   [`CurrencySetRequest`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/CurrencySetRequest.java), a DTO and a
-   [`CurrencySetDTOMapper`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/CurrencySetDTOMapper.java).
-3. Implement the [`ExchangeRateService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/ExchangeRateService.java)
-   interface. If your data provider is a web API, you should consider extending
-   [`AbstractExchangeRateFetchService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/AbstractExchangeRateFetchService.java),
-   in which case you'll need to implement
-   an [`ExchangeRateSetRequest`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/ExchangeRateSetRequest.java), a DTO and
-   an [`ExchangeRateSetDTOMapper`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/ExchangeRateSetDTOMapper.java).
-   You may extend
-   [`AbstractExchangeRateSetDTOMapper`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/AbstractExchangeRateSetDTOMapper.java)
-   for convenience or simply use
-   [`CommonExchangeRateSetDTOMapper`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/CommonExchangeRateSetDTOMapper.java)
-   if it's compatible with your web API.
-4. Implement the [`DataProvider`](src/main/java/io/github/northmaxdev/coinplot/backend/core/DataProvider.java) interface.
-   There is no need to register it anywhere as
-   [`DataProviderService`](src/main/java/io/github/northmaxdev/coinplot/backend/core/DataProviderService.java)
-   will automatically pick up on it through Spring DI.
-   The `ID` property is used for selecting the desired data provider when deploying the app.
-   [`AbstractDataProvider`](src/main/java/io/github/northmaxdev/coinplot/backend/core/AbstractDataProvider.java)
-   may be extended for convenience.
+## Licensing
 
-Some extra notes:
-
-* You will generally want a base class for your
-  [`CurrencySetRequest`](src/main/java/io/github/northmaxdev/coinplot/backend/core/currency/CurrencySetRequest.java) and
-  [`ExchangeRateSetRequest`](src/main/java/io/github/northmaxdev/coinplot/backend/core/exchange/ExchangeRateSetRequest.java).
-  It is recommended for this base class to itself extend
-  [`AbstractAPIRequest`](src/main/java/io/github/northmaxdev/coinplot/backend/core/web/request/AbstractAPIRequest.java).
-* Either way, it is recommended to explore the codebase and see how existing data providers are implemented to get the general idea.
-
-# Licensing
-
-See the [license file](LICENSE) for more information.
+[MIT license.](LICENSE)
