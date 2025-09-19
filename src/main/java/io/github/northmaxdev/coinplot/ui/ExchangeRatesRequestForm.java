@@ -13,6 +13,8 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.function.SerializableComparator;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.domain.DatedExchangeZip;
 import io.github.northmaxdev.coinplot.domain.ExchangeRatesService;
@@ -29,14 +31,32 @@ import java.util.function.Consumer;
 // TODO: Add duration preview to form via LocalDateInterval::toPeriod
 public final class ExchangeRatesRequestForm extends FormLayout {
 
+    //------------------//
+    // Layout constants //
+    //------------------//
+
     private static final List<ResponsiveStep> RESPONSIVE_STEPS = List.of(
             new ResponsiveStep("0", 1),
             new ResponsiveStep("350px", 2)
     );
+
     private static final int CURRENCY_PICKER_COLSPAN = 2;
-    // TODO: Sort currencies by display name (right now it's not sorted at all). Refer to ListDataProvider or ask an LLM.
+
+    //--------------//
+    // UX constants //
+    //--------------//
+
     // TODO: Add flag emoji or SVG to currency label generator
     private static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getDisplayName;
+
+    // Note: Currency.getDisplayName() could return its ISO 4217 code if a display name is unavailable.
+    // Source: the method's JavaDoc. This could make this comparator severely inconsistent.
+    private static final SerializableComparator<Currency> CURRENCY_SORT_COMPARATOR =
+            (c1, c2) -> c1.getDisplayName().compareTo(c2.getDisplayName());
+
+    //-----------------//
+    // Instance fields //
+    //-----------------//
 
     private final ComboBox<Currency> basePicker;
     private final MultiSelectComboBox<Currency> targetPicker;
@@ -44,26 +64,42 @@ public final class ExchangeRatesRequestForm extends FormLayout {
     private final DatePicker endDatePicker;
     private @Nullable Consumer<DatedExchangeZip> onSubmit;
 
-    public ExchangeRatesRequestForm(ExchangeRatesService currencyDataSource) {
+    public ExchangeRatesRequestForm(ExchangeRatesService exchangeRatesService) {
 
         //------------------//
         // Currency pickers //
         //------------------//
 
-        // TODO: load async
-        // TODO: Handle fetch exceptions
-        Set<Currency> supportedCurrencies = currencyDataSource.getSupportedCurrencies();
-
-        basePicker = new ComboBox<>("Base currency", supportedCurrencies);
+        basePicker = new ComboBox<>("Base currency");
         basePicker.setRequired(true);
         basePicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         setColspan(basePicker, CURRENCY_PICKER_COLSPAN);
 
-        targetPicker = new MultiSelectComboBox<>("Target currencies", supportedCurrencies);
+        targetPicker = new MultiSelectComboBox<>("Target currencies");
         targetPicker.setRequired(true);
         targetPicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         targetPicker.setHelperText("You can select multiple currencies");
         setColspan(targetPicker, CURRENCY_PICKER_COLSPAN);
+
+        try {
+            Set<Currency> supportedCurrencies = exchangeRatesService.getSupportedCurrencies();
+
+            ListDataProvider<Currency> currencyPickerItems = new ListDataProvider<>(supportedCurrencies);
+            currencyPickerItems.setSortComparator(CURRENCY_SORT_COMPARATOR);
+
+            basePicker.setItems(currencyPickerItems);
+            targetPicker.setItems(currencyPickerItems);
+        } catch (RuntimeException e) {
+            String errorMessage = "Failed to load currency data (" + e.getClass().getName() + ')';
+
+            basePicker.setEnabled(false);
+            basePicker.setErrorMessage(errorMessage);
+            basePicker.setInvalid(true);
+
+            targetPicker.setEnabled(false);
+            targetPicker.setErrorMessage(errorMessage);
+            targetPicker.setInvalid(true);
+        }
 
         //--------------//
         // Date pickers //
