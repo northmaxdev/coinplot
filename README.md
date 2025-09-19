@@ -47,7 +47,7 @@ There are two versions of this project:
    git clone https://github.com/northmaxdev/coinplot.git # close the repo
    cd coinplot # go into the cloned repo
    ./mvnw package -Pproduction # build a self-contained JAR file (this might take a few minutes)
-   java -jar ./target/coinplot-3.0.0.jar # run the JAR file on the JRE
+   java -jar ./target/coinplot-3.1.0.jar # run the JAR file on the JRE
    ```
    
    **Microsoft Windows**
@@ -55,7 +55,7 @@ There are two versions of this project:
    git clone https://github.com/northmaxdev/coinplot.git # close the repo
    cd coinplot # go into the cloned repo
    \mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
-   java -jar .\target\coinplot-3.0.0-dev.jar # run the JAR file on the JRE
+   java -jar .\target\coinplot-3.1.0-dev.jar # run the JAR file on the JRE
    ```
 
    The resulting JAR file should be fully self-contained and can be copied and ran in any environment where JRE 25 is set up.
