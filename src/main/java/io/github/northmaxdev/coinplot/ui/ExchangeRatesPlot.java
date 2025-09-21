@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
-public final class ExchangeRatesPlot extends Chart {
+public final class ExchangeRatesPlot extends Chart implements Clearable {
 
     private static final List<Series> EMPTY_LIST_OF_SERIES = List.of();
 
@@ -84,6 +84,7 @@ public final class ExchangeRatesPlot extends Chart {
         redraw(series);
     }
 
+    @Override
     public void clear() {
         redraw(EMPTY_LIST_OF_SERIES);
     }

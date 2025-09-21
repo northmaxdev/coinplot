@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-// TODO: Add duration preview to form via LocalDateInterval::toPeriod
-public final class ExchangeRatesRequestForm extends FormLayout {
+public final class ExchangeRatesRequestForm extends FormLayout implements Clearable {
 
     //------------------//
     // Layout constants //
@@ -197,6 +196,7 @@ public final class ExchangeRatesRequestForm extends FormLayout {
         }
     }
 
+    @Override
     public void clear() {
         basePicker.clear();
         targetPicker.clear();
