@@ -30,7 +30,7 @@ public final class ExchangeRatesPlot extends Chart {
     private static final List<Series> EMPTY_LIST_OF_SERIES = List.of();
 
     // A comparator to sort {x,y} coordinates chronologically.
-    // Since x is always a UNIX timestamp, we can always safely treat it as a regular in64 (long).
+    // Since x is always a UNIX timestamp, we can always safely treat it as a regular int64 (long).
     private static final Comparator<DataSeriesItem> COORDINATE_CHRONOLOGICAL_ORDER = comparingLong(coordinate -> {
         Number x = coordinate.getX();
         return x.longValue();

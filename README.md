@@ -44,7 +44,7 @@ There are two versions of this project:
 
    **Linux & macOS**
    ```shell
-   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   git clone https://github.com/northmaxdev/coinplot.git # clone the repo
    cd coinplot # go into the cloned repo
    ./mvnw package -Pproduction # build a self-contained JAR file (this might take a few minutes)
    java -jar ./target/coinplot-3.1.0.jar # run the JAR file on the JRE
@@ -52,9 +52,9 @@ There are two versions of this project:
    
    **Microsoft Windows**
    ```shell
-   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   git clone https://github.com/northmaxdev/coinplot.git # clone the repo
    cd coinplot # go into the cloned repo
-   \mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
+   .\mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
    java -jar .\target\coinplot-3.1.0-dev.jar # run the JAR file on the JRE
    ```
 
