@@ -21,7 +21,8 @@ import static java.util.Objects.requireNonNull;
 public record CurrencyPair(Currency base, Currency quote) {
 
     private static final BigDecimal DEFAULT_PIP = new BigDecimal("0.0001");
-    private static final BigDecimal JPY_PIP = new BigDecimal("0.01");
+    private static final BigDecimal JAPANESE_YEN_PIP = new BigDecimal("0.01");
+    private static final Currency JAPANESE_YEN = Currency.getInstance("JPY");
 
     public CurrencyPair {
         requireNonNull(base);
@@ -66,10 +67,7 @@ public record CurrencyPair(Currency base, Currency quote) {
      * @see <a href="https://www.investopedia.com/terms/p/pip.asp">What Are Pips in Forex Trading, and What Is Their Value? - Investopedia</a>
      */
     public BigDecimal getPip() {
-        if ("JPY".equals(base.getCurrencyCode()) || "JPY".equals(quote.getCurrencyCode())) {
-            return JPY_PIP;
-        }
-        return DEFAULT_PIP;
+        return involves(JAPANESE_YEN) ? JAPANESE_YEN_PIP : DEFAULT_PIP;
     }
 
     /**
