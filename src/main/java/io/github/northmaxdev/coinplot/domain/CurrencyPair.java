@@ -2,6 +2,8 @@
 
 package io.github.northmaxdev.coinplot.domain;
 
+import org.springframework.lang.Nullable;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -37,6 +39,16 @@ public record CurrencyPair(Currency base, Currency quote) {
         Currency base = Currency.getInstance(baseCode);
         Currency quote = Currency.getInstance(quoteCode);
         return new CurrencyPair(base, quote);
+    }
+
+    /**
+     * Checks if the given currency is either the base or the quote.
+     *
+     * @param currency a currency, {@code null} is allowed
+     * @return {@code true} if the given currency is either the base or the quote, {@code false} if not or is {@code null}
+     */
+    public boolean involves(@Nullable Currency currency) {
+        return base.equals(currency) || quote.equals(currency);
     }
 
     /**

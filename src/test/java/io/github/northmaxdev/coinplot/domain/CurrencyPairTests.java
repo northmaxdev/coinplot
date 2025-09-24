@@ -3,15 +3,54 @@
 package io.github.northmaxdev.coinplot.domain;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CurrencyPairTests {
+
+    @Nested
+    class Involves {
+
+        @Test
+        void returnsTrueOnInvolvedBase() {
+            CurrencyPair pair = CurrencyPair.fromIsoCodes("EUR", "USD");
+            Currency euro = Currency.getInstance("EUR");
+
+            assertThat(pair.involves(euro)).isTrue();
+        }
+
+        @Test
+        void returnsTrueOnInvolvedQuote() {
+            CurrencyPair pair = CurrencyPair.fromIsoCodes("EUR", "USD");
+            Currency usDollar = Currency.getInstance("USD");
+
+            assertThat(pair.involves(usDollar)).isTrue();
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"JPY", "CHF", "GBP", "KRW", "CAD", "AUD"})
+        void returnsFalseOnUninvolvedCurrency(String currencyCode) {
+            CurrencyPair pair = CurrencyPair.fromIsoCodes("EUR", "USD");
+            Currency currency = Currency.getInstance(currencyCode);
+
+            assertThat(pair.involves(currency)).isFalse();
+        }
+
+        @Test
+        void returnsFalseOnNull() {
+            CurrencyPair pair = CurrencyPair.fromIsoCodes("EUR", "USD");
+
+            assertThat(pair.involves(null)).isFalse();
+        }
+    }
 
     @ParameterizedTest
     @CsvSource({
