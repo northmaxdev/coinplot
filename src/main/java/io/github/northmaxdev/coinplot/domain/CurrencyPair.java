@@ -37,8 +37,8 @@ public record CurrencyPair(Currency base, Currency quote) {
      * @see Currency
      */
     public static CurrencyPair fromIsoCodes(String baseCode, String quoteCode) {
-        Currency base = Currency.getInstance(baseCode);
-        Currency quote = Currency.getInstance(quoteCode);
+        var base = Currency.getInstance(baseCode);
+        var quote = Currency.getInstance(quoteCode);
         return new CurrencyPair(base, quote);
     }
 
@@ -85,4 +85,9 @@ public record CurrencyPair(Currency base, Currency quote) {
     public String toString() {
         return base.getCurrencyCode() + '/' + quote.getCurrencyCode();
     }
+
+    // TODO: isMajor(), isMinor(), isExotic()
+    // https://www.investopedia.com/terms/c/currencypair.asp
+    // https://kinesis.money/blog/major-minor-and-exotic-currency-pairs-guide/
+    // https://en.wikipedia.org/wiki/Currency_pair
 }
