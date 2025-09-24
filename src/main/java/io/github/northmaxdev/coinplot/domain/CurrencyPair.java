@@ -20,8 +20,8 @@ import static java.util.Objects.requireNonNull;
  */
 public record CurrencyPair(Currency base, Currency quote) {
 
-    private static final BigDecimal DEFAULT_PIP = new BigDecimal("0.0001");
-    private static final BigDecimal JAPANESE_YEN_PIP = new BigDecimal("0.01");
+    private static final BigDecimal DEFAULT_PIP_DEFINITION = new BigDecimal("0.0001");
+    private static final BigDecimal JAPANESE_YEN_PIP_DEFINITION = new BigDecimal("0.01");
     private static final Currency JAPANESE_YEN = Currency.getInstance("JPY");
 
     public CurrencyPair {
@@ -63,11 +63,11 @@ public record CurrencyPair(Currency base, Currency quote) {
      * <p>
      * Simple example: consider an exchange rate of {@code EUR/USD 1.1793}. If the value becomes {@code 1.1794}, it has changed by one pip.
      *
-     * @return {@code 0.01} if either of the currencies is JPY, {@code 0.0001} otherwise
+     * @return {@code 0.01} if either of the currencies is a Japanese Yen, {@code 0.0001} otherwise
      * @see <a href="https://www.investopedia.com/terms/p/pip.asp">What Are Pips in Forex Trading, and What Is Their Value? - Investopedia</a>
      */
-    public BigDecimal getPip() {
-        return involves(JAPANESE_YEN) ? JAPANESE_YEN_PIP : DEFAULT_PIP;
+    public BigDecimal getPipDefinition() {
+        return involves(JAPANESE_YEN) ? JAPANESE_YEN_PIP_DEFINITION : DEFAULT_PIP_DEFINITION;
     }
 
     /**

@@ -63,11 +63,11 @@ class CurrencyPairTests {
             "JPY,EUR,0.01",
             "EUR,JPY,0.01",
     })
-    void returnsExpectedPipForPair(String baseCode, String quoteCode, String expectedPipAsString) {
+    void returnsExpectedPipDefinitionForPair(String baseCode, String quoteCode, String expectedPipAsString) {
         CurrencyPair currencyPair = CurrencyPair.fromIsoCodes(baseCode, quoteCode);
         BigDecimal expectedPip = new BigDecimal(expectedPipAsString);
 
-        assertThat(currencyPair.getPip()).isEqualTo(expectedPip);
+        assertThat(currencyPair.getPipDefinition()).isEqualTo(expectedPip);
     }
 
     @Test
