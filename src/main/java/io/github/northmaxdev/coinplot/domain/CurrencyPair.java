@@ -24,9 +24,17 @@ public record CurrencyPair(Currency base, Currency quote) {
     private static final BigDecimal JAPANESE_YEN_PIP_DEFINITION = new BigDecimal("0.01");
     private static final Currency JAPANESE_YEN = Currency.getInstance("JPY");
 
+    /**
+     * Main constructor. Using the same currency for both base and quote is not allowed.
+     * @throws IllegalArgumentException if base and quote are the same currency
+     */
     public CurrencyPair {
         requireNonNull(base);
         requireNonNull(quote);
+
+        if (base.equals(quote)) {
+            throw new IllegalArgumentException("base and quote must not be the same currency");
+        }
     }
 
     /**

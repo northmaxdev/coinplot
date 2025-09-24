@@ -13,11 +13,36 @@ import java.math.BigDecimal;
 import java.util.Currency;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class CurrencyPairTests {
 
     @Nested
-    class Involves {
+    class CanonicalConstructor {
+
+        @Test
+        void throwsIaeOnSameCurrencies() {
+            Currency euro = Currency.getInstance("EUR");
+
+            assertThatIllegalArgumentException().isThrownBy(() -> new CurrencyPair(euro, euro));
+        }
+
+        @Test
+        void doesNotThrowOnDifferentCurrencies() {
+            Currency euro = Currency.getInstance("EUR");
+            Currency usDollar = Currency.getInstance("USD");
+
+            assertThatNoException().isThrownBy(() -> new CurrencyPair(euro, usDollar));
+        }
+    }
+
+    // Note: it's OK to use CurrencyPair.fromIsoCodes() instead of the canonical constructor for brevity in test code.
+    // fromIsoCodes() is no more than just a one-liner shortcut to call Currency.getInstance() and immediately delegate to the canonical
+    // constructor. It does not and should not have any additional logic besides that.
+
+    @Nested
+    class InvolvesCurrency {
 
         @Test
         void returnsTrueOnInvolvedBase() {
@@ -68,7 +93,19 @@ class CurrencyPairTests {
     }
 
     @Test
-    void equalsAndHashCodeContract() {
-        EqualsVerifier.forClass(CurrencyPair.class).verify();
+    void equalsContract() {
+        // An internal invariant of CurrencyPair is that it never involves the same currency twice.
+        // If we let EqualsVerifier use random currencies, it'll generate something like EUR/EUR, which is not allowed.
+        // We should provide prefab values where possible options for "base" do not intersect with possible options for "quote".
+
+        Currency euro = Currency.getInstance("EUR");
+        Currency swissFranc = Currency.getInstance("CHF");
+        Currency britishPound = Currency.getInstance("GBP");
+        Currency canadianDollar = Currency.getInstance("CAD");
+
+        EqualsVerifier.forClass(CurrencyPair.class)
+                .withPrefabValuesForField("base", euro, swissFranc)
+                .withPrefabValuesForField("quote", britishPound, canadianDollar)
+                .verify();
     }
 }
