@@ -25,7 +25,7 @@
     <properties>
         <java.version>25</java.version>
         <vaadin.version>24.8.7</vaadin.version>
-        <equalsverifier.version>4.1</equalsverifier.version>
+        <equalsverifier.version>4.1.1</equalsverifier.version>
     </properties>
 
     <dependencies>
