@@ -51,6 +51,14 @@ public record CurrencyPair(Currency base, Currency quote) {
     }
 
     /**
+     * Returns a new pair with the base and quote reversed.
+     * @return a new instance
+     */
+    public CurrencyPair reversed() {
+        return new CurrencyPair(quote, base);
+    }
+
+    /**
      * Checks if the given currency is either the base or the quote.
      *
      * @param currency a currency, {@code null} is allowed
