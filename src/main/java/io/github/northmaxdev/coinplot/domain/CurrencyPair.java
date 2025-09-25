@@ -26,6 +26,7 @@ public record CurrencyPair(Currency base, Currency quote) {
 
     /**
      * Main constructor. Using the same currency for both base and quote is not allowed.
+     *
      * @throws IllegalArgumentException if base and quote are the same currency
      */
     public CurrencyPair {
@@ -33,7 +34,7 @@ public record CurrencyPair(Currency base, Currency quote) {
         requireNonNull(quote);
 
         if (base.equals(quote)) {
-            throw new IllegalArgumentException("base and quote must not be the same currency");
+            throw new IllegalArgumentException("base and quote must not be the same currency (got " + base.getCurrencyCode() + ')');
         }
     }
 
@@ -52,6 +53,7 @@ public record CurrencyPair(Currency base, Currency quote) {
 
     /**
      * Returns a new pair with the base and quote reversed.
+     *
      * @return a new instance
      */
     public CurrencyPair reversed() {
@@ -101,9 +103,4 @@ public record CurrencyPair(Currency base, Currency quote) {
     public String toString() {
         return base.getCurrencyCode() + '/' + quote.getCurrencyCode();
     }
-
-    // TODO: isMajor(), isMinor(), isExotic()
-    // https://www.investopedia.com/terms/c/currencypair.asp
-    // https://kinesis.money/blog/major-minor-and-exotic-currency-pairs-guide/
-    // https://en.wikipedia.org/wiki/Currency_pair
 }
