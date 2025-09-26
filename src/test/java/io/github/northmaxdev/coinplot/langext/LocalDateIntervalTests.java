@@ -76,6 +76,14 @@ class LocalDateIntervalTests {
 
     @Test
     void equalsAndHashCodeContract() {
-        EqualsVerifier.forClass(LocalDateInterval.class).verify();
+        LocalDate startPrefab1 = LocalDate.of(2000, Month.JANUARY, 1);
+        LocalDate startPrefab2 = LocalDate.of(2000, Month.JANUARY, 2);
+        LocalDate endPrefab1 = LocalDate.of(2000, Month.JANUARY, 15);
+        LocalDate endPrefab2 = LocalDate.of(2000, Month.JANUARY, 16);
+
+        EqualsVerifier.forClass(LocalDateInterval.class)
+                .withPrefabValuesForField("start", startPrefab1, startPrefab2)
+                .withPrefabValuesForField("end", endPrefab1, endPrefab2)
+                .verify();
     }
 }

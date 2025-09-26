@@ -15,7 +15,7 @@
 
     <groupId>io.github.northmaxdev</groupId>
     <artifactId>coinplot</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 
     <name>CoinPlot</name>
     <description>Exchange Rate History Visualizer</description>
@@ -25,15 +25,8 @@
     <properties>
         <java.version>25</java.version>
         <vaadin.version>24.8.7</vaadin.version>
-        <equalsverifier.version>4.1</equalsverifier.version>
+        <equalsverifier.version>4.1.1</equalsverifier.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>https://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>

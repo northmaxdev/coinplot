@@ -23,6 +23,9 @@ There are two versions of this project:
 > [!WARNING]
 > This web app was not tested for mobile screens.
 
+> [!WARNING]
+> This app and its developer(s) bear no responsibility regarding what the user ends up doing with their money when they use this app.
+
 > [!TIP]
 > 1. This project wouldn't exist without the [Frankfurter API](https://frankfurter.dev/) - all other exchange rate APIs are paid for and/or a headache. Consider supporting [the project](https://github.com/lineofflight/frankfurter) and [its developer](https://github.com/hakanensari) ❤️ 
 > 2. The Frankfurter API can be self-hosted, and this app supports that. Simply change the API URI in the [Spring application properties file](src/main/resources/application.properties).
@@ -44,18 +47,18 @@ There are two versions of this project:
 
    **Linux & macOS**
    ```shell
-   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   git clone https://github.com/northmaxdev/coinplot.git # clone the repo
    cd coinplot # go into the cloned repo
    ./mvnw package -Pproduction # build a self-contained JAR file (this might take a few minutes)
-   java -jar ./target/coinplot-3.0.0.jar # run the JAR file on the JRE
+   java -jar ./target/coinplot-3.1.0.jar # run the JAR file on the JRE
    ```
    
    **Microsoft Windows**
    ```shell
-   git clone https://github.com/northmaxdev/coinplot.git # close the repo
+   git clone https://github.com/northmaxdev/coinplot.git # clone the repo
    cd coinplot # go into the cloned repo
-   \mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
-   java -jar .\target\coinplot-3.0.0-dev.jar # run the JAR file on the JRE
+   .\mvnw.cmd package -Pproduction # build a self-contained JAR file (this might take a few minutes)
+   java -jar .\target\coinplot-3.1.0-dev.jar # run the JAR file on the JRE
    ```
 
    The resulting JAR file should be fully self-contained and can be copied and ran in any environment where JRE 25 is set up.

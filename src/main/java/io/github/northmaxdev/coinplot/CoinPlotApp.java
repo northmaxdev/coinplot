@@ -15,7 +15,7 @@ public class CoinPlotApp {
 
     public static final Locale MAIN_LOCALE = Locale.UK; // This is the closest thing to Microsoft's "English (International)"
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Locale.setDefault(MAIN_LOCALE);
         SpringApplication.run(CoinPlotApp.class, args);
     }

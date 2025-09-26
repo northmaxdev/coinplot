@@ -8,10 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
-import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -31,13 +29,13 @@ class FrankfurterServiceTests {
         Currency britishPound = Currency.getInstance("GBP");
         LocalDate start = LocalDate.of(2019, 1, 1);
         LocalDate end = LocalDate.of(2019, 2, 1);
-        CurrencyExchangeBatch batch = new CurrencyExchangeBatch(
+        var dez = new DatedExchangeZip(
                 euro,
                 Set.of(swissFranc, britishPound),
                 new LocalDateInterval(start, end)
         );
 
-        Map<DatedExchange, BigDecimal> exchangeRates = service.getExchangeRates(batch);
-        assertThat(exchangeRates).isNotEmpty();
+        ExchangeRatesDataset exchangeRates = service.getExchangeRates(dez);
+        assertThat(exchangeRates.getData()).isNotEmpty();
     }
 }

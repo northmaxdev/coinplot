@@ -25,12 +25,12 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
-public final class ExchangeRatesPlot extends Chart {
+public final class ExchangeRatesPlot extends Chart implements Clearable {
 
     private static final List<Series> EMPTY_LIST_OF_SERIES = List.of();
 
     // A comparator to sort {x,y} coordinates chronologically.
-    // Since x is always a UNIX timestamp, we can always safely treat it as a regular in64 (long).
+    // Since x is always a UNIX timestamp, we can always safely treat it as a regular int64 (long).
     private static final Comparator<DataSeriesItem> COORDINATE_CHRONOLOGICAL_ORDER = comparingLong(coordinate -> {
         Number x = coordinate.getX();
         return x.longValue();
@@ -84,6 +84,7 @@ public final class ExchangeRatesPlot extends Chart {
         redraw(series);
     }
 
+    @Override
     public void clear() {
         redraw(EMPTY_LIST_OF_SERIES);
     }
