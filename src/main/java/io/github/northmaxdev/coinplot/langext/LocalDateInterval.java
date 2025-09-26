@@ -11,7 +11,7 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Interval of local dates.
+ * Interval of local dates (ascending order).
  * <p>
  * Mathematical notation: {@code [start, end)}
  *
@@ -21,8 +21,8 @@ import static java.util.Objects.requireNonNull;
 public record LocalDateInterval(LocalDate start, LocalDate end) {
 
     public LocalDateInterval {
-        requireNonNull(start, "start date must not be null");
-        requireNonNull(end, "end date must not be null");
+        requireNonNull(start);
+        requireNonNull(end);
 
         if (!start.isBefore(end)) {
             throw new IllegalArgumentException("start >= end");
