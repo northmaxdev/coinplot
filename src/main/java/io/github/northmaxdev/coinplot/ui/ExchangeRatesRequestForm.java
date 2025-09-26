@@ -11,9 +11,12 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.renderer.IconRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.function.SerializableComparator;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import io.github.northmaxdev.coinplot.domain.DatedExchangeZip;
@@ -44,8 +47,19 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Cleara
     // UX constants //
     //--------------//
 
-    // TODO: Add flag emoji or SVG to currency label generator
-    private static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR = Currency::getDisplayName;
+    private static final ItemLabelGenerator<Currency> CURRENCY_LABEL_GENERATOR =
+            currency -> currency.getDisplayName() + " (" + currency.getCurrencyCode() + ')';
+
+    private static final Renderer<Currency> CURRENCY_RENDERER = new IconRenderer<>(currency -> {
+        Image icon = FlagIcons.create(currency);
+
+        // FlagIcons does not specify or modify the icon size, and SVGs too can have a predefined size,
+        // so we should set here an appropriate width & height for the combo-boxes.
+        icon.setMaxWidth(2.0f, Unit.EM);
+        icon.setMaxHeight(2.0f, Unit.EM);
+
+        return new HorizontalLayout(icon);
+    }, CURRENCY_LABEL_GENERATOR);
 
     // Note: Currency.getDisplayName() could return its ISO 4217 code if a display name is unavailable.
     // Source: the method's JavaDoc. This could make this comparator severely inconsistent.
@@ -72,6 +86,7 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Cleara
         basePicker.setRequired(true);
         basePicker.setErrorMessage("A base currency must be selected");
         basePicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
+        basePicker.setRenderer(CURRENCY_RENDERER);
         setColspan(basePicker, CURRENCY_PICKER_COLSPAN);
 
         targetPicker = new MultiSelectComboBox<>("Target currencies");
@@ -79,6 +94,7 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Cleara
         targetPicker.setErrorMessage("At least one target currency must be selected");
         targetPicker.setItemLabelGenerator(CURRENCY_LABEL_GENERATOR);
         targetPicker.setHelperText("You can select multiple currencies");
+        targetPicker.setRenderer(CURRENCY_RENDERER);
         setColspan(targetPicker, CURRENCY_PICKER_COLSPAN);
 
         try {
@@ -162,8 +178,7 @@ public final class ExchangeRatesRequestForm extends FormLayout implements Cleara
         add(basePicker, targetPicker, startDatePicker, endDatePicker, buttonBar);
         setResponsiveSteps(RESPONSIVE_STEPS);
 
-        // Eyeballed value - might look different depending on display resolution and/or scaling
-        setMinWidth(210, Unit.PIXELS);
+        setMinWidth(210, Unit.PIXELS); // Eyeballed value - might look different depending on display resolution and/or scaling
     }
 
     public void setOnSubmit(@Nullable Consumer<DatedExchangeZip> onSubmit) {
