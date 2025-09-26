@@ -23,6 +23,9 @@ There are two versions of this project:
 > [!WARNING]
 > This web app was not tested for mobile screens.
 
+> [!WARNING]
+> This app and its developer(s) bear no responsibility regarding what the user ends up doing with their money when they use this app.
+
 > [!TIP]
 > 1. This project wouldn't exist without the [Frankfurter API](https://frankfurter.dev/) - all other exchange rate APIs are paid for and/or a headache. Consider supporting [the project](https://github.com/lineofflight/frankfurter) and [its developer](https://github.com/hakanensari) ❤️ 
 > 2. The Frankfurter API can be self-hosted, and this app supports that. Simply change the API URI in the [Spring application properties file](src/main/resources/application.properties).
